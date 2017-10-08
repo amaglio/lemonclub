@@ -11,6 +11,8 @@ class Administrador extends CI_Controller {
 		$this->load->helper('url');
 
 		$this->load->library('grocery_CRUD');
+		echo $this->uri->segment(1); 
+		echo $this->session->userdata('usuario_crm');
 	}
 
 	public function _example_output($output = null)
