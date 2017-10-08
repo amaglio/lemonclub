@@ -6,9 +6,12 @@
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
      
     <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-  <style type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <style type="text/css">
      .login-box, .register-box{
         width:360px;
         margin:7% auto;
@@ -31,9 +34,9 @@
         width: -webkit-fill-available;
         padding: 5px;
         font-size: 12px;
-    }
+      }
           
-  </style>
+    </style>
  
   </head>
   <body class="login-page" style=" background-image: url('<?=base_url()?>assets/images/fondos/fondo_admin.jpg');  background-repeat: no-repeat;">

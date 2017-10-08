@@ -10,14 +10,12 @@ class Administrador extends CI_Controller {
 		$this->load->database();
 		$this->load->helper('url');
 
-		$this->load->library('grocery_CRUD');
-		echo $this->uri->segment(1); 
-		echo $this->session->userdata('usuario_crm');
+		$this->load->library('grocery_CRUD'); 
 	}
 
 	public function _example_output($output = null)
 	{
-		$this->load->view('example.php',(array)$output);
+		$this->load->view('administrador/index.php',(array)$output);
 	}
 
 	public function offices()
@@ -30,6 +28,22 @@ class Administrador extends CI_Controller {
 	public function index()
 	{
 		$this->_example_output((object)array('output' => '' , 'js_files' => array() , 'css_files' => array()));
+	}
+
+	public function tipos_plato()
+	{
+			$crud = new grocery_CRUD();
+
+			$crud->set_table('tipo_plato');
+			$crud->columns('id_tipo_plato','descripcion');
+			$crud->display_as('id_tipo_plato','Id del plato')
+				 ->display_as('descripcion','Descripcion del tipo de plato');
+			$crud->unset_delete();
+			$crud->set_language("spanish"); 
+			$crud->required_fields('descripcion');
+			$output = $crud->render();
+
+			$this->_example_output($output);
 	}
 
 	public function offices_management()
@@ -71,22 +85,7 @@ class Administrador extends CI_Controller {
 			$this->_example_output($output);
 	}
 
-	public function customers_management()
-	{
-			$crud = new grocery_CRUD();
-
-			$crud->set_table('customers');
-			$crud->columns('customerName','contactLastName','phone','city','country','salesRepEmployeeNumber','creditLimit');
-			$crud->display_as('salesRepEmployeeNumber','from Employeer')
-				 ->display_as('customerName','Name')
-				 ->display_as('contactLastName','Last Name');
-			$crud->set_subject('Customer');
-			$crud->set_relation('salesRepEmployeeNumber','employees','lastName');
-
-			$output = $crud->render();
-
-			$this->_example_output($output);
-	}
+	
 
 	public function orders_management()
 	{
