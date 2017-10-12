@@ -37,7 +37,7 @@ class Administrador extends CI_Controller {
 			$crud->set_table('producto_tipo');
 			$crud->columns('id_producto_tipo','descripcion');
 			$crud->display_as('id_producto_tipo','Id del producto')
-				 ->display_as('descripcion','Descripcion del tipo de plato');
+				 ->display_as('descripcion','Descripcion del tipo');
 			$crud->unset_delete();
 			$crud->set_language("spanish"); 
 			$crud->required_fields('descripcion');
