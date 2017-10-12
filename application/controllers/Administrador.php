@@ -34,9 +34,9 @@ class Administrador extends CI_Controller {
 	{
 			$crud = new grocery_CRUD();
 
-			$crud->set_table('tipo_plato');
-			$crud->columns('id_tipo_plato','descripcion');
-			$crud->display_as('id_tipo_plato','Id del plato')
+			$crud->set_table('producto_tipo');
+			$crud->columns('id_producto_tipo','descripcion');
+			$crud->display_as('id_producto_tipo','Id del producto')
 				 ->display_as('descripcion','Descripcion del tipo de plato');
 			$crud->unset_delete();
 			$crud->set_language("spanish"); 
@@ -44,6 +44,46 @@ class Administrador extends CI_Controller {
 			$output = $crud->render();
 
 			$this->_example_output($output);
+	}
+
+	public function productos()
+	{
+			$crud = new grocery_CRUD();
+
+			$crud->set_table('producto');
+			$crud->columns('id_producto','id_producto_tipo','nombre','descripcion','precio');
+			$crud->display_as('id_producto','Id del producto')
+				 ->display_as('descripcion','Descripcion del tipo de plato')
+				 ->display_as('id_producto_tipo','Tipo de producto');
+			$crud->unset_delete();
+
+			//$crud->change_field_type('descripcion', 'text');
+			//$crud->unset_texteditor('descripcion','full_text');
+
+			
+			$crud->set_relation('id_producto_tipo','producto_tipo','descripcion');
+
+			$crud->set_language("spanish"); 
+			
+			
+
+			$crud->callback_add_field('descripcion',array($this,'add_field_callback_1'));
+
+			//$crud->required_fields('id_producto_tipo', 'descripcion', 'nombre' , 'precio');
+			$crud->required_fields('id_producto_tipo' , 'nombre' , 'precio');
+
+			$output = $crud->render();
+
+			$this->_example_output($output);
+	}
+
+
+	function add_field_callback_1()
+
+	{
+
+	      return '<textarea name="address" rows="15"></textarea>';
+
 	}
 
 	public function offices_management()

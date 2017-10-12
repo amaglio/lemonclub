@@ -27,8 +27,8 @@ foreach($css_files as $file): ?>
 	      <a class="navbar-brand" href="#">Administrador Lemon</a>
 	    </div>
 	    <ul class="nav navbar-nav">
-	      <li class="active"><a href='<?php echo site_url('administrador/tipos_plato')?>'>Tipos de platos</a></li>
-	      <li><a href="#">Platos</a></li>
+	      <li><a href='<?php echo site_url('administrador/tipos_plato')?>'>Tipos de productos</a></li>
+	      <li><a href='<?php echo site_url('administrador/productos')?>'>Productos</a></li>
 	      <li><a href="#">Page 2</a></li>
 	      <li><a href="#"><i class="fa fa-power-off" aria-hidden="true"></i> Salir</a></li>
 	    </ul>
