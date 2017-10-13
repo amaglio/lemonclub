@@ -43,14 +43,25 @@ foreach($css_files as $file): ?>
 	    	<li><a href='<?php echo site_url('administrador/productos')?>'><i class="fa fa-lemon-o" aria-hidden="true"></i> Productos</a></li>
 	      	<li><a href='<?php echo site_url('administrador/tipos_plato')?>'><i class="fa fa-tags" aria-hidden="true"></i> Tipos de productos</a></li>
 			<li><a href='<?php echo site_url('administrador/pedidos')?>'><i class="fa fa-shopping-basket" aria-hidden="true"></i> Pedidos</a></li>
-	      	<li><a href='<?php echo site_url('administrador/pedidos')?>'><i class="fa fa-flask" aria-hidden="true"></i>Ingredientes</a></li>
+	      	<li><a href='<?php echo site_url('administrador/ingredientes')?>'><i class="fa fa-flask" aria-hidden="true"></i>Ingredientes</a></li>
 	      	<li><a href='<?php echo site_url('administrador/pedidos')?>'><i class="fa fa-users" aria-hidden="true"></i> Usuarios</a></li>
 	      	<li><a href="#"><i class="fa fa-power-off" aria-hidden="true"></i> Salir</a></li>
 	    </ul>
 	  </div>
+	  	
 	</nav>
+
+
   
     <div style="margin: 20px">
+    	<div class="bs-callout bs-callout-primary" style="background-color: white">
+		  	<h4></h4>
+		  
+		</div>
+		<div class="alert alert-warning alert-dismissable">
+		  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		  <?php echo $titulo; ?>
+		</div>
 		<?php echo $output; ?>
     </div>
 </body>

@@ -15,15 +15,11 @@ class Administrador extends CI_Controller {
 
 	public function _example_output($output = null)
 	{
-		$this->load->view('administrador/index.php',(array)$output);
-	}
 
-	public function offices()
-	{
-		$output = $this->grocery_crud->render();
- 
-		$this->_example_output($output);
+		//$output->titulo = traer_titulo($this->uri->segment(3)); ;
+				$this->load->view('administrad)or/index.php',(array)$output);
 	}
+ 
 
 	public function index()
 	{
@@ -36,7 +32,7 @@ class Administrador extends CI_Controller {
 
 			$crud->set_table('producto_tipo');
 			$crud->columns('id_producto_tipo','descripcion');
-			$crud->display_as('id_producto_tipo','Id del producto')
+			$crud->display_as('id_producto_tipo','Id')
 				 ->display_as('descripcion','Descripcion del tipo');
 			$crud->unset_delete();
 			$crud->set_language("spanish"); 
@@ -52,22 +48,21 @@ class Administrador extends CI_Controller {
 
 			$crud->set_table('producto');
 			$crud->columns('id_producto','id_producto_tipo','nombre','descripcion','precio');
-			$crud->display_as('id_producto','Id del producto')
+			$crud->display_as('id_producto','Id')
 				 ->display_as('descripcion','Descripcion del tipo de plato')
 				 ->display_as('id_producto_tipo','Tipo de producto');
-			$crud->unset_delete();
+			//$crud->unset_delete();
+			$crud->set_table_title('TABLE TITLE GOES HERE'); 
+			$crud->add_action('Ingredientes', 'http://www.grocerycrud.com/assets/uploads/general/smiley.png', 'Administrador/agregar_ingrediente');
 
-			//$crud->change_field_type('descripcion', 'text');
-			//$crud->unset_texteditor('descripcion','full_text');
 
-			
 			$crud->set_relation('id_producto_tipo','producto_tipo','descripcion');
 
 			$crud->set_language("spanish"); 
 			
 			
 
-			$crud->callback_add_field('descripcion',array($this,'add_field_callback_1'));
+			$crud->callback_add_field('descripcion',array($this,'f_agregar_textarea'));
 
 			//$crud->required_fields('id_producto_tipo', 'descripcion', 'nombre' , 'precio');
 			$crud->required_fields('id_producto_tipo' , 'nombre' , 'precio');
@@ -77,15 +72,58 @@ class Administrador extends CI_Controller {
 			$this->_example_output($output);
 	}
 
+	public function ingredientes()
+	{
+			$crud = new grocery_CRUD();
 
-	function add_field_callback_1()
+			$crud->set_table('ingrediente');
+			$crud->columns('id_ingrediente','nombre','precio','calorias');
+			$crud->display_as('id_ingrediente','Id')
+				 ->display_as('descripcion','Descripcion del tipo');
+			$crud->unset_delete();
+			$crud->set_language("spanish"); 
+			$crud->required_fields('descripcion');
+			$output = $crud->render();
 
+			$this->_example_output($output);
+	}
+
+	public function pedidos()
+	{
+			$crud = new grocery_CRUD();
+
+			$crud->set_table('pedido');
+			$crud->columns('id_pedido','id_pedido_estado','id_sucursal');
+			$crud->display_as('id_pedido','Id')
+				 ->display_as('id_pedido_estado','Estado pedido')
+				 ->display_as('id_sucursal','Sucursal');
+			$crud->unset_delete();
+			$crud->set_language("spanish"); 
+			//$crud->required_fields('descripcion');
+			
+			$crud->set_relation('id_pedido_estado','pedido_estado','descripcion');
+			$crud->set_relation('id_sucursal','sucursal','descripcion');
+
+			$output = $crud->render();
+
+			$this->_example_output($output);
+	}
+
+
+	function f_agregar_textarea()
 	{
 
 	      return '<textarea name="address" rows="15"></textarea>';
 
 	}
 
+	public function agregar_ingrediente()
+	{
+			$id = $this->uri->segment(3);
+			echo $id;
+	}
+
+	/*
 	public function offices_management()
 	{
 		try{
@@ -285,6 +323,6 @@ class Administrador extends CI_Controller {
 		} else {
 			return $output;
 		}
-	}
+	}*/
 
 }
