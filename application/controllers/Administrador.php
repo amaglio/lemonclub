@@ -19,10 +19,10 @@ class Administrador extends CI_Controller {
 		$output->titulo = traer_titulo($this->uri->segment(2));
 		$this->load->view('administrador/index.php',(array)$output);
 	}
- 
 
 	public function index()
 	{
+		
 		$this->_example_output((object)array('output' => '' , 'js_files' => array() , 'css_files' => array()));
 	}
 
@@ -60,6 +60,27 @@ class Administrador extends CI_Controller {
 			$crud->set_language("spanish"); 
  
 			$crud->required_fields('id_producto_tipo' , 'nombre' , 'precio');
+
+			$output = $crud->render();
+
+			$this->_example_output($output);
+	}
+
+	public function usuarios()
+	{
+			$crud = new grocery_CRUD();
+
+			$crud->set_table('usuario');
+			$crud->columns('id_usuario','nombre','apellido','email','telefono', 'direccion');
+			$crud->display_as('id_usuario','Id');
+ 
+			//$crud->add_action('Agregar Ingredientes',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/ingredientes.png', 'Administrador/agregar_ingrediente');
+
+			//$crud->set_relation('id_producto_tipo','producto_tipo','descripcion');
+
+			//$crud->set_language("spanish"); 
+ 
+			//$crud->required_fields('id_producto_tipo' , 'nombre' , 'precio');
 
 			$output = $crud->render();
 
@@ -124,42 +145,48 @@ class Administrador extends CI_Controller {
 			$datos['ingredientes_producto'] = $this->Administrador_model->traer_ingredientes_producto($id_producto);
 
 			$this->load->view('administrador/agregar_ingredientes_producto.php',$datos);
- 
 	}
 
 
 	public function ajax_ingrediente()
-{	
-	chrome_log("ajax_ingrediente: " );
-
-	$buscar = $this->input->get('term');
-
-	if( isset($buscar) && strlen($buscar) > 1 )
 	{
-		$query=$this->db->query("   SELECT *
-									FROM	ingrediente i
-									WHERE 	i.nombre like '%$buscar%'
-									ORDER BY i.nombre"
-								);
+		chrome_log("ajax_ingrediente: " );
 
-		
-		if($query->num_rows() > 0)
+		$buscar = $this->input->get('term');
+
+		if( isset($buscar) && strlen($buscar) > 1 )
 		{
-			foreach ($query->result() as $row)
-			{	
- 
+			$query=$this->db->query("   SELECT *
+										FROM	ingrediente i
+										WHERE 	i.nombre like '%$buscar%'
+										ORDER BY i.nombre"
+									);
 
-				$result[]= array( 	"id_ingrediente" => $row->id_ingrediente, 
-									"value" => $row->nombre 
-								);
+			
+			if($query->num_rows() > 0)
+			{
+				foreach ($query->result() as $row)
+				{	
+	 
 
-			 
-			}
-		} 
-		
-		echo json_encode($result);
+					$result[]= array( 	"id_ingrediente" => $row->id_ingrediente, 
+										"value" => $row->nombre 
+									);
+
+				 
+				}
+			} 
+			
+			echo json_encode($result);
+		}
 	}
-}
+
+
+	public function alta_pedido()
+	{
+		 
+	}
+
 
 
 	/*

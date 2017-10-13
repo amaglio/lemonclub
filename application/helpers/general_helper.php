@@ -23,13 +23,17 @@ if(!function_exists('traer_titulo'))
                 break;
             
             case 'ingredientes':
-                $titulo = "Agregue los ingredientes que se pueden incluir en tus <strong>productos</strong>.";
+                $titulo = "Agregue los <strong>ingredientes</strong> que se pueden incluir en tus <strong>productos</strong>.";
                 break;
 
             case 'pedidos':
-                $titulo = "Administre los pedidos recibidos";
+                $titulo = "Administre los <strong>pedidos</strong> recibidos";
                 break;
-            
+
+            case 'usuarios':
+                $titulo = "Gestioné los <strong>usuarios</strong> del sistema";
+                break;
+
             default:
                 # code...
                 break;
