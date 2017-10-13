@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url','security', 'chrome_logger');
+$autoload['helper'] = array('url','security', 'chrome_logger', 'general');
 
 /*
 | -------------------------------------------------------------------

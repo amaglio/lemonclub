@@ -54,11 +54,8 @@ foreach($css_files as $file): ?>
 
   
     <div style="margin: 20px">
-    	<div class="bs-callout bs-callout-primary" style="background-color: white">
-		  	<h4></h4>
-		  
-		</div>
-		<div class="alert alert-warning alert-dismissable">
+ 
+		<div class="alert alert-info alert-dismissable">
 		  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 		  <?php echo $titulo; ?>
 		</div>
