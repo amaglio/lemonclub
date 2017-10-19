@@ -68,7 +68,7 @@ foreach($css_files as $file): ?>
 
 	      	<li <? echo ($this->uri->segment(2) == 'usuarios')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/usuarios')?>'><i class="fa fa-users" aria-hidden="true"></i> Usuarios</a></li>
 
-	      	<li <? echo ($this->uri->segment(2) == 'productos')? 'class="active"' : ' ' ;  ?>><a href="#"><i class="fa fa-power-off" aria-hidden="true"></i> Salir</a></li>
+	      	<li ><a href='<?php echo site_url('login/logout')?>'><i class="fa fa-power-off" aria-hidden="true"></i> Salir</a></li>
 	    </ul>
 	  </div>
 	  	

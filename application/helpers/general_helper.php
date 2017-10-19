@@ -43,7 +43,7 @@ if(!function_exists('traer_titulo'))
                 break;
 
             default:
-                # code...
+               $titulo = " Bienvenido al <strong>  Administrador de Lemon Club </strong> <br> Desde aquí podrá administrar los  <strong> productos, ingredientes y pedidos  </strong> del restaurant.";
                 break;
         }
     
