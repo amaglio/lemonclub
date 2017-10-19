@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LEMONCLUB | Administradorr </title>
+    <title>LemonClub | Administradorr </title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
      
     <!-- Latest compiled and minified CSS -->
@@ -22,6 +22,22 @@
 		.navbar-default .navbar-nav>li>a{
 			color: white;
 		}
+
+ 		.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+ 			color: #000;
+ 			background-color:#fce028;
+ 		}
+
+ 		.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover{
+			color: #fce028;
+		}
+ 		
+ 		.alert-info{
+			    color: #000000;
+    background-color: #fce028;
+    border-color: #d8c129;
+		}
+
 	</style>
 
 <?php 
@@ -40,12 +56,19 @@ foreach($css_files as $file): ?>
 	      <a class="navbar-brand"  ><img   style="width:100px; margin-bottom:10px" src="<?=base_url()?>assets/images/lemonlogo_admin.png"  > </a>
 	    </div>
 	    <ul class="nav navbar-nav">
-	    	<li><a href='<?php echo site_url('administrador/productos')?>'><i class="fa fa-lemon-o" aria-hidden="true"></i> Productos</a></li>
-	      	<li><a href='<?php echo site_url('administrador/tipos_plato')?>'><i class="fa fa-tags" aria-hidden="true"></i> Tipos de productos</a></li>
-			<li><a href='<?php echo site_url('administrador/pedidos')?>'><i class="fa fa-shopping-basket" aria-hidden="true"></i> Pedidos</a></li>
-	      	<li><a href='<?php echo site_url('administrador/ingredientes')?>'><i class="fa fa-flask" aria-hidden="true"></i>Ingredientes</a></li>
-	      	<li><a href='<?php echo site_url('administrador/pedidos')?>'><i class="fa fa-users" aria-hidden="true"></i> Usuarios</a></li>
-	      	<li><a href="#"><i class="fa fa-power-off" aria-hidden="true"></i> Salir</a></li>
+	    	<li <? echo ($this->uri->segment(2) == 'productos')? 'class="active"' : ' ' ;  ?> ><a  href='<?php echo site_url('administrador/productos')?>'><i class="fa fa-lemon-o" aria-hidden="true"></i> Productos</a></li>
+
+	      	<li <? echo ($this->uri->segment(2) == 'tipos_productos')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/tipos_productos')?>'><i class="fa fa-tags" aria-hidden="true"></i> Tipos de productos</a></li>
+
+			<li <? echo ($this->uri->segment(2) == 'pedidos')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/pedidos')?>'><i class="fa fa-shopping-basket" aria-hidden="true"></i> Pedidos</a></li>
+
+	      	<li <? echo ($this->uri->segment(2) == 'ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/ingredientes')?>'><i class="fa fa-flask" aria-hidden="true"></i>Ingredientes</a></li>
+
+	      	<li <? echo ($this->uri->segment(2) == 'tipos_ingrediente')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/tipos_ingredientes')?>'><i class="fa fa-tag" aria-hidden="true"></i>Tipo de Ingredientes</a></li>
+
+	      	<li <? echo ($this->uri->segment(2) == 'usuarios')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/usuarios')?>'><i class="fa fa-users" aria-hidden="true"></i> Usuarios</a></li>
+
+	      	<li <? echo ($this->uri->segment(2) == 'productos')? 'class="active"' : ' ' ;  ?>><a href="#"><i class="fa fa-power-off" aria-hidden="true"></i> Salir</a></li>
 	    </ul>
 	  </div>
 	  	

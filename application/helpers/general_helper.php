@@ -15,23 +15,31 @@ if(!function_exists('traer_titulo'))
                 break;
 
             case 'productos':
-                $titulo = "Agregar, modifica o elimina los <strong>productos</strong> de tu carta.";
+                $titulo = "Agregá, modificá o eliminá los <strong>productos</strong> de tu carta.";
                 break;
 
             case 'agregar_ingrediente':
-                $titulo = "Agregue los ingredientes que puede incluir su <strong>producto</strong>.";
+                $titulo = "Agregá los ingredientes que se pueden incluir en este <strong>producto</strong>.";
                 break;
             
             case 'ingredientes':
-                $titulo = "Agregue los <strong>ingredientes</strong> que se pueden incluir en tus <strong>productos</strong>.";
+                $titulo = "Agregá, modificá o eliminá los <strong>ingredientes</strong> que se pueden incluir en tus <strong>productos</strong>.";
                 break;
 
             case 'pedidos':
-                $titulo = "Administre los <strong>pedidos</strong> recibidos";
+                $titulo = "Administrá los <strong>pedidos</strong> recibidos.";
                 break;
 
             case 'usuarios':
-                $titulo = "Gestioné los <strong>usuarios</strong> del sistema";
+                $titulo = "Administrá los <strong>usuarios</strong> del sistema.";
+                break;
+
+            case 'tipos_productos':
+                $titulo = "Agregá, modificá o eliminá los <strong>tipos de platos</strong> del menu.";
+                break;
+
+            case 'tipos_ingredientes':
+                $titulo = "Agregá, modificá o eliminá los <strong>tipos de ingredientes</strong>.";
                 break;
 
             default:

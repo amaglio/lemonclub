@@ -26,7 +26,7 @@ class Administrador extends CI_Controller {
 		$this->_example_output((object)array('output' => '' , 'js_files' => array() , 'css_files' => array()));
 	}
 
-	public function tipos_plato()
+	public function tipos_productos()
 	{
 			$crud = new grocery_CRUD();
 
@@ -47,7 +47,7 @@ class Administrador extends CI_Controller {
 			$crud = new grocery_CRUD();
 
 			$crud->set_table('producto');
-			$crud->columns('id_producto','id_producto_tipo','nombre','descripcion','precio');
+			$crud->columns('id_producto','id_producto_tipo','nombre','descripcion','precio','foto');
 			$crud->display_as('id_producto','Id')
 				 ->display_as('descripcion','Descripcion del tipo de plato')
 				 ->display_as('id_producto_tipo','Tipo de producto');
@@ -60,6 +60,8 @@ class Administrador extends CI_Controller {
 			$crud->set_language("spanish"); 
  
 			$crud->required_fields('id_producto_tipo' , 'nombre' , 'precio');
+
+			$crud->set_field_upload('foto','assets/images/productos');
 
 			$output = $crud->render();
 
@@ -94,6 +96,23 @@ class Administrador extends CI_Controller {
 			$crud->set_table('ingrediente');
 			$crud->columns('id_ingrediente','nombre','precio','calorias');
 			$crud->display_as('id_ingrediente','Id')
+				 ->display_as('descripcion','Descripcion del tipo');
+			$crud->unset_delete();
+			$crud->set_language("spanish"); 
+			$crud->required_fields('descripcion');
+			$output = $crud->render();
+
+			$this->_example_output($output);
+	}
+
+
+	public function tipos_ingredientes()
+	{
+			$crud = new grocery_CRUD();
+
+			$crud->set_table('producto_tipo');
+			$crud->columns('id_producto_tipo','descripcion');
+			$crud->display_as('id_producto_tipo','Id')
 				 ->display_as('descripcion','Descripcion del tipo');
 			$crud->unset_delete();
 			$crud->set_language("spanish"); 
