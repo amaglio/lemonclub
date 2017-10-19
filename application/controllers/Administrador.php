@@ -54,7 +54,15 @@ class Administrador extends CI_Controller {
  
 			$crud->add_action('Agregar Ingredientes',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/ingredientes.png', 'Administrador/agregar_ingrediente');
 
-
+			
+			$state_info = $crud->getStateInfo();
+			$state = $crud->getState();
+			if($state == "edit")
+			{
+				$primary_key = $state_info->primary_key;
+				$crud->field_type('id_producto','readonly');
+			}
+			$crud->set_subject('Producto');
 			$crud->set_relation('id_producto_tipo','producto_tipo','descripcion');
 
 			$crud->set_language("spanish"); 
