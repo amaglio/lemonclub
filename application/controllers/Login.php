@@ -32,8 +32,8 @@ class Login extends CI_Controller {
  			
  			$this->session->set_userdata('usuario_lemon',  "aaaaa" );
  			
- 			echo "Post: ".$this->input->post('usuario')."<br>";
- 			echo "Session: ".$this->session->userdata('usuario_lemon');
+ 			//echo "Post: ".$this->input->post('usuario')."<br>";
+ 			//echo "Session: ".$this->session->userdata('usuario_lemon');
  			redirect('Administrador/index/','refresh');
 	 
 		endif;

@@ -7,8 +7,8 @@ class Chequear
 	public function check_login()
 	{	
 		$CI =& get_instance();
-
-        if( $CI->uri->segment(1) == 'Administrador' )
+		//echo $CI->uri->segment(1);
+        if( strtolower($CI->uri->segment(1)) == 'administrador' )
         {
         	if($CI->session->userdata('usuario_lemon') == false)
 				redirect(base_url('index.php/login/index'));
