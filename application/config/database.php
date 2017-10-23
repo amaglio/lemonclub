@@ -75,7 +75,7 @@ $query_builder = TRUE;
 
 
 // Configuracion trabajo
-/*
+
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
@@ -96,10 +96,10 @@ $db['default'] = array(
 	'stricton' => FALSE,
 	'failover' => array(),
 	'save_queries' => TRUE
-); */
+); 
 
 // Configuracion WEB
-
+/*
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
@@ -121,3 +121,4 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+*/

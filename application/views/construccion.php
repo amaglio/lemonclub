@@ -20,9 +20,19 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,700,600" rel="stylesheet" type="text/css">
     </head>
     <body style="background:#000; text-align:center; font-family:'Open Sans'; color:#FFF;">
-        
-        <img src="assets/images/lemonlogo.png" width="300px">
-        <h1>En Construcci&oacute;n</h1>
-
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12" style="text-align:center">
+                    <img src="assets/images/lemonlogo.png" class="img-responsive" style="margin:auto;">
+                    <h1>En Construcci&oacute;n</h1>
+                    <br>
+                    <img src="assets/images/menu/1.jpg" class="img-responsive" style="margin:auto;">
+                    <img src="assets/images/menu/2.jpg" class="img-responsive" style="margin:auto;">
+                </div>
+            </div>
+        </div>
+        <?php
+        $this->load->view('templates/footer');
+        ?>
     </body>
 </html>

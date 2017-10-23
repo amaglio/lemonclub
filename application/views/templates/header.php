@@ -2,15 +2,15 @@
     	<div class="container">
     		<div class="row">
     			<div class="col-xs-5 area-botones" style="">
-		            <a class="" href="<?=site_url()?>">HOME</a>
-		            <a class="" href="<?=site_url('pages/menu')?>">MENU</a>
+		            <a class="" href="<?=site_url('pages')?>">HOME</a>
+		            <a class="" href="<?=site_url('menu')?>">MENU</a>
 		            <a class="" href="<?=site_url('pages/contacto')?>">CONTACTO</a>
     			</div>
     			<div class="col-xs-2 area-logo">
-    				<a href="<?=site_url()?>"><img src="<?=base_url('assets/images/lemonlogo.png')?>"></a>
+    				<a href="<?=site_url('pages')?>"><img src="<?=base_url('assets/images/lemonlogo.png')?>"></a>
     			</div>
     			<div class="col-xs-5 area-carrito" style="text-align:right">
-    				<a href="<?=site_url('pages/carrito')?>" class="btn btn-amarillo"><i class="fa fa-shopping-cart fa-lg"></i> INGRES&Aacute; AL CARRITO</a>
+    				<a href="<?=site_url('pedido')?>" class="btn btn-amarillo"><i class="fa fa-shopping-cart fa-lg"></i> INGRES&Aacute; AL CARRITO</a>
     			</div>
     		</div>
     	</div>
@@ -26,14 +26,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="<?=site_url()?>"><img src="<?=base_url('assets/images/lemonlogo.png')?>" height="100%"></a>
+          <a class="navbar-brand" href="<?=site_url('pages')?>"><img src="<?=base_url('assets/images/lemonlogo.png')?>" height="100%"></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="<?=site_url()?>">HOME</a></li>
-            <li><a href="<?=site_url('pages/menu')?>">MENU</a></li>
+            <li class="active"><a href="<?=site_url('pages')?>">HOME</a></li>
+            <li><a href="<?=site_url('menu')?>">MENU</a></li>
             <li><a href="<?=site_url('pages/contacto')?>">CONTACTO</a></li>
-            <li><a href="<?=site_url('pages/carrito')?>">CARRITO</a></li>
+            <li><a href="<?=site_url('pedido')?>">CARRITO</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

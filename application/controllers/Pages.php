@@ -8,24 +8,9 @@ class Pages extends CI_Controller {
 		$this->load->view('pages/index');
 	}
 
-	public function menu()
-	{
-		$this->load->view('pages/menu');
-	}
-
 	public function contacto()
 	{
 		$this->load->view('pages/contacto');
-	}
-
-	public function carrito()
-	{
-		$this->load->view('pages/carrito');
-	}
-
-	public function confirmar_pedido()
-	{
-		$this->load->view('pages/confirmar_pedido');
 	}
 
 	public function construccion()
