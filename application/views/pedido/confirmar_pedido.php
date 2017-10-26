@@ -25,7 +25,7 @@ $this->load->view('templates/head');
 			<div class="col-xs-12 col-sm-7 col-sm-offset-1">
 				<div class="titulo"><i class="fa fa-shopping-cart fa-lg"></i> &nbsp; CONFIRMAR PEDIDO</div>
 				<div class="formulario">
-					<form class="form-horizontal" action="<?=site_url('pedido/confirmar_pedido')?>" method="POST">
+					<form class="form-horizontal" action="<?=site_url('pedido/comprar')?>" method="POST">
 						<div class="form-group">
 						    <div class="col-sm-12">
 						    	<input type="email" class="form-control" id="mail" name="mail" placeholder="Email" value="<?php echo set_value('mail'); ?>">

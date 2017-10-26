@@ -14,25 +14,49 @@ class Pedido_model extends CI_Model {
 
 	function abm_pedido($accion, $array)
     {
+ 		/*
    		$nombre = $array['nombre'];
    		$apellido = $array['apellido'];
-   		$email = $array['email'];
+   		$mail = $array['mail'];
 
-   	 
-	    if(isset($array['direccion_delivery']) && !empty($array['direccion_delivery']))
-	        $direccion_delivery = "'".$array['direccion_delivery']."'";
-	    else
-	        $direccion_delivery = " NULL " ;
+   
+ 		$this->db->trans_start();
+ 			
+ 			// Pedido 
+
+			$array_agregar_programa['id_pedido'] = ;
+		    $array_agregar_programa['id_sucursal'] = ;
+		    $array_agregar_programa['id_usuario'] = ;
+		    $array_agregar_programa['id_forma_pago'] = ;
+		    $array_agregar_programa['id_forma_entrega'] = ;
+
+		    $this->db->insert('pedido',$array_agregar_programa);
+
+		    // Pedido 
 
 
-	    chrome_log("");
- 
 
-	    $sql = " ";
+ 		$this->db->trans_complete();
+	 
+		if ($this->db->trans_status() === FALSE) // Error en la transaccion
+		{
+		    return false;
+		}
+		else
+		{
+	   		return true;
+		}    		
+		*/
 
-	    $query = $this->db->query($sql);
-
-	    return $query->row_array(); 
+ 		foreach ($this->cart->contents() as $item)
+		{
+			print_r($item);
+			
+			/*echo '<div class="row item">
+					<div class="col-xs-3 area-imagen"><img src="'.base_url('assets/images/productos/ensalada1.jpg').'" class="img-responsive"></div>
+					<div class="col-xs-9 area-texto">'.$item['name'].' x'.$item['qty'].'</div>
+				</div>';*/
+		}
     	 
     }
 

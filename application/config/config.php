@@ -23,8 +23,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url']	= 'http://localhost:8888/Lemonclub/';
+//$config['base_url']	= 'http://localhost:8888/Lemonclub/';
 //$config['base_url']	= 'http://www.lemonclub.com.ar/';
+$config['base_url']	= 'http://localhost/lemonclub/';
 
 /*
 |--------------------------------------------------------------------------

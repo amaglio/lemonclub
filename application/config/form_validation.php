@@ -17,6 +17,27 @@ $config = array(
                                         )
                                 ),
 
+// --------------------------------- PEDIDO ------------------------------
+
+
+            'comprar' => array(
+                                    array(
+                                            'field' => 'nombre',
+                                            'label' => 'nombre',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'apellido',
+                                            'label' => 'apellido',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'mail',
+                                            'label' => 'mail',
+                                            'rules' => 'required|trim|xss_clean'
+                                        )
+                                ),
+
           
 /*               
 // --------------------------------- USUARIO ------------------------------
