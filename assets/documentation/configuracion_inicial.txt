@@ -1,0 +1,9 @@
+RECURSO
+
+- CodeIgniter-3.1.5
+- Grocery-crud-1.5.9
+
+- Configuracion:
+	- Chrome_log: helper y thirty party.
+	- 'database', 'session','form_validation',
+	- 'MY_Form_validation': libraries (extiende form_validation)

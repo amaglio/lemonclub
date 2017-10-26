@@ -9,27 +9,214 @@ class Administrador extends CI_Controller {
 
 		$this->load->database();
 		$this->load->helper('url');
-
-		$this->load->library('grocery_CRUD');
+		$this->load->model('Administrador_model');
+		$this->load->library('grocery_CRUD'); 
 	}
 
 	public function _example_output($output = null)
-	{
-		$this->load->view('example.php',(array)$output);
-	}
+	{	
 
-	public function offices()
-	{
-		$output = $this->grocery_crud->render();
- 
-		$this->_example_output($output);
+		$output->titulo = traer_titulo($this->uri->segment(2));
+		$this->load->view('administrador/index.php',(array)$output);
 	}
 
 	public function index()
 	{
+		
 		$this->_example_output((object)array('output' => '' , 'js_files' => array() , 'css_files' => array()));
 	}
 
+	public function tipos_productos()
+	{
+			$crud = new grocery_CRUD();
+
+			$crud->set_table('producto_tipo');
+			$crud->columns('id_producto_tipo','descripcion');
+			$crud->display_as('id_producto_tipo','Id')
+				 ->display_as('descripcion','Descripcion del tipo');
+			$crud->unset_delete();
+			$crud->set_language("spanish"); 
+			$crud->required_fields('descripcion');
+			$output = $crud->render();
+
+			$this->_example_output($output);
+	}
+
+	public function productos()
+	{
+			$crud = new grocery_CRUD();
+
+			$crud->set_table('producto');
+			$crud->columns('id_producto','id_producto_tipo','nombre','descripcion','precio','foto');
+			$crud->display_as('id_producto','Id')
+				 ->display_as('descripcion','Descripcion del tipo de plato')
+				 ->display_as('id_producto_tipo','Tipo de producto');
+ 
+			$crud->add_action('Agregar Ingredientes',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/ingredientes.png', 'Administrador/agregar_ingrediente');
+
+			
+			$state_info = $crud->getStateInfo();
+			$state = $crud->getState();
+			if($state == "edit")
+			{
+				$primary_key = $state_info->primary_key;
+				$crud->field_type('id_producto','readonly');
+			}
+			$crud->set_subject('Producto');
+			$crud->set_relation('id_producto_tipo','producto_tipo','descripcion');
+
+			$crud->set_language("spanish"); 
+ 
+			$crud->required_fields('id_producto_tipo' , 'nombre' , 'precio');
+
+			$crud->set_field_upload('foto','assets/images/productos');
+
+			$output = $crud->render();
+
+			$this->_example_output($output);
+	}
+
+	public function usuarios()
+	{
+			$crud = new grocery_CRUD();
+
+			$crud->set_table('usuario');
+			$crud->columns('id_usuario','nombre','apellido','email','telefono', 'direccion');
+			$crud->display_as('id_usuario','Id');
+ 
+			//$crud->add_action('Agregar Ingredientes',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/ingredientes.png', 'Administrador/agregar_ingrediente');
+
+			//$crud->set_relation('id_producto_tipo','producto_tipo','descripcion');
+
+			//$crud->set_language("spanish"); 
+ 
+			//$crud->required_fields('id_producto_tipo' , 'nombre' , 'precio');
+
+			$output = $crud->render();
+
+			$this->_example_output($output);
+	}
+
+	public function ingredientes()
+	{
+			$crud = new grocery_CRUD();
+
+			$crud->set_table('ingrediente');
+			$crud->columns('id_ingrediente','nombre','precio','calorias');
+			$crud->display_as('id_ingrediente','Id')
+				 ->display_as('descripcion','Descripcion del tipo');
+			$crud->unset_delete();
+			$crud->set_language("spanish"); 
+			$crud->required_fields('descripcion');
+			$output = $crud->render();
+
+			$this->_example_output($output);
+	}
+
+
+	public function tipos_ingredientes()
+	{
+			$crud = new grocery_CRUD();
+
+			$crud->set_table('producto_tipo');
+			$crud->columns('id_producto_tipo','descripcion');
+			$crud->display_as('id_producto_tipo','Id')
+				 ->display_as('descripcion','Descripcion del tipo');
+			$crud->unset_delete();
+			$crud->set_language("spanish"); 
+			$crud->required_fields('descripcion');
+			$output = $crud->render();
+
+			$this->_example_output($output);
+	}
+
+	public function pedidos()
+	{
+			$crud = new grocery_CRUD();
+
+			$crud->set_table('pedido');
+			$crud->columns('id_pedido','id_pedido_estado','id_sucursal');
+			$crud->display_as('id_pedido','Id')
+				 ->display_as('id_pedido_estado','Estado pedido')
+				 ->display_as('id_sucursal','Sucursal');
+			$crud->unset_delete();
+			$crud->set_language("spanish"); 
+			//$crud->required_fields('descripcion');
+			
+			$crud->set_relation('id_pedido_estado','pedido_estado','descripcion');
+			$crud->set_relation('id_sucursal','sucursal','descripcion');
+
+			$output = $crud->render();
+
+			$this->_example_output($output);
+	}
+
+
+	function f_agregar_textarea()
+	{
+
+	      return '<textarea name="address" rows="15"></textarea>';
+
+	}
+
+	public function agregar_ingrediente()
+	{
+			$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+			$output->titulo = traer_titulo($this->uri->segment(2));
+
+			$this->load->view('administrador/index.php',(array)$output);
+
+			$id_producto = $this->uri->segment(3);
+
+			$datos['producto_info'] = $this->Administrador_model->traer_informacion_producto($id_producto);
+			$datos['ingredientes_producto'] = $this->Administrador_model->traer_ingredientes_producto($id_producto);
+
+			$this->load->view('administrador/agregar_ingredientes_producto.php',$datos);
+	}
+
+
+	public function ajax_ingrediente()
+	{
+		chrome_log("ajax_ingrediente: " );
+
+		$buscar = $this->input->get('term');
+
+		if( isset($buscar) && strlen($buscar) > 1 )
+		{
+			$query=$this->db->query("   SELECT *
+										FROM	ingrediente i
+										WHERE 	i.nombre like '%$buscar%'
+										ORDER BY i.nombre"
+									);
+
+			
+			if($query->num_rows() > 0)
+			{
+				foreach ($query->result() as $row)
+				{	
+	 
+
+					$result[]= array( 	"id_ingrediente" => $row->id_ingrediente, 
+										"value" => $row->nombre 
+									);
+
+				 
+				}
+			} 
+			
+			echo json_encode($result);
+		}
+	}
+
+
+	public function alta_pedido()
+	{
+		 
+	}
+
+
+
+	/*
 	public function offices_management()
 	{
 		try{
@@ -69,22 +256,7 @@ class Administrador extends CI_Controller {
 			$this->_example_output($output);
 	}
 
-	public function customers_management()
-	{
-			$crud = new grocery_CRUD();
-
-			$crud->set_table('customers');
-			$crud->columns('customerName','contactLastName','phone','city','country','salesRepEmployeeNumber','creditLimit');
-			$crud->display_as('salesRepEmployeeNumber','from Employeer')
-				 ->display_as('customerName','Name')
-				 ->display_as('contactLastName','Last Name');
-			$crud->set_subject('Customer');
-			$crud->set_relation('salesRepEmployeeNumber','employees','lastName');
-
-			$output = $crud->render();
-
-			$this->_example_output($output);
-	}
+	
 
 	public function orders_management()
 	{
@@ -244,6 +416,6 @@ class Administrador extends CI_Controller {
 		} else {
 			return $output;
 		}
-	}
+	}*/
 
 }

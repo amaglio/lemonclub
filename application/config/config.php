@@ -23,10 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url']	= 'http://localhost/lemonclub/';
-//$config['base_url']	= 'http://adrianpc.staff.cema.edu.ar/crm/';
-//$config['base_url']	= 'https://www.ucema.edu.ar/sintal/';
-//$config['base_url']	= 'http://localhost/crm/';
+$config['base_url']	= 'http://localhost:8888/Lemonclub/';
+//$config['base_url']	= 'http://www.lemonclub.com.ar/';
 
 /*
 |--------------------------------------------------------------------------
@@ -79,7 +77,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']	= 'english';
+$config['language']	= 'spanish';
 
 /*
 |--------------------------------------------------------------------------
@@ -327,7 +325,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = 'thu23456789#[n,';
 
 /*
 |--------------------------------------------------------------------------

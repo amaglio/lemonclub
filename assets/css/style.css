@@ -1,0 +1,749 @@
+/********
+OSWALD
+********/
+@font-face {
+	font-family: 'Oswald';
+	src: url('../fonts/Oswald-Regular.eot');
+	src: url('../fonts/Oswald-Regular.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Oswald-Regular.woff') format('woff'),
+		url('../fonts/Oswald-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Oswald';
+	src: url('../fonts/Oswald-Bold.eot');
+	src: url('../fonts/Oswald-Bold.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Oswald-Bold.woff') format('woff'),
+		url('../fonts/Oswald-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Oswald';
+	src: url('../fonts/Oswald-SemiBold.eot');
+	src: url('../fonts/Oswald-SemiBold.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Oswald-SemiBold.woff') format('woff'),
+		url('../fonts/Oswald-SemiBold.ttf') format('truetype');
+	font-weight: 600;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Oswald';
+	src: url('../fonts/Oswald-Light.eot');
+	src: url('../fonts/Oswald-Light.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Oswald-Light.woff') format('woff'),
+		url('../fonts/Oswald-Light.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Oswald';
+	src: url('../fonts/Oswald-ExtraLight.eot');
+	src: url('../fonts/Oswald-ExtraLight.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Oswald-ExtraLight.woff') format('woff'),
+		url('../fonts/Oswald-ExtraLight.ttf') format('truetype');
+	font-weight: 200;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Oswald';
+	src: url('../fonts/Oswald-Medium.eot');
+	src: url('../fonts/Oswald-Medium.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Oswald-Medium.woff') format('woff'),
+		url('../fonts/Oswald-Medium.ttf') format('truetype');
+	font-weight: 500;
+	font-style: normal;
+}
+
+/**********
+LATO
+**********/
+
+@font-face {
+	font-family: 'Lato';
+	src: url('../fonts/Lato-Italic.eot');
+	src: url('../fonts/Lato-Italic.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Lato-Italic.woff') format('woff'),
+		url('../fonts/Lato-Italic.ttf') format('truetype');
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Lato Hairline';
+	src: url('../fonts/Lato-HairlineItalic.eot');
+	src: url('../fonts/Lato-HairlineItalic.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Lato-HairlineItalic.woff') format('woff'),
+		url('../fonts/Lato-HairlineItalic.ttf') format('truetype');
+	font-weight: 300;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Lato';
+	src: url('../fonts/Lato-Black.eot');
+	src: url('../fonts/Lato-Black.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Lato-Black.woff') format('woff'),
+		url('../fonts/Lato-Black.ttf') format('truetype');
+	font-weight: 900;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Lato';
+	src: url('../fonts/Lato-Bold.eot');
+	src: url('../fonts/Lato-Bold.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Lato-Bold.woff') format('woff'),
+		url('../fonts/Lato-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+
+@font-face {
+	font-family: 'Lato';
+	src: url('../fonts/Lato-LightItalic.eot');
+	src: url('../fonts/Lato-LightItalic.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Lato-LightItalic.woff') format('woff'),
+		url('../fonts/Lato-LightItalic.ttf') format('truetype');
+	font-weight: 300;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Lato';
+	src: url('../fonts/Lato-Light.eot');
+	src: url('../fonts/Lato-Light.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Lato-Light.woff') format('woff'),
+		url('../fonts/Lato-Light.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Lato';
+	src: url('../fonts/Lato-BlackItalic.eot');
+	src: url('../fonts/Lato-BlackItalic.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Lato-BlackItalic.woff') format('woff'),
+		url('../fonts/Lato-BlackItalic.ttf') format('truetype');
+	font-weight: 900;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Lato';
+	src: url('../fonts/Lato-BoldItalic.eot');
+	src: url('../fonts/Lato-BoldItalic.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Lato-BoldItalic.woff') format('woff'),
+		url('../fonts/Lato-BoldItalic.ttf') format('truetype');
+	font-weight: bold;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Lato Hairline';
+	src: url('../fonts/Lato-Hairline.eot');
+	src: url('../fonts/Lato-Hairline.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Lato-Hairline.woff') format('woff'),
+		url('../fonts/Lato-Hairline.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Lato';
+	src: url('../fonts/Lato-Regular.eot');
+	src: url('../fonts/Lato-Regular.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Lato-Regular.woff') format('woff'),
+		url('../fonts/Lato-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/********
+DOSIS
+********/
+
+@font-face {
+	font-family: 'Dosis';
+	src: url('../fonts/Dosis-Light.eot');
+	src: url('../fonts/Dosis-Light.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Dosis-Light.woff') format('woff'),
+		url('../fonts/Dosis-Light.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Dosis';
+	src: url('../fonts/Dosis-Bold.eot');
+	src: url('../fonts/Dosis-Bold.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Dosis-Bold.woff') format('woff'),
+		url('../fonts/Dosis-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Dosis';
+	src: url('../fonts/Dosis-Regular.eot');
+	src: url('../fonts/Dosis-Regular.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Dosis-Regular.woff') format('woff'),
+		url('../fonts/Dosis-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Dosis';
+	src: url('../fonts/Dosis-ExtraLight.eot');
+	src: url('../fonts/Dosis-ExtraLight.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Dosis-ExtraLight.woff') format('woff'),
+		url('../fonts/Dosis-ExtraLight.ttf') format('truetype');
+	font-weight: 200;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Dosis';
+	src: url('../fonts/Dosis-SemiBold.eot');
+	src: url('../fonts/Dosis-SemiBold.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Dosis-SemiBold.woff') format('woff'),
+		url('../fonts/Dosis-SemiBold.ttf') format('truetype');
+	font-weight: 600;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Dosis';
+	src: url('../fonts/Dosis-ExtraBold.eot');
+	src: url('../fonts/Dosis-ExtraBold.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Dosis-ExtraBold.woff') format('woff'),
+		url('../fonts/Dosis-ExtraBold.ttf') format('truetype');
+	font-weight: 800;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Dosis';
+	src: url('../fonts/Dosis-Medium.eot');
+	src: url('../fonts/Dosis-Medium.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/Dosis-Medium.woff') format('woff'),
+		url('../fonts/Dosis-Medium.ttf') format('truetype');
+	font-weight: 500;
+	font-style: normal;
+}
+
+.btn{
+	font-family: 'Oswald';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 13px;
+	border-radius: 0px;
+}
+.btn-mas-padding{
+	padding: 4px 50px;
+}
+.btn-amarillo{
+	background: #ffc200;
+	color: #231f20;
+}
+.btn-amarillo:hover{
+	background: #edaf14;
+	color: #231f20;
+}
+
+.form-control{
+	border-radius: 0px;
+	border: none;
+}
+
+/**************
+HEADER
+***************/
+
+.barra-menu{
+	padding: 0px 0px;
+	background:rgba(35,31,32,0.8);
+	z-index:9999;
+	position:relative;
+}
+.barra-menu .area-botones{
+	padding: 40px 0px;
+	text-align: right;
+	font-family: 'Lato';
+	font-weight: bold;
+	font-style: normal;
+	font-size: 13px;
+}
+.barra-menu .area-botones a{
+	padding: 0px 10px;
+	color:#FFF;
+}
+.barra-menu .area-logo{
+	text-align: center;
+}
+.barra-menu .area-logo a{
+	padding: 0px;
+	margin: auto;
+}
+.barra-menu .area-logo img{
+	height: 100px;
+}
+.barra-menu .area-carrito{
+	padding: 30px 0px;
+	text-align:right;
+}
+.barra-menu .area-carrito i{
+	margin-right: 20px;
+}
+
+/***************
+INDEX
+*************/
+
+.area-index{
+	padding: 0px;
+	width: 100%;
+}
+.area-index .row{
+	margin: 0px;
+	width: 100%;
+}
+.area-index .col-xs-12{
+	padding: 0px;
+}
+.area-index .carousel{
+	margin-top: -100px;
+}
+
+.carousel-caption{
+	bottom: 45%;
+}
+.carousel-caption h3{
+	font-family: 'Dosis';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 30px;
+	color: #ffc50a;
+	text-transform: uppercase;
+	margin: 0px;
+}
+.carousel-caption p{
+	font-family: 'Oswald';
+	font-weight: bold;
+	font-style: normal;
+	font-size: 60px;
+	text-transform: uppercase;
+	margin: 0px;
+}
+
+.btns-index{
+	margin-top: 0px;
+	margin-bottom: 100px;
+	text-align: center;
+}
+.btn-index{
+	text-align: center;
+	height: 300px;
+	padding: 100px 50px;
+	margin: 0px 10px;
+}
+.btn1-index{
+	background: url('../images/btn1.jpg');
+	background-size: cover;
+	background-position: center;
+}
+.btn2-index{
+	background: url('../images/btn2.jpg');
+	background-size: cover;
+	background-position: center;
+}
+.btn3-index{
+	background: url('../images/btn3.jpg');
+	background-size: cover;
+	background-position: center;
+}
+.btn4-index{
+	background: url('../images/btn4.jpg');
+	background-size: cover;
+	background-position: center;
+}
+
+/****************
+MENU
+****************/
+
+.area-banner{
+	text-align: center;
+	background: url('../images/fondos/ensalada.jpg');
+	background-size: cover;
+	background-position: center;
+	height: 300px;
+	padding: 180px 0px;
+	margin-top: -100px;
+}
+.area-banner .row{
+	margin: 0px;
+}
+.area-banner h3{
+	font-family: 'Dosis';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 30px;
+	color: #ffc50a;
+	text-transform: uppercase;
+	margin: 0px;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+}
+.area-banner p{
+	font-family: 'Oswald';
+	font-weight: bold;
+	font-style: normal;
+	font-size: 60px;
+	text-transform: uppercase;
+	margin: 0px;
+	color: #FFF;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+}
+
+.area-menu{
+	background: #f7f7f7;
+	height: 45px;
+}
+.menu{
+	text-align: center;
+	margin: 11px 0px 0px 0px;
+}
+.menu a {
+    color: #231f20;
+    background-color: #f7f7f7;
+    font-family: 'Oswald';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 16px;
+	padding: 10px 20px;
+	text-transform: uppercase;
+}
+.menu .active{
+	background: #ffc200;
+}
+
+.area-menu-items{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.area-menu-items .item{
+	font-family: 'Lato';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 18px;
+	text-align: center;
+	margin-top: 20px;
+}
+.area-menu-items .item .titulo{
+	font-size: 18px;
+	color: #451602;
+	margin-top: 5px;
+}
+.area-menu-items .item .descripcion{
+	font-size: 14px;
+	font-style: italic;
+	color: #939393;
+	margin-top: 5px;
+}
+.area-menu-items .item .precio{
+	font-size: 24px;
+	color: #451602;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+/***************
+CONTACTO
+****************/
+
+.area-contacto{
+	background: url('../images/fondos/palta.jpg');
+	background-size: cover;
+	background-position: center;
+	text-align: center;
+	margin-top: -100px;
+	height: auto;
+}
+.area-contacto .area-negra{
+	background: rgba(0,0,0,0.5);
+	padding-top: 120px;
+	padding-bottom: 50px;
+}
+.area-contacto h3{
+	font-family: 'Dosis';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 50px;
+	color: #ffc50a;
+	text-transform: uppercase;
+	margin-bottom: 10px;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+}
+.area-contacto p{
+	font-family: 'Lato';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 21px;
+	color: #ffc50a;
+	text-transform: uppercase;
+	margin: 0px;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+}
+
+.contacto{
+	background: #f7f7f7;
+	text-align: left;
+	padding: 20px;
+	font-family: 'Lato';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 14px;
+	color: #6b6b6b;
+	margin-top: 20px;
+}
+.contacto .area-mapa{
+	height: 360px;
+}
+.contacto label{
+	font-weight: normal;
+}
+
+.contacto-footer{
+	background: #000000;
+	padding: 20px;
+	text-align: center;
+}
+.contacto-footer .datos{
+	color: #ffc50a;
+	font-family: 'Lato';
+	font-weight: bold;
+	font-style: normal;
+	font-size: 14px;
+	margin: 20px 0px;
+}
+.contacto-footer .copy{
+	color: #ffffff;
+	font-family: 'Lato';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 12px;
+	margin: 20px 0px;
+}
+
+/*****************
+CARRITO
+*******************/
+
+.carrito{
+	margin-top: 30px;
+	margin-bottom: 50px;
+}
+.carrito .titulo{
+	text-align: center;
+	background: #ffc50a;
+	font-family: 'Oswald';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 17px;
+	padding: 10px 30px;
+	width: 220px;
+}
+.carrito .table{
+	background: #f7f7f7;
+	margin-bottom: 0px;
+}
+.carrito .th{
+	font-family: 'Lato';
+	font-weight: bold;
+	font-style: normal;
+	font-size: 13px;
+	color: #451602;
+}
+.carrito .item{
+	font-family: 'Lato';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 18px;
+	text-align: left;
+	padding: 10px 20px;
+	border-top: 1px solid #FFF;
+	vertical-align: middle;
+}
+.carrito .item:first-child{
+	border-top: none;
+}
+.carrito .item .title{
+	font-size: 21px;
+	color: #451602;
+}
+.carrito .item .descripcion{
+	font-size: 18px;
+	font-style: italic;
+	color: #939393;
+}
+.carrito .item .precio{
+	font-size: 24px;
+	color: #451602;
+}
+.carrito .item .precio{
+	font-size: 18px;
+	color: #451602;
+}
+.carrito .item .form-control{
+	width: 60px;
+}
+.carrito .total{
+	margin-top: 0px;
+	border-left: 1px solid #939393;
+	border-right: 1px solid #939393;
+	border-bottom: 1px solid #939393;
+	font-family: 'Lato';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 21px;
+	color: #451602;
+	text-align: center;
+	padding: 15px;
+}
+
+/*****************
+CONFIRMAR PEDIDO
+*******************/
+
+.confirmar{
+	margin-top: 30px;
+	margin-bottom: 50px;
+}
+.confirmar .titulo{
+	text-align: center;
+	background: #ffc50a;
+	font-family: 'Oswald';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 17px;
+	padding: 10px 30px;
+	width: 220px;
+}
+.confirmar .formulario{
+	background: #f7f7f7;
+	padding: 10px;
+}
+.confirmar .formulario .item{
+	font-family: 'Lato';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 14px;
+	color: #451602;
+	vertical-align: middle;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.confirmar .total{
+	font-family: 'Lato';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 21px;
+	color: #451602;
+	text-align: center;
+	border-top: 1px solid #FFF;
+	background: #f7f7f7;
+	padding: 10px;
+}
+.confirmar .seguir{
+	padding: 20px 60px;
+}
+/*****************
+MEDIA
+*******************/
+
+@media (max-width: 768px) {
+	.navbar{
+		margin-bottom: 0px;
+	}
+	.navbar-brand{
+		padding: 0px;
+		margin-left: 10px;
+	}
+	.area-index .carousel{
+		margin-top: 0px;
+	}
+	.carousel-caption{
+		bottom: 10%;
+	}
+	.carousel-caption h3{
+		font-size: 14px;
+	}
+	.carousel-caption p{
+		font-size: 30px;
+	}
+
+	.btns-index{
+		margin-bottom: 0px;
+	}
+	.btn-index{
+		display: block;
+		height: 150px;
+		padding: 50px 10px;
+		margin: 10px 0px;
+	}
+
+	.area-banner{
+		margin-top: 0px;
+		height: 150px;
+		padding: 40px 0px;
+	}
+	.area-banner h3{
+		font-size: 18px;
+	}
+	.area-banner p{
+		font-size: 30px;
+	}
+	.area-menu{
+		background: #f7f7f7;
+		height: 45px;
+	}
+	.area-menu{
+		height: 190px;
+	}
+	.menu a {
+	    color: #231f20;
+	    background-color: #f7f7f7;
+	    font-family: 'Oswald';
+		font-weight: normal;
+		font-style: normal;
+		font-size: 16px;
+		padding: 10px 20px;
+		display: block;
+	}
+
+	.area-contacto{
+		margin-top: 0px;
+	}
+	.area-contacto .area-negra{
+		padding-top: 0px;
+		padding-bottom: 50px;
+	}
+	.area-contacto h3{
+		font-size: 30px;
+	}
+	.area-contacto p{
+		font-size: 14px;
+	}
+	.contacto{
+		padding: 10px 0px;
+		font-size: 14px;
+	}
+}
