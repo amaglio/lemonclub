@@ -114,7 +114,7 @@ class Pedido extends CI_Controller {
 		 
 			chrome_log("Paso validacion");
 
-			$this->pedido_model->abm_pedido('A',$this->input->post());
+			//$this->pedido_model->abm_pedido('A',$this->input->post());
 
  			
  			/*
