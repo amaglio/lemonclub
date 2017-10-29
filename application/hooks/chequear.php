@@ -10,7 +10,7 @@ class Chequear
 		//echo $CI->uri->segment(1);
         if( strtolower($CI->uri->segment(1)) == 'administrador' )
         {
-        	if($CI->session->userdata('usuario_lemon') == false)
+        	if($CI->session->userdata('administrador_lemon') == false)
 				redirect(base_url('index.php/login/index'));
         }
 
