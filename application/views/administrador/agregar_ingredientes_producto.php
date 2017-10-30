@@ -16,6 +16,8 @@
 
 </style>
 
+
+
 <div class="col-md-3">
 	<div class="panel panel-default">
 	  	<div class="panel-heading"><strong>Informacion del producto</strong></div>
@@ -41,7 +43,7 @@
 
 </div>
 <div class="col-md-5">
-
+  <? mensaje_resultado($mensaje); ?>
 	<div class="panel panel-default">
 	  	<div class="panel-heading"><strong>Ingredientes del producto</strong></div>
   		<div class="panel-body">
@@ -49,7 +51,7 @@
   			<?php if($ingredientes_producto->num_rows() > 0): ?>
 						
 
-			<?php else: ?>
+			   <?php else: ?>
 
 					<div class="alert alert-danger alert-dismissable"> 
 					   Aún no hay ingredientes en el producto
@@ -68,17 +70,19 @@
 	  	<div class="panel-heading"><strong>Agregar ingrediente</strong></div>
   		<div class="panel-body">
 
-  			<form  name="form_agregar_ingrediente" id="form_agregar_ingrediente"  method="POST"  action="<?=base_url()?>index.php/consulta/ver_alta_consulta_2/" >
+  			<form  name="form_agregar_ingrediente" id="form_agregar_ingrediente"  method="POST"  action="<?=base_url()?>index.php/administrador/agregar_ingrediente_producto/" >
+
+        <input type="text" class="form-control" name="id_producto" id="id_producto" value="<?=$producto_info->id_producto?>" readonly="readonly">
 				
 				<div class="form-group">
 				    <label for="email">Ingrediente</label>
 				    <input type="text" class="form-control" id="ingrediente"  name="ingrediente" >
 				</div>
 
-
-              	<div class="form-group" id="div_ingrediente_seleccionado">
-              			<a onclick="ocultar_educacion_sigeu()"> <i class="fa fa-times" aria-hidden="true"> Eliminar </i></a> <input readonly="readonly" type="text" class="form-control" id="ingrediente_seleccionado"  name="ingrediente_seleccionado" >
-                       	<input readonly="readonly" type="hidden" class="form-control" id="id_ingrediente" name="id_ingrediente" > <br>
+        <div class="form-group" id="div_ingrediente_seleccionado">
+            <a onclick="ocultar_ingrediente()"> <i class="fa fa-times" aria-hidden="true"> Eliminar </i></a> <input readonly="readonly" type="text" class="form-control" id="ingrediente_seleccionado"  name="ingrediente_seleccionado" >
+            
+            <input readonly="readonly" type="hidden" class="form-control" id="id_ingrediente" name="id_ingrediente" > <br>
 				</div>
 
 				<div class="form-group">
@@ -231,7 +235,7 @@
 
     });
 
-	function ocultar_educacion_sigeu()
+	function ocultar_ingrediente()
     {
         jq_ui('#div_ingrediente_seleccionado').hide();
         jq_ui('#id_ingrediente').val("");

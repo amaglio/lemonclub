@@ -124,4 +124,16 @@ if(!function_exists('enviar_email'))
         endif;  
     }
 }
-  
+
+// Mensaje de error de las variables flash session
+if(!function_exists('mensaje_resultado'))
+{
+    function mensaje_resultado($mensaje)
+    {
+        if ($mensaje): ?>
+                <div class="alert alert-success mensaje_resultado" style="padding:5px 30px 5px 15px">
+                  <h5><?=$mensaje?></h5>
+                </div>
+        <? endif;  
+    }
+}
