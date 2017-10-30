@@ -7,17 +7,16 @@ public function __construct()
 	parent::__construct();
 	$this->load->model('Usuario_model');
 }
- 
 
 public function procesa_logueo()
 {
-	chrome_log("Login/procesa_login");
+	chrome_log("Usuario/procesa_login");
  
 	if ($this->form_validation->run('loguearse_usuario') == FALSE):
 
 		chrome_log("No paso validacion");
 		$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.');
-		redirect('Login/index/','refresh');
+		redirect('Usuario/index/','refresh');
 
 	else: 
 	 
@@ -34,10 +33,89 @@ public function procesa_logueo()
 		 				 
 		else:  
 		 
-			$this->session->set_flashdata('mensaje_login', 'Email o usuario incorrecto');
+			$this->session->set_flashdata('mensaje', 'Email o clave incorrecto');
 
 		endif; 
 
+ 
+	endif;	
+}
+
+public function procesa_usuario_invitado()
+{
+	chrome_log("Usuario/procesa_usuario_invitado");
+ 
+	if ($this->form_validation->run('usuario_invitado') == FALSE):
+
+		chrome_log("No paso validacion");
+		$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.');
+		redirect('Login/index/','refresh');
+
+	else: 
+	 
+		chrome_log("Paso validacion");
+
+		date_default_timezone_set('America/New_York');
+	 	$token = $this->input->post('email').rand(1,9999999).time();
+
+		$query = $this->Usuario_model->usuario_invitado( $this->input->post('email'), $token );
+
+		if ( $query ):   // Si se creo el token, se envia el email
+		 
+			chrome_log("Pudo procesar usuario invitado");
+ 			
+			if( enviar_email( $this->input->post() , $token )):
+
+				$this->session->set_flashdata('mensaje', 'Se le ha enviado un email, por favor ingresa a tu email y continua el pedido. La próxima vez podes registrarte y hacer tu pedido aún mas fácil. ');
+
+			else:
+
+				$this->session->set_flashdata('mensaje', 'Ha ocurrido un error, por favor, intentá mas tarde.'); 
+
+			endif;
+		 				 
+		else: 
+
+ 			$this->session->set_flashdata('mensaje', 'Ha ocurrido un error, por favor, intentá mas tarde.');
+
+		endif; 
+ 
+ 
+	endif;	
+}
+
+public function procesa_validar_usuario_invitado($email, $token) // Valida la URL en enviamos en procesa_usuario_invitado()
+{
+	chrome_log("Usuario/procesa_validar_usuario_invitado");
+
+	$this->form_validation->set_data(array(
+        'email'    =>  $email,
+        'token'    =>  $token,
+	));
+ 
+	if ($this->form_validation->run('validar_usuario_invitado') == FALSE):
+
+		chrome_log("No paso validacion");
+		$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.');
+ 
+	else: 
+	 
+		chrome_log("Paso validacion");
+
+		$query = $this->Usuario_model->procesa_validar_usuario_invitado( $email, $token);
+
+		if ( $query ):   
+		 
+			chrome_log("Pudo validar el usuario invitado");
+			$this->session->set_flashdata('mensaje', 'Se ha validado su email exitosamente, ya podes finalizar tu pedido.');
+		 				 
+		else: 
+
+			chrome_log("No pudo validar el usuario invitado");
+ 			$this->session->set_flashdata('mensaje', 'Ha ocurrido un error, por favor, intentá mas tarde.');
+
+		endif; 
+ 
  
 	endif;	
 }
@@ -79,7 +157,6 @@ public function procesa_registrarse()
 	redirect("Login/index");
 }
 
-
 public function logout()
 {
 	$this->session->unset_userdata('usuario_lemon');
@@ -96,7 +173,8 @@ public function comprobar_email_existente_validation($email=null)
 	else 
 		return true; // Duplicado 	
 }
- 
+
+
 
 
 }

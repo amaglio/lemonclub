@@ -82,7 +82,28 @@ $config = array(
                                             'rules' => 'strip_tags|required|max_length[100]|trim|min_length[6]|max_length[15]|xss_clean'
                                          ) 
                                 ),
-          
+
+          'usuario_invitado' => array(
+                                    array(
+                                            'field' => 'id_pedido',
+                                            'label' => 'id_pedido',
+                                            'rules' => 'required|trim|xss_clean|required'
+                                        ) 
+                                ),
+
+          'validar_usuario_invitado' => array(
+                                     array(
+                                            'field' => 'email',
+                                            'label' => 'email',
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
+                                         ),
+                                        array(
+                                            'field' => 'token',
+                                            'label' => 'token',
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
+                                         )  
+                                ),
+
 /*               
 // --------------------------------- USUARIO ------------------------------
 

@@ -5,8 +5,6 @@ class Usuario_model extends CI_Model {
 public function __construct()
 {
 	parent::__construct();
-	
-	
 }
 
 
@@ -85,8 +83,95 @@ public function registrar_usuario( $array )
 
 		return $resultado;
 	} 
-
 }
+
+public function usuario_invitado( $array, $token ) 
+{
+	chrome_log("Usuario_model/usuario_invitado");
+ 
+
+	//--- Usuario ---
+
+	$this->db->trans_start();
+
+		//--- Usuario invitado ya existente ¿? --
+
+		$sql = "SELECT 	*
+	 			FROM 	usuario u 
+	 			WHERE 	u.email = ? "; 
+
+		$query = $this->db->query($sql, array( $array['email'] ));
+
+		if($query->num_rows() > 0): // El email ya existe
+		 	
+			$array_where = array( 'email' => $array['email'] );
+
+			$educacion =  array();
+			$educacion['token'] =  $token;
+
+			$this->db->where($array_where);
+			$this->db->update('usuario', $educacion); 
+
+		
+		else: // El email no existe
+		
+			$usuario['email'] = $array['email'];
+			$usuario['token'] = $token;
+			$this->db->insert('usuario', $usuario); 
+
+		endif
+	 
+
+	$this->db->trans_complete();
+
+	if ($this->db->trans_status() === FALSE)
+	{
+	      $this->db->trans_rollback();
+	      $resultado = false;
+	}
+	else
+	{
+	    if($this->db->affected_rows() > 0): // Se inserto el usuario o se actualizo el token
+	    {
+			$this->db->trans_commit();
+			$resultado = true;
+		}
+		else
+		{
+			$this->db->trans_rollback();
+	      	$resultado = false;
+		}
+
+		return $resultado;
+	} 
+	 
+}
+
+public function procesa_validar_usuario_invitado( $email, $token ) 
+{
+	chrome_log("Usuario_model/procesa_validar_usuario_invitado");
+ 
+
+	$sql = "SELECT 	*
+ 			FROM 	usuario u 
+ 			WHERE 	u.email = ? 
+ 			AND 	u.token = ? "; 
+
+	$query = $this->db->query($sql, array( $array['email'], $array['token'] ));
+ 
+    if($this->db->affected_rows() > 0):  
+    {
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+ 
+}
+
+
 
 public function existe_email_registrado($email)
 {
@@ -106,6 +191,8 @@ public function existe_email_registrado($email)
 	else
 		return false;
 }
+
+
 
 }
 
