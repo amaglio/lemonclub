@@ -1,7 +1,7 @@
 <?
 $config = array(
             
-// --------------------------------- LOGUEO ------------------------------
+// --------------------------------- LOGUEO ADMIN ------------------------------
 
 
             'loguearse' => array(
@@ -17,7 +17,112 @@ $config = array(
                                         )
                                 ),
 
-          
+// --------------------------------- PEDIDO ------------------------------
+
+
+            'comprar' => array(
+                                    array(
+                                            'field' => 'nombre',
+                                            'label' => 'nombre',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'apellido',
+                                            'label' => 'apellido',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'mail',
+                                            'label' => 'mail',
+                                            'rules' => 'required|trim|xss_clean'
+                                        )
+                                ),
+
+// --------------------------------- USUARIO ------------------------------
+
+
+            'loguearse_usuario' => array(
+                                    array(
+                                            'field' => 'email',
+                                            'label' => 'email',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'password',
+                                            'label' => 'password',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ) 
+                                ),
+
+             'registrarse' => array(
+                                    
+                                    array(
+                                            'field' => 'nombre',
+                                            'label' => 'nombre',
+                                            'rules' => 'strip_tags|max_length[100]|trim|xss_clean'
+                                         ),
+                                    array(
+                                            'field' => 'apellido',
+                                            'label' => 'apellido',
+                                            'rules' => 'strip_tags|max_length[100]|trim|xss_clean'
+                                         ),
+                                    array(
+                                            'field' => 'email',
+                                            'label' => 'email',
+                                            'rules' => 'strip_tags|required|max_length[100]|trim|valid_email|callback_comprobar_email_existente_validation|xss_clean'
+                                         ),
+                                    array(
+                                            'field' => 'password',
+                                            'label' => 'password',
+                                            'rules' => 'strip_tags|required|max_length[100]|trim|matches[confirma_password]|min_length[6]|max_length[15]|xss_clean'
+                                         ),
+                                    array(
+                                            'field' => 'confirma_password',
+                                            'label' => 'confirma_password',
+                                            'rules' => 'strip_tags|required|max_length[100]|trim|min_length[6]|max_length[15]|xss_clean'
+                                         ) 
+                                ),
+
+          'usuario_invitado' => array(
+                                    array(
+                                            'field' => 'id_pedido',
+                                            'label' => 'id_pedido',
+                                            'rules' => 'required|trim|xss_clean|required'
+                                        ) 
+                                ),
+
+          'validar_usuario_invitado' => array(
+                                     array(
+                                            'field' => 'email',
+                                            'label' => 'email',
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
+                                         ),
+                                        array(
+                                            'field' => 'token',
+                                            'label' => 'token',
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
+                                         )  
+                                ),
+
+// --------------------------------- ADMINISTRADOR ------------------------------
+
+
+            'agregar_ingrediente_producto' => array(
+                                    array(
+                                            'field' => 'id_producto',
+                                            'label' => 'id_producto',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'id_ingrediente',
+                                            'label' => 'id_ingrediente',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ) 
+                                ),
+
+
+ 
+
 /*               
 // --------------------------------- USUARIO ------------------------------
 

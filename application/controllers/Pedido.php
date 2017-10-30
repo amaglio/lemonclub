@@ -100,4 +100,35 @@ class Pedido extends CI_Controller {
 		echo json_encode($return);
 	}
 
+	public function comprar()
+	{
+		chrome_log("Pedido/comprar");	 
+
+		if ($this->form_validation->run('comprar') == FALSE):
+
+			chrome_log("No paso validacion");
+			$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.');
+			//redirect('Login/index/','refresh');
+
+		else: 
+		 
+			chrome_log("Paso validacion");
+
+			//$this->pedido_model->abm_pedido('A',$this->input->post());
+
+ 			
+ 			/*
+			foreach ($this->cart->contents() as $item)
+			{
+				 
+			}*/
+
+
+ 			
+	 
+		endif;
+
+
+	}
+
 }

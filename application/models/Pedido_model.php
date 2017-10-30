@@ -14,25 +14,68 @@ class Pedido_model extends CI_Model {
 
 	function abm_pedido($accion, $array)
     {
+ 	 
    		$nombre = $array['nombre'];
    		$apellido = $array['apellido'];
-   		$email = $array['email'];
+   		$mail = $array['mail'];
 
-   	 
-	    if(isset($array['direccion_delivery']) && !empty($array['direccion_delivery']))
-	        $direccion_delivery = "'".$array['direccion_delivery']."'";
-	    else
-	        $direccion_delivery = " NULL " ;
+   
+ 		$this->db->trans_start();
+
+ 			//--- Insertar USUARIO
 
 
-	    chrome_log("");
- 
+ 			
+ 			//--- Insertar PEDIDO 
 
-	    $sql = " ";
+			$array_pedido['id_pedido_estado'] = 1; // Sin confirmar pero hay que ver si la envia ya logueado
+		    $array_pedido['id_sucursal'] = 1; // Harcodeada la de reconquista
+		    $array_pedido['id_usuario'] = 0; // 
+		    $array_pedido['id_forma_pago'] = 0;
+		    $array_pedido['id_forma_entrega'] = 0;
 
-	    $query = $this->db->query($sql);
+		    $this->db->insert('pedido',$array_pedido);
 
-	    return $query->row_array(); 
+		    $id_pedido = $this->db->insert_id();
+
+		    //---- Insertar PRODUCTOS DEL PEDIDO
+
+		    foreach ($this->cart->contents() as $item)
+			{
+				print_r($item);
+				
+				$array_pedido_producto['id_pedido'] = $id_pedido;
+		    	$array_pedido_producto['id_producto'] = $item['id']; 
+		    	$array_pedido_producto['cantidad'] = $item['qty']; // 
+
+		    	$this->db->insert('pedido_producto',$array_pedido_producto);
+
+			}
+
+			//---- Insertar PEDIDO DELIVEY 
+
+			$array_pedido_delivey['id_pedido'] = $id_pedido;  
+		    $array_pedido_delivey['dirección'] = $array['calle'];  
+		    $array_pedido_delivey['telefono'] = $array['telefono'];
+		    // $array_pedido_delivey['latitud'] = $array['latitud'];
+		    // $array_pedido_delivey['longitud'] = $array['longitud'];
+		    // $array_pedido_delivey['nota'] = $array['nota'];
+
+			$this->db->insert('pedido_delivery',$array_pedido_delivey);
+
+			//---- Insertar PEDIDO DELIVEY 
+
+ 		$this->db->trans_complete();
+	 
+		if ($this->db->trans_status() === FALSE) // Error en la transaccion
+		{
+		    return false;
+		}
+		else
+		{
+	   		return true;
+		}    		 
+ 		
     	 
     }
 

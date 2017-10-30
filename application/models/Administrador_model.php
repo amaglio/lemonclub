@@ -27,20 +27,47 @@ class Administrador_model extends CI_Model {
     {
    	
     	$resultado = $this->db->query("	SELECT 	pi.*,
-												pit.descripcion as tipo_ingrediente,
+												it.descripcion as tipo_ingrediente,
 												i.nombre as nombre,
 												i.precio as precio,
 												i.calorias as calorias
 						    			FROM 	producto_ingrediente pi,
-												producto_ingrediente_tipo pit,
+												ingrediente_tipo it,
 												ingrediente i
 						    			WHERE pi.id_producto = '$id_producto' 
 						    			AND pi.id_ingrediente = i.id_ingrediente
-						    			AND pi.id_producto_ingrediente_tipo = pit.id_producto_ingrediente_tipo " );
+						    			AND i.id_ingrediente_tipo = it.id_ingrediente_tipo " );
 
     	return $resultado;
     }
 
+	function agregar_ingrediente_producto($array)
+    {
+   		chrome_log("Usuario_model/registrar_usuario");
+ 
+		//--- Producto ingrediente ---
+
+		$producto_ingrediente['id_producto'] =  $array['id_producto'];
+		$producto_ingrediente['id_ingrediente'] = $array['id_ingrediente']; 
+   
+		if(isset($array['ingrediente_default']))
+	        $producto_ingrediente['ingrediente_default'] =  1;
+	    else
+	    	$producto_ingrediente['ingrediente_default'] =  0;
+
+	   	if(isset($array['ingrediente_fijo']))
+	        $producto_ingrediente['ingrediente_fijo'] =  1;
+	    else
+	    	$producto_ingrediente['ingrediente_fijo'] =  0;
+	 
+		$this->db->insert('producto_ingrediente', $producto_ingrediente); 
+ 
+	    if($this->db->affected_rows() > 0)
+			return true;
+		else
+	      	return false;
+ 
+    }
 
 
 
