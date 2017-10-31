@@ -323,8 +323,12 @@ INDEX
 	margin-top: -100px;
 }
 
+.carousel-inner{
+	max-height:600px;
+	overflow:hidden;
+}
 .carousel-caption{
-	bottom: 45%;
+	bottom: 50%;
 }
 .carousel-caption h3{
 	font-family: 'Dosis';

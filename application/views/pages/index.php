@@ -12,11 +12,11 @@ $this->load->view('templates/head');
 	?>
 
 	<div class="container-fluid area-index">
-		<div class="row" >
+		<div class="row">
 			<div class="col-xs-12">
 				<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
 					<div class="carousel-inner">
-						<div class="item active">
+						<div class="item active" >
 							<img class="d-block w-100" src="<?=base_url('assets/images/fondos/carne.jpg')?>" alt="First slide">
 							<div class="carousel-caption">
 								<h3>Reinventando el</h3>
@@ -25,7 +25,7 @@ $this->load->view('templates/head');
 							</div>
 						</div>
 						<div class="item">
-							<img class="d-block w-100" src="<?=base_url('assets/images/fondos/ensalada.jpg')?>" alt="First slide">
+							<img class="d-block w-100" src="<?=base_url('assets/images/fondos/ensalada.jpg')?>" alt="Second slide">
 							<div class="carousel-caption">
 								<h3>Reinventando el</h3>
 								<p>Fast casual</p>
@@ -33,7 +33,7 @@ $this->load->view('templates/head');
 							</div>
 						</div>
 						<div class="item">
-							<img class="d-block w-100" src="<?=base_url('assets/images/fondos/pizza.jpg')?>" alt="First slide">
+							<img class="d-block w-100" src="<?=base_url('assets/images/fondos/pizza.jpg')?>" alt="Third slide">
 							<div class="carousel-caption">
 								<h3>Reinventando el</h3>
 								<p>Fast casual</p>
@@ -47,16 +47,16 @@ $this->load->view('templates/head');
 
 		<div class="row ">
 			<div class="col-md-10 col-md-offset-1 btns-index">
-				<a class="btn-index btn1-index" href="#">
+				<a class="btn-index btn1-index" href="<?php echo site_url('menu/index/4'); ?>">
 					<button class="btn btn-amarillo"><strong>ENSALADAS</strong><br>Y WRAPS</button>
 				</a>
-				<a class="btn-index btn2-index" href="#">
+				<a class="btn-index btn2-index" href="<?php echo site_url('menu/index/1'); ?>">
 					<button class="btn btn-amarillo"><strong>SANDWICHS</strong><br>Y PANINIS</button>
 				</a>
-				<a class="btn-index btn3-index" href="#">
+				<a class="btn-index btn3-index" href="<?php echo site_url('menu/index/3'); ?>">
 					<button class="btn btn-amarillo"><strong>PLATOS</strong><br>CALIENTES</button>
 				</a>
-				<a class="btn-index btn4-index" href="#">
+				<a class="btn-index btn4-index" href="<?php echo site_url('menu/index/2'); ?>">
 					<button class="btn btn-amarillo"><strong>CAFETERÍA</strong><br>Y PASTELERÍA</button>
 				</a>
 			</div>

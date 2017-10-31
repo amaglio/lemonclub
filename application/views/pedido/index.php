@@ -39,7 +39,7 @@ $this->load->view('templates/head');
 									<span class="descripcion">'.$item['descripcion'].'</span>
 								</div>
 								<div class="col-xs-12 col-sm-2 precio">$'.$this->cart->format_number($item['price']).'</div>
-								<div class="col-xs-12 col-sm-2 cantidad"><input type="number" min="1" step="1" name="cantidad[]" value="'.$item['qty'].'" onchange="modificar_cantidad(\''.$item['rowid'].'\', this.value);" class="form-control"></div>
+								<div class="col-xs-12 col-sm-2 cantidad"><input type="number" min="1" step="1" name="cantidad[]" id="cant_'.$item['rowid'].'" value="'.$item['qty'].'"  onchange="modificar_cantidad(\''.$item['rowid'].'\', this.value);" class="form-control"></div>
 							</div>';
 					}
 					?>
@@ -83,11 +83,11 @@ function modificar_cantidad(rowid, qty)
 	        	if(data.error == false)
 		        {
 		        	$('#total').html(data.total);
-		          	$.notify(data.data, "success");
+		          	$('#cant_'+rowid).notify(data.data, { className:'success', position:"top" });
 		        }
 		        else
 		        {
-		        	$.notify(data.data, "error");
+		        	$('#cant_'+rowid).notify(data.data, { className:'error', position:"top" });
 		        }
 	      	},
 	      	error: function(x, status, error)

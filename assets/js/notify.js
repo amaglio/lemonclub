@@ -533,6 +533,7 @@
     classes: {
       base: {
         "font-weight": "bold",
+        "font-size": "12px",
         "padding": "8px 15px 8px 14px",
         "text-shadow": "0 1px 0 rgba(255, 255, 255, 0.5)",
         "background-color": "#fcf8e3",

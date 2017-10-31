@@ -60,7 +60,7 @@ $this->load->view('templates/head');
 						<div class="titulo">'.$producto['nombre'].'</div>
 						<div class="descripcion">'.$producto['descripcion'].'</div>
 						<div class="precio">$'.$producto['precio'].'</div>
-						<button onclick="comprar('.$producto['id_producto'].');" id="btn_'.$producto['id_producto'].'" class="btn btn-amarillo btn-mas-padding">COMPRAR</button>
+						<button onclick="comprar('.$producto['id_producto'].');" id="btn_'.$producto['id_producto'].'" class="btn btn-amarillo btn-mas-padding" data-loading-text="CARGANDO...">AGREGAR</button>
 					</div>';
 			}
 			?>
@@ -73,6 +73,7 @@ $this->load->view('templates/footer');
 <script type="text/javascript">
 function comprar(id)
 {
+	$('#btn_'+id).button('loading');
 	var data = {id:id};
     $.ajax({
       	url: SITE_URL+'/pedido/agregar_producto_ajax',
@@ -86,16 +87,18 @@ function comprar(id)
       	{
         	if(data.error == false)
 	        {
-	          	$('#btn_'+id).notify(data.data, "success");
+	          	$('#btn_'+id).notify(data.data, { className:'success', position:"top" });
 	        }
 	        else
 	        {
-	        	$('#btn_'+id).notify(data.data, "error");
+	        	$('#btn_'+id).notify(data.data, { className:'error', position:"top" });
 	        }
+	        $('#btn_'+id).button('reset');
       	},
       	error: function(x, status, error)
       	{
       		$.notify("Ocurrio un error: " + status + " \nError: " + error, "error");
+      		$('#btn_'+id).button('reset');
       	}
     });
 }
