@@ -30,23 +30,26 @@ $this->load->view('templates/head');
 						<div class="col-xs-2 th">CANTIDAD</div>
 					</div>
 					<?php
-					foreach ($this->cart->contents() as $item)
+					foreach ($items as $key => $item)
 					{
-						echo '<div class="row item">
-								<div class="col-xs-12 col-sm-2"><img src="'.base_url('assets/images/productos/ensalada1.jpg').'" class="img-responsive"></div>
+						echo '<div class="row item" id="item_'.$item['id_producto'].'">
+								<div class="col-xs-12 col-sm-2"><img src="'.base_url('assets/images/productos/'.$item['path_imagen']).'" class="img-responsive"></div>
 								<div class="col-xs-12 col-sm-6">
-									<span class="title">'.$item['name'].'</span><br>
+									<span class="title">'.$item['nombre'].'</span><br>
 									<span class="descripcion">'.$item['descripcion'].'</span>
 								</div>
-								<div class="col-xs-12 col-sm-2 precio">$'.$this->cart->format_number($item['price']).'</div>
-								<div class="col-xs-12 col-sm-2 cantidad"><input type="number" min="1" step="1" name="cantidad[]" id="cant_'.$item['rowid'].'" value="'.$item['qty'].'"  onchange="modificar_cantidad(\''.$item['rowid'].'\', this.value);" class="form-control"></div>
+								<div class="col-xs-12 col-sm-2 precio">$'.$this->cart->format_number($item['precio']).'</div>
+								<div class="col-xs-12 col-sm-2 cantidad">
+									<input type="number" min="1" step="1" name="cantidad[]" id="cant_'.$item['id_producto'].'" value="'.$item['cantidad'].'"  onchange="modificar_cantidad(\''.$item['id_producto'].'\', this.value);" class="form-control pull-left">
+									<button class="btn btn-danger" onclick="eliminar_producto('.$item['id_producto'].')"><i class="fa fa-times"></i></button>
+									</div>
 							</div>';
 					}
 					?>
 				</div>
 				<div class="col-xs-12 col-sm-4 col-sm-offset-8 total">
 					<div class="col-xs-6">Total</div>
-					<div class="col-xs-6" id="total">$<?php echo $this->cart->format_number($this->cart->total()); ?></div>
+					<div class="col-xs-6" id="total">$<?php echo $total; ?></div>
 				</div>
 				<div class="row hidden-xs">
 					<div class="col-xs-12 col-sm-6" style="text-align:left"><a href="<?=site_url('menu')?>" class="btn btn-default btn-mas-padding">SEGUIR COMPRANDO</a></div>
@@ -65,11 +68,11 @@ $this->load->view('templates/footer');
 ?>
 
 <script type="text/javascript">
-function modificar_cantidad(rowid, qty)
+function modificar_cantidad(id, qty)
 {
 	if(qty > 0)
 	{
-		var data = {rowid:rowid, qty:qty};
+		var data = {id_producto:id, qty:qty};
 	    $.ajax({
 	      	url: SITE_URL+'/pedido/modificar_cantidad_ajax',
 	      	type: 'POST',
@@ -82,12 +85,12 @@ function modificar_cantidad(rowid, qty)
 	      	{
 	        	if(data.error == false)
 		        {
-		        	$('#total').html(data.total);
-		          	$('#cant_'+rowid).notify(data.data, { className:'success', position:"top" });
+		        	$('#total').html("$"+data.total);
+		          	$('#cant_'+id).notify(data.data, { className:'success', position:"top" });
 		        }
 		        else
 		        {
-		        	$('#cant_'+rowid).notify(data.data, { className:'error', position:"top" });
+		        	$('#cant_'+id).notify(data.data, { className:'error', position:"top" });
 		        }
 	      	},
 	      	error: function(x, status, error)
@@ -100,6 +103,36 @@ function modificar_cantidad(rowid, qty)
 	{
 		$.notify("La cantidad no puede ser menor que 1.", "warn");
 	}
+}
+
+function eliminar_producto(id)
+{
+	var data = {id_producto:id};
+    $.ajax({
+      	url: SITE_URL+'/pedido/eliminar_producto_ajax',
+      	type: 'POST',
+      	data: jQuery.param( data ),
+      	cache: false,
+      	dataType: 'json',
+      	processData: false, // Don't process the files
+      	//contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+      	success: function(data, textStatus, jqXHR)
+      	{
+        	if(data.error == false)
+	        {
+	        	$('#total').html("$"+data.total);
+	          	$('#item_'+id).remove();
+	        }
+	        else
+	        {
+	        	$('#cant_'+id).notify(data.data, { className:'error', position:"top" });
+	        }
+      	},
+      	error: function(x, status, error)
+      	{
+      		$.notify("Ocurrio un error: " + status + " \nError: " + error, "error");
+      	}
+    });
 }
 </script>
 

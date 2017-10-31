@@ -13,7 +13,7 @@ public function loguearse( $array )
 	chrome_log("Usuario_model/loguearse");
  
 	$email = $array['email'];
-	$password = md5($array['password']);
+	$password = md5($array['clave']);
 
  	$sql = "SELECT *
  			FROM 	usuario u,
@@ -26,9 +26,20 @@ public function loguearse( $array )
 	$query = $this->db->query($sql, array( $email, $password ));
 
 	if($query->num_rows() > 0)
+	{
+		$this->session->set_userdata('id_usuario', $query->row()->id_usuario);
+		$this->session->set_userdata('email', $query->row()->email);
+		$this->session->set_userdata('nombre', $query->row()->nombre);
+		$this->session->set_userdata('apellido', $query->row()->apellido);
+		$this->session->set_userdata('direccion', $query->row()->direccion);
+		$this->session->set_userdata('telefono', $query->row()->telefono);
+
 		return true;
+	}
 	else
+	{
 		return false;
+	}
 }
 
 public function registrar_usuario( $array ) 
@@ -41,7 +52,7 @@ public function registrar_usuario( $array )
 
 		$usuario['email'] = $array['email'];
 
-		$this->db->insert('usuario', $usuario_registrado); 
+		$this->db->insert('usuario', $usuario); 
 
 		$id_usuario = $this->db->insert_id();
 
@@ -50,7 +61,7 @@ public function registrar_usuario( $array )
 		$usuario_registrado['id_usuario'] = $id_usuario;
 		$usuario_registrado['nombre'] = $array['nombre'];
 		$usuario_registrado['apellido'] = $array['apellido'];
-		$usuario_registrado['password'] = md5($array['password']);
+		$usuario_registrado['password'] = md5($array['clave']);
    
 		if(isset($array['direccion']) && !empty($array['direccion']))
 	        $usuario_registrado['direccion'] =  $array['direccion'];
@@ -70,7 +81,7 @@ public function registrar_usuario( $array )
 	}
 	else
 	{
-	    if($this->db->affected_rows() > 0): // Se inserto
+	    if($this->db->affected_rows() > 0) // Se inserto
 	    {
 			$this->db->trans_commit();
 			$resultado = true;
@@ -102,8 +113,8 @@ public function usuario_invitado( $array, $token )
 
 		$query = $this->db->query($sql, array( $array['email'] ));
 
-		if($query->num_rows() > 0): // El email ya existe
-		 	
+		if($query->num_rows() > 0) // El email ya existe
+		{
 			$array_where = array( 'email' => $array['email'] );
 
 			$educacion =  array();
@@ -111,15 +122,13 @@ public function usuario_invitado( $array, $token )
 
 			$this->db->where($array_where);
 			$this->db->update('usuario', $educacion); 
-
-		
-		else: // El email no existe
-		
+		}
+		else // El email no existe
+		{
 			$usuario['email'] = $array['email'];
 			$usuario['token'] = $token;
 			$this->db->insert('usuario', $usuario); 
-
-		endif
+		}
 	 
 
 	$this->db->trans_complete();
@@ -131,7 +140,7 @@ public function usuario_invitado( $array, $token )
 	}
 	else
 	{
-	    if($this->db->affected_rows() > 0): // Se inserto el usuario o se actualizo el token
+	    if($this->db->affected_rows() > 0) // Se inserto el usuario o se actualizo el token
 	    {
 			$this->db->trans_commit();
 			$resultado = true;
@@ -159,7 +168,7 @@ public function procesa_validar_usuario_invitado( $email, $token )
 
 	$query = $this->db->query($sql, array( $array['email'], $array['token'] ));
  
-    if($this->db->affected_rows() > 0):  
+    if($this->db->affected_rows() > 0)
     {
 		return true;
 	}
