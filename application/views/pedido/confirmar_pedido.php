@@ -111,7 +111,7 @@ $this->load->view('templates/head');
 				<div class="total">
 					<div class="row">
 					<div class="col-xs-6">Total</div>
-					<div class="col-xs-6">$<?php echo $this->cart->format_number($this->cart->total()); ?></div>
+					<div class="col-xs-6">$<?php echo $total; ?></div>
 					</div>
 				</div>
 			</div>

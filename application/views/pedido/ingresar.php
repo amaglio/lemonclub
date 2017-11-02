@@ -35,43 +35,21 @@ $this->load->view('templates/head');
 					echo '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'.$success.'</div>';
 				}
 
+				echo '<div id="area-mensaje"></div>';
+
 				echo '<ul class="nav nav-tabs " role="tablist">';
-					$active="";
-					if($this->input->post('ingresar')==1 || $this->input->post('ingresar')=="")
-					{
-						$active = 'class="active"';
-					}
-				    echo '<li role="presentation" '.$active.'><a href="#ingresar" aria-controls="ingresar" role="tab" data-toggle="tab">Ingresar</a></li>';
-
-				    $active="";
-					if($this->input->post('ingresar')==2)
-					{
-						$active = 'class="active"';
-					}
-				    echo '<li role="presentation" '.$active.'><a href="#invitado" aria-controls="invitado" role="tab" data-toggle="tab">Invitado</a></li>';
-
-				    $active="";
-					if($this->input->post('ingresar')==3)
-					{
-						$active = 'class="active"';
-					}
-				    echo '<li role="presentation" '.$active.'><a href="#registro" aria-controls="registro" role="tab" data-toggle="tab">Registro</a></li>';
+				    echo '<li role="presentation" class="active"><a href="#ingresar" aria-controls="ingresar" role="tab" data-toggle="tab">Ingresar</a></li>';
+				    echo '<li role="presentation" ><a href="#invitado" aria-controls="invitado" role="tab" data-toggle="tab">Invitado</a></li>';
+				    echo '<li role="presentation" ><a href="#registro" aria-controls="registro" role="tab" data-toggle="tab">Registro</a></li>';
 				echo '</ul>';
 				?>
 
 				<!-- Tab panes -->
 				<div class="tab-content">
-					<?php
-					$active="";
-					if($this->input->post('ingresar')==1 || $this->input->post('ingresar')=="")
-					{
-						$active = 'active';
-					}
-					?>
-				    <div role="tabpanel" class="tab-pane <?php echo $active; ?>" id="ingresar">
+				    <div role="tabpanel" class="tab-pane active" id="ingresar">
 				    	<div class="formulario">
 				    		<p>Si ya estas registrado ingresa con tu email y contraseña.</p>
-							<form class="form-horizontal" action="<?=site_url('pedido/ingresar')?>" method="POST">
+							<form class="form-horizontal" action="<?=site_url('pedido/ingresar')?>" method="POST" id="form-ingresar">
 								<div class="form-group">
 								    <div class="col-sm-12">
 								    	<input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo set_value('email'); ?>">
@@ -82,41 +60,33 @@ $this->load->view('templates/head');
 								    	<input type="password" class="form-control" name="clave" placeholder="Contraseña" value="<?php echo set_value('clave'); ?>">
 								    </div>
 								</div>
-								<button type="submit" value="1" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">INGRESAR</button>
+								<button type="submit" id="btn-ingresar" value="1" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">INGRESAR</button>
 							</form>
 						</div>
 				    </div>
-				    <?php
-					$active="";
-					if($this->input->post('ingresar')==2)
-					{
-						$active = 'active';
-					}
-					?>
-				    <div role="tabpanel" class="tab-pane <?php echo $active; ?>" id="invitado">
+
+				    <div role="tabpanel" class="tab-pane" id="invitado">
 				    	<div class="formulario">
 				    		<p>No necesitas registrarte, pero te enviaremos un email para validar tu correo.</p>
-							<form class="form-horizontal" action="<?=site_url('pedido/ingresar')?>" method="POST">
+							<form class="form-horizontal" action="<?=site_url('pedido/ingresar')?>" method="POST" id="form-invitado">
 								<div class="form-group">
 								    <div class="col-sm-12">
 								    	<input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo set_value('email'); ?>">
 								    </div>
 								</div>
-								<button type="submit" value="2" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">INGRESAR</button>
+								<button type="submit" id="btn-invitado" value="2" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">INGRESAR</button>
 							</form>
 						</div>
 				    </div>
-				    <?php
-					$active="";
-					if($this->input->post('ingresar')==3)
-					{
-						$active = 'active';
-					}
-					?>
-				    <div role="tabpanel" class="tab-pane <?php echo $active; ?>" id="registro">
+
+				    <div role="tabpanel" class="tab-pane" id="registro">
 				    	<div class="formulario">
 				    		<p>Registrate para que sea más rapido y facil realizar futuros pedidos.</p>
+<<<<<<< HEAD
 							<form class="form-horizontal" action="<?=site_url('usuario/procesa_registrarse')?>" method="POST">
+=======
+							<form class="form-horizontal" action="<?=site_url('pedido/ingresar')?>" method="POST" id="form-registro">
+>>>>>>> 11dd5623c1c5a5b32e418502e66dc7e58512a0f1
 								<div class="form-group">
 								    <div class="col-sm-6">
 								    	<input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="<?php echo set_value('nombre'); ?>">
@@ -138,7 +108,7 @@ $this->load->view('templates/head');
 								    	<input type="password" class="form-control" name="clave2" placeholder="Repetir Contraseña" value="<?php echo set_value('clave2'); ?>">
 								    </div>
 								</div>
-								<button type="submit" value="3" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">REGISTRAR</button>
+								<button type="submit" id="btn-registro" value="3" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">REGISTRAR</button>
 							</form>
 						</div>
 				    </div>
@@ -163,7 +133,7 @@ $this->load->view('templates/head');
 				<div class="total">
 					<div class="row">
 					<div class="col-xs-6">Total</div>
-					<div class="col-xs-6">$<?php echo $this->cart->format_number($this->cart->total()); ?></div>
+					<div class="col-xs-6">$<?php echo $total; ?></div>
 					</div>
 				</div>
 			</div>
@@ -173,6 +143,125 @@ $this->load->view('templates/head');
 <?php
 $this->load->view('templates/footer');
 ?>
+
+<script type="text/javascript">
+$('#form-ingresar').submit(function( event ) {
+	event.preventDefault();
+	$('#btn-ingresar').button('loading');
+	$('#area-mensaje').html("");
+  	$.ajax({
+       type: 'POST',
+        data: $(event.target).serialize(),
+        cache: false,
+        dataType: 'json',
+        processData: false, // Don't process the files
+        //contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+       url: SITE_URL+"usuario/procesa_registrarse",
+       success: function(data){
+          if(data.resultado == true)
+          {
+            var htmlData = '<div class="alert with-icon alert-success" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += data.mensaje;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+          }
+          else
+          {
+            var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += data.mensaje;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+          }
+          $('#btn-ingresar').button('reset');
+       },
+       error: function(x, status, error){
+          	var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += " Error: " + error;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+            $('#btn-ingresar').button('reset');
+       }
+  	});
+});
+
+$('#form-invitado').submit(function( event ) {
+	event.preventDefault();
+	$('#btn-invitado').button('loading');
+	$('#area-mensaje').html("");
+  	$.ajax({
+       type: 'POST',
+        data: $(event.target).serialize(),
+        cache: false,
+        dataType: 'json',
+        processData: false, // Don't process the files
+        //contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+       url: SITE_URL+"usuario/procesa_registrarse",
+       success: function(data){
+          if(data.resultado == true)
+          {
+            var htmlData = '<div class="alert with-icon alert-success" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += data.mensaje;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+          }
+          else
+          {
+            var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += data.mensaje;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+          }
+          $('#btn-invitado').button('reset');
+       },
+       error: function(x, status, error){
+          	var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += " Error: " + error;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+            $('#btn-invitado').button('reset');
+       }
+  	});
+});
+
+$('#form-registro').submit(function( event ) {
+	event.preventDefault();
+	$('#btn-registro').button('loading');
+	$('#area-mensaje').html("");
+  	$.ajax({
+       type: 'POST',
+        data: $(event.target).serialize(),
+        cache: false,
+        dataType: 'json',
+        processData: false, // Don't process the files
+        //contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+       url: SITE_URL+"usuario/procesa_registrarse",
+       success: function(data){
+          if(data.resultado == true)
+          {
+            var htmlData = '<div class="alert with-icon alert-success" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += data.mensaje;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+          }
+          else
+          {
+            var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += data.mensaje;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+          }
+          $('#btn-registro').button('reset');
+       },
+       error: function(x, status, error){
+          	var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += " Error: " + error;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+            $('#btn-registro').button('reset');
+       }
+  	});
+});
+</script>
 
 </body>
 </html>
