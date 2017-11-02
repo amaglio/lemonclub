@@ -11,6 +11,12 @@
     			</div>
     			<div class="col-xs-5 area-carrito" style="text-align:right">
     				<a href="<?=site_url('pedido')?>" class="btn btn-amarillo"><i class="fa fa-shopping-cart fa-lg"></i> INGRES&Aacute; AL CARRITO</a>
+                    <?
+                    if($this->session->userdata('id_usuario') != "")
+                    {
+                        echo '<a href="'.site_url('usuario/logout').'" class="btn btn-amarillo">CERRAR SESIÓN</a>';
+                    }
+                    ?>
     			</div>
     		</div>
     	</div>
@@ -34,6 +40,12 @@
             <li><a href="<?=site_url('menu')?>">MENU</a></li>
             <li><a href="<?=site_url('pages/contacto')?>">CONTACTO</a></li>
             <li><a href="<?=site_url('pedido')?>">CARRITO</a></li>
+            <?
+            if($this->session->userdata('id_usuario') != "")
+            {
+                echo '<li><a href="'.site_url('usuario/logout').'">CERRAR SESIÓN</a></li>';
+            }
+            ?>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
