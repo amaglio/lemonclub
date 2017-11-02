@@ -72,13 +72,13 @@ $config = array(
                                             'rules' => 'strip_tags|required|max_length[100]|trim|valid_email|callback_comprobar_email_existente_validation|xss_clean'
                                          ),
                                     array(
-                                            'field' => 'password',
-                                            'label' => 'password',
-                                            'rules' => 'strip_tags|required|max_length[100]|trim|matches[confirma_password]|min_length[6]|max_length[15]|xss_clean'
+                                            'field' => 'clave',
+                                            'label' => 'clave',
+                                            'rules' => 'strip_tags|required|max_length[100]|trim|matches[clave2]|min_length[6]|max_length[15]|xss_clean'
                                          ),
                                     array(
-                                            'field' => 'confirma_password',
-                                            'label' => 'confirma_password',
+                                            'field' => 'clave2',
+                                            'label' => 'clave2',
                                             'rules' => 'strip_tags|required|max_length[100]|trim|min_length[6]|max_length[15]|xss_clean'
                                          ) 
                                 ),
@@ -104,6 +104,18 @@ $config = array(
                                          )  
                                 ),
 
+            'procesa_validar_registro' => array(
+                                     array(
+                                            'field' => 'id_usuario',
+                                            'label' => 'id_usuario',
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
+                                         ),
+                                        array(
+                                            'field' => 'token',
+                                            'label' => 'token',
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
+                                         )  
+                                ),
 // --------------------------------- ADMINISTRADOR ------------------------------
 
 

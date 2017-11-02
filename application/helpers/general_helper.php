@@ -70,7 +70,7 @@ if(!function_exists('esta_logueado'))
 
 if(!function_exists('enviar_email'))
 {
-    function enviar_email($email_to, $token )
+    function enviar_email($email_to, $mensaje, $asunto )
     {   
         $CI =& get_instance();
 
@@ -91,23 +91,8 @@ if(!function_exists('enviar_email'))
 
         $CI->email->initialize($configuracion_gmail);
         $CI->email->from("lemonclub@gmail.com");
-        $CI->email->subject('Lemon Club - usuario invitado');
-
-        $enlace = base_url().'index.php/usuario/procesa_validar_usuario_invitado/'.$email_to.'/'.$token;
-
-        $mensaje =  '<h2>TERMINÁ TU PEDIDO!</h2><hr><br>';
-        $mensaje .= 'Has recibido este e-mail por que se efectuó una solicitud para realizar un pedido como usuario invitado en lemonclub.com.<br>';
-
-        $mensaje .= 'En caso de querer continuar con el proceso de compra, haga click el siguiente link  <a href="'.$enlace.'"> Validar Email </a>.<br>';
-
-        $mensaje .= '<h4>Gracias por elegirnos y recordá que podes REGISTRARTE a lemonclub.com y hacer tu pedido mas fácil. </h4> ';
-
-        $mensaje .= 'Si usted no lo pidió, puede ignorar este mensaje.<br>';
-
-        $mensaje  = html_entity_decode( $mensaje , ENT_QUOTES, "UTF-8");
-       
-        $CI->email->to($email_to); 
- 
+        $CI->email->subject($asunto);     
+        $CI->email->to($email_to);  
 
         $CI->email->message($mensaje);
         
