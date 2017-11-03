@@ -27,14 +27,8 @@ public function loguearse( $array )
 
 	if($query->num_rows() > 0)
 	{
-		$this->session->set_userdata('id_usuario', $query->row()->id_usuario);
-		$this->session->set_userdata('email', $query->row()->email);
-		$this->session->set_userdata('nombre', $query->row()->nombre);
-		$this->session->set_userdata('apellido', $query->row()->apellido);
-		$this->session->set_userdata('direccion', $query->row()->direccion);
-		$this->session->set_userdata('telefono', $query->row()->telefono);
-
-		return true;
+		//$this->session->set_userdata('id_usuario', );
+		return $query->row()->id_usuario;
 	}
 	else
 	{
@@ -62,8 +56,6 @@ public function registrar_usuario( $array, $token )
 		$usuario_registrado['nombre'] = $array['nombre'];
 		$usuario_registrado['apellido'] = $array['apellido'];
 		$usuario_registrado['password'] = md5($array['clave']);
-
-
    
 		if(isset($array['direccion']) && !empty($array['direccion']))
 	        $usuario_registrado['direccion'] =  $array['direccion'];
@@ -93,11 +85,10 @@ public function registrar_usuario( $array, $token )
 	return $resultado;
 }
 
-public function usuario_invitado( $array, $token ) 
+public function usuario_invitado( $email, $token ) 
 {
-	chrome_log("Usuario_model/usuario_invitado");
+	chrome_log("Usuario_model/registrar_usuario");
  
-
 	//--- Usuario ---
 
 	$this->db->trans_start();
@@ -108,66 +99,72 @@ public function usuario_invitado( $array, $token )
 	 			FROM 	usuario u 
 	 			WHERE 	u.email = ? "; 
 
-		$query = $this->db->query($sql, array( $array['email'] ));
+		$query = $this->db->query($sql, array( $email ));
 
+ 
 		if($query->num_rows() > 0) // El email ya existe
 		{
-			$array_where = array( 'email' => $array['email'] );
+			$id_usuario = $query->row()->id_usuario;
 
-			$educacion =  array();
-			$educacion['token'] =  $token;
+			$array_where = array( 'email' => $email );
+
+			$usuario =  array();
+			$usuario['token'] =  $token;
 
 			$this->db->where($array_where);
-			$this->db->update('usuario', $educacion); 
+			$this->db->update('usuario', $usuario); 
+
+
 		}
 		else // El email no existe
 		{
-			$usuario['email'] = $array['email'];
+			$usuario =  array();
+			$usuario['email'] = $email;
 			$usuario['token'] = $token;
 			$this->db->insert('usuario', $usuario); 
-		}
-	 
+
+			$id_usuario = $this->db->insert_id();
+		} 
 
 	$this->db->trans_complete();
 
 	if ($this->db->trans_status() === FALSE)
 	{
-	      $this->db->trans_rollback();
-	      $resultado = false;
+	    $this->db->trans_rollback();
+	    $resultado = false;
 	}
 	else
 	{
-	    if($this->db->affected_rows() > 0) // Se inserto el usuario o se actualizo el token
-	    {
-			$this->db->trans_commit();
-			$resultado = true;
-		}
-		else
-		{
-			$this->db->trans_rollback();
-	      	$resultado = false;
-		}
-
-		return $resultado;
+		$this->db->trans_commit();
+		$resultado = $id_usuario;
 	} 
+
+	return $resultado;
 	 
 }
 
-public function procesa_validar_usuario_invitado( $email, $token ) 
+public function procesa_validar_usuario_invitado( $id_usuario, $token ) 
 {
 	chrome_log("Usuario_model/procesa_validar_usuario_invitado");
  
 
 	$sql = "SELECT 	*
  			FROM 	usuario u 
- 			WHERE 	u.email = ? 
+ 			WHERE 	SHA1(u.id_usuario) = ? 
  			AND 	u.token = ? "; 
 
-	$query = $this->db->query($sql, array( $array['email'], $array['token'] ));
+	$query = $this->db->query($sql, array( $id_usuario, $token ));
  
     if($this->db->affected_rows() > 0)
     {
-		return true;
+		// Borro el token
+		$id_usuario = $query->row()->id_usuario;
+		$array_where = array(  'id_usuario' =>  $id_usuario );
+		$array_usuario['token'] = NULL;
+  		$this->db->where($array_where);
+  		$this->db->update('usuario', $array_usuario); 
+
+		return $id_usuario;
 	}
 	else
 	{
@@ -193,6 +190,7 @@ public function procesa_validar_registro( $id_usuario, $token )
 
 	if($query->num_rows() > 0)
 	{
+		// Borro el token
 		$id_usuario = $query->row()->id_usuario;
 		$array_where = array(  'id_usuario' =>  $id_usuario );
 		$array_usuario['token'] = NULL;
@@ -228,18 +226,18 @@ public function existe_email_registrado($email)
 		return false;
 }
 
-public function traer_datos_usuario( $id_usuarios ) 
+public function traer_datos_usuario( $id_usuario ) 
 {
 	chrome_log("Usuario_model/traer_datos_usuario");
 
  	$sql = "SELECT  *,
-					IF(ur.id_usuario = NULL, 'Usuario Invitado', 'Usuario Registrado') as tipo_usuario
+					IF(ur.id_usuario IS NULL, 'Usuario Invitado', 'Usuario Registrado') as tipo_usuario
  			FROM 	usuario u
  					LEFT JOIN usuario_registrado ur ON u.id_usuario = ur.id_usuario 
  			WHERE  
  					u.id_usuario = ? "; 
 
-	$query = $this->db->query($sql, array( $id_usuarios ));
+	$query = $this->db->query($sql, array( $id_usuario ));
 
 	if($query->num_rows() > 0)
 	{

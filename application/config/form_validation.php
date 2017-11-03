@@ -48,8 +48,8 @@ $config = array(
                                             'rules' => 'required|trim|xss_clean'
                                         ),
                                     array(
-                                            'field' => 'password',
-                                            'label' => 'password',
+                                            'field' => 'clave',
+                                            'label' => 'clave',
                                             'rules' => 'required|trim|xss_clean'
                                         ) 
                                 ),
@@ -85,16 +85,16 @@ $config = array(
 
           'usuario_invitado' => array(
                                     array(
-                                            'field' => 'id_pedido',
-                                            'label' => 'id_pedido',
+                                            'field' => 'email',
+                                            'label' => 'email',
                                             'rules' => 'required|trim|xss_clean|required'
                                         ) 
                                 ),
 
           'validar_usuario_invitado' => array(
                                      array(
-                                            'field' => 'email',
-                                            'label' => 'email',
+                                            'field' => 'id_usuario',
+                                            'label' => 'id_usuario',
                                             'rules' => 'strip_tags|required|trim|xss_clean'
                                          ),
                                         array(
