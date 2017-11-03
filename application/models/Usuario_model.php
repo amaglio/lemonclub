@@ -228,6 +228,31 @@ public function existe_email_registrado($email)
 		return false;
 }
 
+public function traer_datos_usuario( $id_usuarios ) 
+{
+	chrome_log("Usuario_model/traer_datos_usuario");
+
+ 	$sql = "SELECT  *,
+					IF(ur.id_usuario = NULL, 'Usuario Invitado', 'Usuario Registrado') as tipo_usuario
+ 			FROM 	usuario u
+ 					LEFT JOIN usuario_registrado ur ON u.id_usuario = ur.id_usuario 
+ 			WHERE  
+ 					u.id_usuario = ? "; 
+
+	$query = $this->db->query($sql, array( $id_usuarios ));
+
+	if($query->num_rows() > 0)
+	{
+		return $query->row();
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
+
 
 
 }

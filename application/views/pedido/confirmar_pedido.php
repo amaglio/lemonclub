@@ -6,6 +6,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->view('templates/head');
 ?>
 
+<style type="text/css">
+	
+	.subtitulo{
+		 padding: 10px;
+	    background-color: #fac80054;
+	    font-size: 12px;
+	    font-weight: bold;
+	    /* color: #fac800; */
+	}
+
+</style>
 <body>
 	<?php
 	$this->load->view('templates/header');
@@ -38,19 +49,21 @@ $this->load->view('templates/head');
 				?>
 
 				<div class="titulo"><i class="fa fa-shopping-cart fa-lg"></i> &nbsp; CONFIRMAR PEDIDO</div>
+
+				<div class="subtitulo"><?=$datos_usuario->tipo_usuario?></div>
 				<div class="formulario">
-					<form class="form-horizontal" action="<?=site_url('pedido/confirmar_pedido')?>" method="POST">
+					<form class="form-horizontal" action="<?=site_url('pedido/finalizar_pedido')?>" method="POST">
 						<div class="form-group">
 						    <div class="col-sm-12">
-						    	<input type="email" class="form-control" id="mail" name="mail" placeholder="Email" value="<?php echo $this->session->userdata('email'); ?>" readonly="readonly">
+						    	<input type="email" class="form-control" id="mail" name="mail" placeholder="Email" value="<?=$datos_usuario->email?>" readonly="readonly">
 						    </div>
 						</div>
 						<div class="form-group">
 						    <div class="col-sm-6">
-						    	<input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="<?php echo $this->session->userdata('nombre'); ?>" readonly="readonly">
+						    	<input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="<?=$datos_usuario->nombre?>" readonly="readonly">
 						    </div>
 						    <div class="col-sm-6">
-						    	<input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" value="<?php echo $this->session->userdata('apellido'); ?>" readonly="readonly">
+						    	<input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" value="<?=$datos_usuario->apellido?>" readonly="readonly">
 						    </div>
 						</div>
 						

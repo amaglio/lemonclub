@@ -133,7 +133,32 @@ $config = array(
                                 ),
 
 
- 
+// --------------------------------- PEDIDO ------------------------------ 
+
+
+            'finalizar_pedido' => array(
+
+                                    array(
+                                            'field' => 'id_pedido',
+                                            'label' => 'id_pedido',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'mail',
+                                            'label' => 'mail',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'nombre',
+                                            'label' => 'id_producto',
+                                            'rules' => 'trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'apellido',
+                                            'label' => 'apellido',
+                                            'rules' => 'trim|xss_clean'
+                                        ) 
+                                ),
 
 /*               
 // --------------------------------- USUARIO ------------------------------

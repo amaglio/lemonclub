@@ -37,6 +37,61 @@ class Pedido extends CI_Controller {
 		$data['success'] = FALSE;
 
 		if($this->session->userdata('id_usuario') == "")
+			redirect('pedido/ingresar');
+
+		$data['datos_usuario'] = $this->usuario_model->traer_datos_usuario($this->session->userdata('id_usuario'));
+ 		
+		$data['pedido'] = $this->pedido_model->get_pedido( $this->session->userdata('id_pedido') );
+		$data['items'] = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
+		$data['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
+
+		$this->load->view(self::$solapa.'/confirmar_pedido', $data);
+	}
+
+
+	public function finalizar_pedido()
+	{
+		chrome_log("usuario/finalizar_pedido");
+
+		$data['error'] = FALSE;
+		$data['success'] = FALSE;
+
+		$_POST['id_pedido'] = $this->session->userdata('id_pedido');
+ 
+		if ($this->form_validation->run('finalizar_pedido') == FALSE):
+
+			chrome_log("No paso validacion");
+			$data['error'] = "Ocurrio un error al cargar el pedido.";
+			
+		else: 
+		 
+			chrome_log("Paso validacion");
+
+			$result = $this->pedido_model->finalizar_pedido( $this->session->userdata('id_pedido'), $this->session->userdata('id_usuario'), $this->input->post() );
+        	if($result)
+        	{
+        		$this->session->set_userdata('id_pedido', "");
+
+	            redirect(self::$solapa.'/success');
+        	}
+        	else
+        	{
+        		$data['error'] = "Ocurrio un error al cargar el pedido.";
+        	}
+		 
+		endif; 
+
+
+	}
+
+
+	/*
+	public function confirmar_pedido()
+	{
+		$data['error'] = FALSE;
+		$data['success'] = FALSE;
+
+		if($this->session->userdata('id_usuario') == "")
 		{
 			redirect('pedido/ingresar');
 		}
@@ -66,8 +121,10 @@ class Pedido extends CI_Controller {
         	}
         }
 
-		$this->load->view(self::$solapa.'/confirmar_pedido', $data);
+		
 	}
+
+	*/
 
 	public function ingresar()
 	{
