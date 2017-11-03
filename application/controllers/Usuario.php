@@ -57,7 +57,6 @@ public function procesa_usuario_invitado()
 
 		date_default_timezone_set('America/New_York');
 	 	$token = $this->input->post('email').rand(1,9999999).time();
-
 		$query = $this->Usuario_model->usuario_invitado( $this->input->post('email'), $token );
 
 		if ( $query ):   // Si se creo el token, se envia el email
@@ -127,35 +126,92 @@ public function procesa_registrarse()
 	if ($this->form_validation->run('registrarse') == FALSE): 
 
 		chrome_log("No Paso validacion");
-		$this->session->set_flashdata('mensaje', 'No pasó la validacion, intente nuevamente');
-		$this->session->set_flashdata('error', $this->form_validation->error_array());
+		$return["resultado"] = FALSE;
+		$return["mensaje"] = "Ha ocurrido un error en la validación, por favor, intenta mas tarde";
+
+		//var_dump($this->form_validation->error_array());
 		 
 	else:
 		chrome_log("Si Paso validacion");
-
-		$query = $this->Usuario_model->registrar_usuario( $this->input->post() );
+ 		
+ 		$token = sha1($this->input->post('email').rand(1,9999999).time());
+		$resultado = $this->Usuario_model->registrar_usuario( $this->input->post(), $token );
 		 
-		if ( $query['codigo_error'] == 0 ):  
-		 
-			chrome_log("Pudo registrarse ");
+		if ( $resultado ):  
+		 	
+		 	$id_usuario =  sha1($resultado);
+			$enlace = base_url().'index.php/usuario/procesa_validar_registro/'.$id_usuario.'/'.$token;
 
-			$this->session->set_userdata('usuario_lemon', $query['id_usuario']); 
+			$mensaje =  '<h2>TERMINÁ TU PEDIDO!</h2><hr><br>';
+			$mensaje .= 'Has recibido este e-mail por que se efectuó una solicitud para registrarte a lemonclub.com.<br>';
+			$mensaje .= 'En caso de querer continuar con el proceso de compra, haga click en el siguiente link  <a href="'.$enlace.'"> Validar Email </a>.<br>';
+			$mensaje .= '<h4>Gracias por elegirnos! </h4> ';
+			$mensaje .= 'Si usted no realizo el pedido, puede ignorar este mensaje.<br>';
+			$mensaje  = html_entity_decode( $mensaje , ENT_QUOTES, "UTF-8");
 
-			redirect(base_url()."index.php/home");
+			$asunto = "LemonClub - Registro de usuario";
+
+			if( enviar_email( $this->input->post('email'), $mensaje, $asunto) ):
+
+				$return["resultado"] = TRUE;
+				$return["mensaje"] = "Gracias por registrarte ! Te hemos enviado un email para confirmar tu registro y finalizar tu pedido.";
+
+			else:
+
+				$return["resultado"] = FALSE;
+				$return["mensaje"] = "Ha ocurrido un error al enviarte el email de registro, por favor, intenta mas tarde";
+
+			endif;
 		 				 
 		else: 
 		 	
-			chrome_log("No pudo registrarse, intenta mas tarde");
-		
-			$this->session->set_flashdata('mensaje', 'No pudo registrarse, intente nuevamente');
-			$this->load->view('login/login',$data);
+			$return["resultado"] = FALSE;
+			$return["mensaje"] = "Ha ocurrido un error al registrarte, por favor, intenta mas tarde";
 
 		endif;  
 
 	endif; 	
 
-	redirect("Login/index");
+	///redirect("Login/index");
+	print json_encode($return);
 }
+
+public function procesa_validar_registro($id_usuario, $token) // Valida la URL en enviamos en procesa_usuario_invitado()
+{
+	chrome_log("Usuario/procesa_validar_usuario_invitado");
+
+	$this->form_validation->set_data(array(
+        'id_usuario'    =>  $id_usuario,
+        'token'    =>  $token,
+	));
+
+ 	if ($this->form_validation->run('procesa_validar_registro') == FALSE): 
+
+		chrome_log("No Paso validacion");
+		 
+	else:
+		chrome_log("Si Paso validacion");
+ 		
+ 	 	$resultado = $this->Usuario_model->procesa_validar_registro( $id_usuario, $token );
+
+ 	 	if ( $resultado ):  
+		 
+			chrome_log("Pudo validar ");
+
+			$this->session->set_userdata('id_usuario', $resultado );
+			$this->session->set_flashdata('mensaje', 'Se ha registrado su usuario exitosamente. Por favor, finalice su pedido.');
+			redirect(base_url()."index.php/pedido/confirmar_pedido");
+		 				 
+		else:  
+		 	
+		 	chrome_log("No Pudo validar");
+			//$this->session->set_flashdata('mensaje', 'Email o clave incorrecto');
+
+		endif; 
+
+	endif; 	
+}
+
 
 public function logout()
 {

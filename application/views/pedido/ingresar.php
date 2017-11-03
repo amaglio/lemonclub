@@ -82,7 +82,9 @@ $this->load->view('templates/head');
 				    <div role="tabpanel" class="tab-pane" id="registro">
 				    	<div class="formulario">
 				    		<p>Registrate para que sea más rapido y facil realizar futuros pedidos.</p>
+
 							<form class="form-horizontal" action="<?=site_url('pedido/ingresar')?>" method="POST" id="form-registro">
+
 								<div class="form-group">
 								    <div class="col-sm-6">
 								    	<input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="<?php echo set_value('nombre'); ?>">

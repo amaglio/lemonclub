@@ -42,7 +42,7 @@ public function loguearse( $array )
 	}
 }
 
-public function registrar_usuario( $array ) 
+public function registrar_usuario( $array, $token ) 
 {
 	chrome_log("Usuario_model/registrar_usuario");
 
@@ -51,7 +51,7 @@ public function registrar_usuario( $array )
 		//--- Usuario ---
 
 		$usuario['email'] = $array['email'];
-
+		$usuario['token'] = $token;
 		$this->db->insert('usuario', $usuario); 
 
 		$id_usuario = $this->db->insert_id();
@@ -62,6 +62,8 @@ public function registrar_usuario( $array )
 		$usuario_registrado['nombre'] = $array['nombre'];
 		$usuario_registrado['apellido'] = $array['apellido'];
 		$usuario_registrado['password'] = md5($array['clave']);
+
+
    
 		if(isset($array['direccion']) && !empty($array['direccion']))
 	        $usuario_registrado['direccion'] =  $array['direccion'];
@@ -76,24 +78,19 @@ public function registrar_usuario( $array )
 
 	if ($this->db->trans_status() === FALSE)
 	{
-	      $this->db->trans_rollback();
-	      $resultado = false;
+	    chrome_log("Error Transaccion");
+	    $this->db->trans_rollback();
+	    $resultado = false;
+	      
 	}
 	else
-	{
-	    if($this->db->affected_rows() > 0) // Se inserto
-	    {
-			$this->db->trans_commit();
-			$resultado = true;
-		}
-		else
-		{
-			$this->db->trans_rollback();
-	      	$resultado = false;
-		}
-
-		return $resultado;
+	{	
+		chrome_log("Transaccion Correcta ");
+		$this->db->trans_commit();
+		$resultado = $id_usuario;
 	} 
+
+	return $resultado;
 }
 
 public function usuario_invitado( $array, $token ) 
@@ -180,6 +177,36 @@ public function procesa_validar_usuario_invitado( $email, $token )
  
 }
 
+public function procesa_validar_registro( $id_usuario, $token ) 
+{
+	chrome_log("Usuario_model/procesa_validar_registro");
+ 
+ 	$sql = "SELECT *
+ 			FROM 	usuario u,
+ 					usuario_registrado ur
+ 			WHERE
+ 					u.id_usuario = ur.id_usuario
+ 			AND 	SHA1(u.id_usuario) = ?
+ 			AND 	u.token = ? "; 
+
+	$query = $this->db->query($sql, array( $id_usuario , $token ));
+
+	if($query->num_rows() > 0)
+	{
+		$id_usuario = $query->row()->id_usuario;
+		$array_where = array(  'id_usuario' =>  $id_usuario );
+		$array_usuario['token'] = NULL;
+  		$this->db->where($array_where);
+  		$this->db->update('usuario', $array_usuario); 
+
+		return $id_usuario;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 
 
 public function existe_email_registrado($email)
@@ -191,7 +218,7 @@ public function existe_email_registrado($email)
  					usuario_registrado ur
  			WHERE
  					u.id_usuario = ur.id_usuario
- 			AND 	ur.email = ?  "; 
+ 			AND 	u.email = ?  "; 
  
 	$query = $this->db->query($sql, array($email)); 
 
