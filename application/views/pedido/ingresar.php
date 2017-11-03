@@ -83,6 +83,7 @@ $this->load->view('templates/head');
 				    	<div class="formulario">
 				    		<p>Registrate para que sea más rapido y facil realizar futuros pedidos.</p>
 
+
 							<form class="form-horizontal" action="<?=site_url('pedido/ingresar')?>" method="POST" id="form-registro">
 
 								<div class="form-group">
