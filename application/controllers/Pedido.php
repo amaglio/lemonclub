@@ -122,6 +122,8 @@ class Pedido extends CI_Controller {
 
         		enviar_email("adrian.magliola@gmail.com", $mensaje, $asunto );
 
+        		$this->session->unset_userdata('id_pedido');
+
 	          	redirect(self::$solapa.'/success');
         	}
         	else

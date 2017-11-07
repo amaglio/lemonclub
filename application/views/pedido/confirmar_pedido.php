@@ -16,6 +16,10 @@ $this->load->view('templates/head');
 	    /* color: #fac800; */
 	}
 
+	.popover-title{
+		width: 200px;
+	}
+
 </style>
 <body>
 	<?php
@@ -52,7 +56,7 @@ $this->load->view('templates/head');
 
 				<div class="subtitulo"><?=$datos_usuario->tipo_usuario?></div>
 				<div class="formulario">
-					<form class="form-horizontal" action="<?=site_url('pedido/finalizar_pedido')?>" method="POST">
+					<form class="form-horizontal" id="form-confirmar" action="<?=site_url('pedido/finalizar_pedido')?>" method="POST">
 						<div class="form-group">
 						    <div class="col-sm-12">
 						    	<input type="email" class="form-control" id="mail" name="mail" placeholder="Email" value="<?=$datos_usuario->email?>" readonly="readonly">
@@ -101,7 +105,18 @@ $this->load->view('templates/head');
 
 						<hr>
 
-						<input type="submit" value="COMPRAR" name="comprar" class="btn btn-block btn-amarillo" style="margin-top:10px;">
+						<!--<input type="submit" value="COMPRAR" name="comprar" id="btn-comprar" class="btn btn-block btn-amarillo confirmation-callback" style="margin-top:10px;">-->
+
+
+						<button  name="comprar" id="btn-comprar" class="btn btn-block btn-amarillo confirmation-callback" 
+						        data-btn-ok-label="Continuar" data-btn-ok-icon="glyphicon glyphicon-share-alt"
+						        data-btn-ok-class="btn btn-primary"
+						        data-btn-cancel-label="Cancelar" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
+						        data-btn-cancel-class="btn btn-danger"
+						        data-title="Is it ok?" data-content="This might be dangerous">
+						  COMPRAR
+						</button>
+
 					</form>
 				</div>
 
@@ -127,6 +142,8 @@ $this->load->view('templates/head');
 					<div class="col-xs-6">$<?php echo $total; ?></div>
 					</div>
 				</div>
+ 
+
 			</div>
 		</div>
 	</div>
@@ -145,7 +162,32 @@ function select_takeaway()
 {
 	$('#area_envio').hide();
 }
+
+$('#form-confirmar').submit(function( event ) {
+
+	$('#btn-comprar').button('loading');
+});
+
+
+
 </script>
+
+	<script>
+	
+	$(function() {
+		
+		$('body').confirmation({
+			selector: '[data-toggle="confirmation"]'
+		});
+
+		$('.confirmation-callback').confirmation({
+			onConfirm: function() {  $('#form-confirmar').submit() },
+			onCancel: function() {   },
+			title:'¿ Seguro desea confirmar el pedido ?'
+		});
+	});
+
+	</script>
 
 </body>
 </html>

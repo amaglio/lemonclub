@@ -575,6 +575,7 @@ CARRITO
 	font-style: normal;
 	font-size: 13px;
 	color: #451602;
+	padding:10px;
 }
 .carrito .item{
 	font-family: 'Lato';

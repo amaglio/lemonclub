@@ -4,12 +4,17 @@
     			<div class="col-xs-5 area-botones" style="">
 		            <a class="" href="<?=site_url('pages')?>">HOME</a>
 		            <a class="" href="<?=site_url('menu')?>">MENU</a>
+                    
 		            <a class="" href="<?=site_url('pages/contacto')?>">CONTACTO</a>
     			</div>
     			<div class="col-xs-2 area-logo">
     				<a href="<?=site_url('pages')?>"><img src="<?=base_url('assets/images/lemonlogo.png')?>"></a>
     			</div>
-    			<div class="col-xs-5 area-carrito" style="text-align:right">
+                <div class="col-xs-2 area-botones" style="">
+                    <a class="" href="<?=site_url('menu')?>">SERVICIO COORPORATIVO</a>
+                </div>
+    			<div class="col-xs-3 area-carrito" style="text-align:right">
+
     				<a href="<?=site_url('pedido')?>" class="btn btn-amarillo"><i class="fa fa-shopping-cart fa-lg"></i> INGRES&Aacute; AL CARRITO</a>
                     <?
                     if($this->session->userdata('id_usuario') != "")

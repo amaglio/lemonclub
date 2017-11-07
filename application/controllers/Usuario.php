@@ -237,8 +237,7 @@ public function procesa_validar_registro($id_usuario, $token) // Valida la URL e
 		 				 
 		else:  
 		 	
-		 	chrome_log("No Pudo validar");
-			//$this->session->set_flashdata('mensaje', 'Email o clave incorrecto');
+		 	chrome_log("No Pudo validar"); 
 
 		endif; 
 
@@ -252,7 +251,7 @@ public function logout()
 
 	$this->db->close();
 	session_destroy();
-	redirect('Login/index/','refresh');
+	redirect('pages/index/','refresh');
 }
 
 public function comprobar_email_existente_validation($email=null)  
