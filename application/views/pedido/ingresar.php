@@ -163,13 +163,14 @@ $('#form-ingresar').submit(function( event ) {
             htmlData += data.mensaje;
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
+            window.location.href = SITE_URL+"/pedido/confirmar_pedido"; 
           }
           else
           {
             var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
             htmlData += data.mensaje;
             htmlData += '</div>';
-            $('#area-mensaje').html(htmlData);
+     
           }
           $('#btn-ingresar').button('reset');
        },
@@ -241,6 +242,7 @@ $('#form-registro').submit(function( event ) {
             htmlData += data.mensaje;
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
+
           }
           else
           {
