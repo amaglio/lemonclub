@@ -71,7 +71,7 @@ $this->load->view('templates/head');
 
 						<div class="radio">
 						  <label>
-						    <input type="radio" name="entrega" id="entrega1" value="<?php echo FORMA_ENTREGA_TAKEAWAY; ?>" onchange="select_delivery()">
+						    <input type="radio" name="entrega" id="entrega1" value="<?php echo FORMA_ENTREGA_DELIVERY; ?>" onchange="select_delivery()">
 						    Quiero que me lo envien
 						  </label>
 						</div>
@@ -85,7 +85,7 @@ $this->load->view('templates/head');
 						</div>
 						<div class="radio">
 						  <label>
-						    <input type="radio" name="entrega" id="entrega2" value="<?php echo FORMA_ENTREGA_DELIVERY; ?>" onchange="select_takeaway()" checked>
+						    <input type="radio" name="entrega" id="entrega2" value="<?php echo FORMA_ENTREGA_TAKEAWAY; ?>" onchange="select_takeaway()" checked>
 						    Quiero pasarlo a buscar
 						  </label>
 						</div>

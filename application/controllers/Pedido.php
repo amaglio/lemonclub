@@ -10,7 +10,7 @@ class Pedido extends CI_Controller {
 
 		$this->load->model('pedido_model');
 		$this->load->model('producto_model');
-		$this->load->model('usuario_model');
+		$this->load->model('Usuario_model');
 
 		if($this->session->userdata('id_pedido') == "")
 		{
@@ -39,7 +39,7 @@ class Pedido extends CI_Controller {
 		if($this->session->userdata('id_usuario') == "")
 			redirect('pedido/ingresar');
 
-		$data['datos_usuario'] = $this->usuario_model->traer_datos_usuario($this->session->userdata('id_usuario'));
+		$data['datos_usuario'] = $this->Usuario_model->traer_datos_usuario($this->session->userdata('id_usuario'));
  		
 		$data['pedido'] = $this->pedido_model->get_pedido( $this->session->userdata('id_pedido') );
 		$data['items'] = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
@@ -69,10 +69,60 @@ class Pedido extends CI_Controller {
 
 			$result = $this->pedido_model->finalizar_pedido( $this->session->userdata('id_pedido'), $this->session->userdata('id_usuario'), $this->input->post() );
         	if($result)
-        	{
-        		$this->session->set_userdata('id_pedido', "");
+        	{	
+        		$usuario = $this->Usuario_model->traer_datos_usuario( $this->session->userdata('id_usuario') );
 
-	            redirect(self::$solapa.'/success');
+        		$mensaje =  '<h2>NUEVO PEDIDO</h2><hr><br>';
+        		$mensaje .= 'Has recibido un nuevo pedido en lemonclub.com.<br>';
+        		$mensaje .= 'Email: '.$usuario->email.'<br>';
+        		
+        		if($usuario->nombre)
+        			$mensaje .= 'Nombre: '.$usuario->nombre.'<br>';
+
+        		if($usuario->apellido)
+        			$mensaje .= 'Apellido: '.$usuario->apellido.'<br>';
+ 
+        		$descripcion_forma_pago =  $this->pedido_model->traer_descripcion_forma_pago($this->input->post('pago'));
+        		$descripcion_forma_entrega =  $this->pedido_model->traer_descripcion_forma_entrega($this->input->post('entrega'));	 
+
+        		if( $this->input->post('entrega') == FORMA_ENTREGA_DELIVERY )
+        		{
+  					$mensaje .= 'Forma entrega:  DELIVERY <br>';
+
+        			if($this->input->post('calle'))
+        				$mensaje .= 'Calle: '.$this->input->post('calle').'<br>';
+
+	        		if($this->input->post('altura'))
+	        			$mensaje .= 'Altura: '.$this->input->post('altura').'<br>';
+
+        		}
+        		else
+        		{
+        			$mensaje .= 'Forma entrega:  TAKE AWAY <br>';
+        		}
+
+       
+        		$pedido = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
+
+        		$mensaje .= '<h3>Productos</h3> ';
+
+        		foreach ($pedido as $key => $value) 
+        		{
+        			$mensaje .= '-----------------------------------------------------<br>';
+        			$mensaje .= 'Nombre: '.$value['nombre'].'<br>';
+        			$mensaje .= 'Descripcion: '.$value['descripcion'].'<br>';
+        			$mensaje .= 'Cantidad: '.$value['cantidad'].'<br>';
+        			$mensaje .= 'Precio: $'.$value['precio'].'<br>';
+        		}
+
+        		$mensaje .= '-----------------------------------------------------<br>';
+        		$mensaje .= '<b>TOTAL:</b> $'.$this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') ).'<br>';
+
+        		$asunto = "Lemonclub: Nuevo pedido";
+
+        		enviar_email("adrian.magliola@gmail.com", $mensaje, $asunto );
+
+	          	redirect(self::$solapa.'/success');
         	}
         	else
         	{
@@ -150,7 +200,7 @@ class Pedido extends CI_Controller {
 
     		if($this->form_validation->run() !== FALSE)
     		{
-    			if($this->usuario_model->loguearse($this->input->post()))
+    			if($this->Usuario_model->loguearse($this->input->post()))
     			{
     				redirect(self::$solapa.'/confirmar_pedido');
     			}
@@ -181,7 +231,7 @@ class Pedido extends CI_Controller {
 
     		if($this->form_validation->run() !== FALSE)
     		{
-    			$result = $this->usuario_model->registrar_usuario($this->input->post());
+    			$result = $this->Usuario_model->registrar_usuario($this->input->post());
 	    		if($result)
 	    		{
 	    			$data['success'] = "El usuario fue registrado con exito.<br>Ingresa al link que te enviamos por email para validar tu cuenta.";

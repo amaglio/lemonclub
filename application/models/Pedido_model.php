@@ -143,6 +143,53 @@ class Pedido_model extends CI_Model {
         return $this->db->delete('pedido_producto');
 	}
 
+
+	public function traer_descripcion_forma_pago( $id_forma_pago )
+	{	
+
+		chrome_log("Usuario_model/traer_descripcion_forma_pago");
+
+	 	$sql = "SELECT *
+                FROM forma_pago  
+                WHERE id_forma_pago = ? "; 
+
+		$query = $this->db->query($sql, array( $id_forma_pago ));
+
+		if($query->num_rows() > 0)
+		{ 
+			return $query->row()->descripcion;
+		}
+		else
+		{
+			return false;
+		}
+
+
+	}
+
+	public function traer_descripcion_forma_entrega( $id_forma_entrega )
+	{	
+
+		chrome_log("Usuario_model/traer_descripcion_forma_entrega");
+
+	 	$sql = "SELECT *
+                FROM forma_entrega  
+                WHERE id_forma_entrega = ? "; 
+
+		$query = $this->db->query($sql, array( $id_forma_entrega ));
+
+		if($query->num_rows() > 0)
+		{ 
+			return $query->row()->descripcion;
+		}
+		else
+		{
+			return false;
+		}
+
+	}
+ 
+
 }
 
 /* End of file  */
