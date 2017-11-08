@@ -55,10 +55,13 @@ p {
 }
 </style>
 </head>
-<body>
-	<div id="container">
-		<h1><?php echo $heading; ?></h1>
-		<?php echo $message; ?>
-	</div>
+<body style="background-image: url('http://localhost/lemonclub/assets/images/fondos/carne.jpg');">
+ 
+		<div style=" background-color:#00000069; text-align: center;
+    color: white;
+    font-size: 50px;
+    text-shadow: 4px 4px 2px rgb(0, 0, 0); line-height:200px
+    ">ERROR 404: Página no encontrada</div>
+ 	 
 </body>
 </html>

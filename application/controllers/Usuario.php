@@ -16,7 +16,7 @@ public function procesa_logueo()
 
 		chrome_log("No paso validacion");
 		$return["resultado"] = FALSE;
-		$return["mensaje"] =  validation_errors();
+		$return["mensaje"] =  "nada";
 
 	else: 
 	 
@@ -29,18 +29,15 @@ public function procesa_logueo()
 		 	chrome_log("Pudo loguearse ");
 			$id_usuario = $resultado;
 			$this->session->set_userdata('id_usuario', $id_usuario);
-		
-			//redirect(base_url()."index.php/pedido/comprar")
 
 			$return["resultado"] = TRUE;
 			$return["mensaje"] = 'Logueo exitoso';
-
-			//redirect(base_url()."index.php/pedido/confirmar_pedido");
 		 				 
 		else:  
-		 
+		 	chrome_log("No Pudo loguearse ");
+
 			$return["resultado"] = FALSE;
- 			$return["mensaje"] ='Ha ocurrido un error, por favor, intentá mas tarde.';
+ 			$return["mensaje"] ='Usuario o password incorrecto.';
 
 		endif; 
 
@@ -58,14 +55,13 @@ public function procesa_usuario_invitado()
 
 		chrome_log("No paso validacion");
 		$return["resultado"] = FALSE;
-		$return["mensaje"] = "Ha ocurrido un error en la validación, por favor, intenta mas tarde";
+		$return["mensaje"] = validation_errors(); 
 
 	else: 
  
 		chrome_log("Paso validacion");
 		date_default_timezone_set('America/New_York'); 	 	
 	 	$token = sha1($this->input->post('email').rand(1,9999999).time());
-
 
 		$resultado = $this->Usuario_model->usuario_invitado( $this->input->post('email'), $token ); 
 
@@ -121,7 +117,7 @@ public function procesa_validar_usuario_invitado($id_usuario, $token) // Valida 
 
 	$this->form_validation->set_data(array(
         'id_usuario'    =>  $id_usuario,
-        'token'    =>  $token,
+        'token'    =>  $token
 	));
  
 	if ($this->form_validation->run('validar_usuario_invitado') == FALSE):
@@ -150,6 +146,8 @@ public function procesa_validar_usuario_invitado($id_usuario, $token) // Valida 
  
  
 	endif;	
+
+	show_404('error', "Página no encontrada");
 }
 
 public function procesa_registrarse() 
@@ -161,8 +159,7 @@ public function procesa_registrarse()
 		chrome_log("No Paso validacion");
 		$return["resultado"] = FALSE;
 		$return["mensaje"] = "Ha ocurrido un error en la validación, por favor, intenta mas tarde";
-
-		//var_dump($this->form_validation->error_array());
+ 
 		 
 	else:
 		chrome_log("Si Paso validacion");
@@ -242,6 +239,8 @@ public function procesa_validar_registro($id_usuario, $token) // Valida la URL e
 		endif; 
 
 	endif; 	
+
+	show_404();
 }
 
 

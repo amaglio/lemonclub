@@ -15,7 +15,13 @@
                 </div>
     			<div class="col-xs-3 area-carrito" style="text-align:right">
 
-    				<a href="<?=site_url('pedido')?>" class="btn btn-amarillo"><i class="fa fa-shopping-cart fa-lg"></i> INGRES&Aacute; AL CARRITO</a>
+    				<a href="<?=site_url('pedido')?>" class="btn btn-amarillo">
+                            <i class="fa fa-shopping-cart fa-lg"></i> 
+
+                            INGRES&Aacute; AL CARRITO
+   
+
+                    </a>
                     <?
                     if($this->session->userdata('id_usuario') != "")
                     {

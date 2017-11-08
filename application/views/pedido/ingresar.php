@@ -71,7 +71,7 @@ $this->load->view('templates/head');
 							<form class="form-horizontal" action="<?=site_url('pedido/ingresar')?>" method="POST" id="form-invitado">
 								<div class="form-group">
 								    <div class="col-sm-12">
-								    	<input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo set_value('email'); ?>">
+								    	<input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo set_value('email'); ?>" required="required" >
 								    </div>
 								</div>
 								<button type="submit" id="btn-invitado" value="2" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">INGRESAR</button>
@@ -145,6 +145,7 @@ $this->load->view('templates/footer');
 
 <script type="text/javascript">
 $('#form-ingresar').submit(function( event ) {
+	$('#area-mensaje').html(' ');
 	event.preventDefault();
 	$('#btn-ingresar').button('loading');
 	$('#area-mensaje').html("");
@@ -159,7 +160,7 @@ $('#form-ingresar').submit(function( event ) {
        success: function(data){
           if(data.resultado == true)
           {
-            var htmlData = '<div class="alert with-icon alert-success" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            var htmlData = '<div class="alert with-icon alert-success" role="alert"><i class="icon fa fa-exclamation-triangle"></i> ';
             htmlData += data.mensaje;
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
@@ -167,19 +168,20 @@ $('#form-ingresar').submit(function( event ) {
           }
           else
           {
-            var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i> ';
             htmlData += data.mensaje;
             htmlData += '</div>';
-     
+     		$('#area-mensaje').html(htmlData);
           }
           $('#btn-ingresar').button('reset');
        },
        error: function(x, status, error){
-          	var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+          	var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i> ';
             htmlData += " Error: " + error;
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
             $('#btn-ingresar').button('reset');
+            alert(error);
        }
   	});
 });
@@ -199,14 +201,14 @@ $('#form-invitado').submit(function( event ) {
        success: function(data){
           if(data.resultado == true)
           {
-            var htmlData = '<div class="alert with-icon alert-success" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            var htmlData = '<div class="alert with-icon alert-success" role="alert"><i class="icon fa fa-exclamation-triangle"></i> ';
             htmlData += data.mensaje;
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
           }
           else
           {
-            var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i> ';
             htmlData += data.mensaje;
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
@@ -214,7 +216,7 @@ $('#form-invitado').submit(function( event ) {
           $('#btn-invitado').button('reset');
        },
        error: function(x, status, error){
-          	var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+          	var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i> ';
             htmlData += " Error: " + error;
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
