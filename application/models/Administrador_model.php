@@ -22,6 +22,25 @@ class Administrador_model extends CI_Model {
     	return $resultado->row();
     }
 
+	function traer_pedidos_pendientes()
+    {
+   	
+    	$resultado = $this->db->query("	SELECT pe.*,
+    										   pd.dirección, pd.telefono, pd.nota,
+    										   fp.descripcion as forma_pago,
+    										   fe.descripcion as forma_entrega,
+    										   pes.descripcion as estado,
+    										   u.email
+						    			FROM pedido pe
+						    				 left join pedido_delivery pd ON pe.id_pedido = pd.id_pedido
+						    				 inner join forma_pago fp ON pe.id_forma_pago =  fp.id_forma_pago
+						    				 inner join forma_entrega fe ON pe.id_forma_entrega =  fe.id_forma_entrega
+						    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado
+						    				 inner join usuario u ON pe.id_usuario =  u.id_usuario
+						    			WHERE  pe.id_pedido_estado != 1"  ); //traer_pedidos_pendientes
+
+    	return $resultado->result_array();
+    }
 
 	function traer_ingredientes_producto($id_producto)
     {

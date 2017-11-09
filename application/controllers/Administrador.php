@@ -10,6 +10,7 @@ public function __construct()
 	$this->load->database();
 	$this->load->helper('url');
 	$this->load->model('Administrador_model');
+	$this->load->model('Pedido_model');
 	$this->load->library('grocery_CRUD'); 
 }
 
@@ -148,6 +149,7 @@ public function tipos_ingredientes()
 	$this->_example_output($output);
 }
 
+/*
 public function pedidos()
 {
 	$crud = new grocery_CRUD();
@@ -171,6 +173,30 @@ public function pedidos()
 	$output = $crud->render();
 
 	$this->_example_output($output);
+}
+*/
+public function pedidos()
+{
+		$datos['mensaje'] = $this->session->flashdata('mensaje');
+		$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+		$output->titulo = traer_titulo($this->uri->segment(2));
+		$this->load->view('administrador/index.php',(array)$output);
+
+		$pedidos = $this->Administrador_model->traer_pedidos_pendientes();
+ 
+		$array_pedidos = array();
+
+		foreach($pedidos as $row)
+		{
+	 
+			$informacion['informacion_pedido'] =  $row;
+			$informacion['productos'] = $this->Pedido_model->get_pedido_productos($row['id_pedido']);
+			array_push($array_pedidos, $informacion);
+		}
+
+		 
+		$this->load->view('administrador/pedidos.php');
+ 
 }
 
 
