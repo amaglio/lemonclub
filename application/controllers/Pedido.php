@@ -20,7 +20,6 @@ class Pedido extends CI_Controller {
 
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>', '</div>');
 	}
- 
 
 	public function index()
 	{
@@ -47,7 +46,6 @@ class Pedido extends CI_Controller {
 
 		$this->load->view(self::$solapa.'/confirmar_pedido', $data);
 	}
-
 
 	public function finalizar_pedido()
 	{
@@ -132,52 +130,8 @@ class Pedido extends CI_Controller {
         	}
 		 
 		endif; 
-
-
 	}
-
-
-	/*
-	public function confirmar_pedido()
-	{
-		$data['error'] = FALSE;
-		$data['success'] = FALSE;
-
-		if($this->session->userdata('id_usuario') == "")
-		{
-			redirect('pedido/ingresar');
-		}
-
-		$data['pedido'] = $this->pedido_model->get_pedido( $this->session->userdata('id_pedido') );
-		$data['items'] = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
-		$data['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
-
-		$this->form_validation->set_rules('nombre', 'nombre', 'required');
-		$this->form_validation->set_rules('apellido', 'apellido', 'required');
-		$this->form_validation->set_rules('mail', 'Email', 'required');
-		$this->form_validation->set_rules('entrega', 'forma de entrega', 'required');
-		$this->form_validation->set_rules('pago', 'forma de pago', 'required');
-
-		if($this->form_validation->run() !== FALSE)
-        {
-        	$result = $this->pedido_model->finalizar_pedido( $this->session->userdata('id_pedido'), $this->session->userdata('id_usuario'), $this->input->post() );
-        	if($result)
-        	{
-        		$this->session->set_userdata('id_pedido', "");
-
-	            redirect(self::$solapa.'/success');
-        	}
-        	else
-        	{
-        		$data['error'] = "Ocurrio un error al cargar el pedido.";
-        	}
-        }
-
-		
-	}
-
-	*/
-
+ 
 	public function ingresar()
 	{
 		$data['error'] = FALSE;
@@ -258,34 +212,25 @@ class Pedido extends CI_Controller {
 	{
 		$return['error'] = FALSE;
 
-		//$_POST['id'] = 1;
-
 		if($this->input->post('id') != "")
 		{
-			/*
-			$producto = $this->producto_model->get_items($this->input->post('id'));
-			$data = array(
-		        'id'      => $producto['id_producto'],
-		        'qty'     => 1,
-		        'price'   => $producto['precio'],
-		        'name'    => $producto['nombre'],
-		        'descripcion' => $producto['descripcion']
-		        //'options' => array('Size' => 'L', 'Color' => 'Red')
-			);
-
-			$this->cart->insert($data);
-			*/
+ 
 			$result = $this->pedido_model->set_producto($this->input->post('id'));
 			if($result)
 			{
 				$return['error'] = FALSE;
 				$return['data'] = "El producto fue agregado al carrito.";
+				$this->session->set_userdata('pedido_activo', 1);
+
 			}
 			else
 			{
 				$return['error'] = TRUE;
 				$return['data'] = "Ocurrio un error al cargar el producto al pedido.";
 			}
+
+			if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) > 0)
+				$this->session->set_userdata('pedido_activo', 1);
 		}
 		else
 		{
@@ -302,20 +247,19 @@ class Pedido extends CI_Controller {
 
 		if($this->input->post('id_producto') != "")
 		{
-			/*
-			$data = array(
-		        'rowid' => $this->input->post('rowid'),
-		        'qty'   => $this->input->post('qty')
-			);
-
-			$this->cart->update($data);
-			*/
+ 
 			$result = $this->pedido_model->modificar_producto_cantidad( $this->session->userdata('id_pedido'), $this->input->post('id_producto'), $this->input->post('qty') );
 			if($result)
 			{
 				$return['error'] = FALSE;
 				$return['data'] = "La cantidad fue modificada.";
 				$return['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
+
+				if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) > 0)
+					$this->session->set_userdata('pedido_activo', 1);
+				else
+					$this->session->unset_userdata('pedido_activo');
+
 			}
 			else
 			{
@@ -344,6 +288,10 @@ class Pedido extends CI_Controller {
 				$return['error'] = FALSE;
 				$return['data'] = "La cantidad fue modificada.";
 				$return['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
+
+				if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) == 0)
+					$this->session->unset_userdata('pedido_activo');
+
 			}
 			else
 			{
@@ -360,35 +308,6 @@ class Pedido extends CI_Controller {
 		echo json_encode($return);
 	}
 
-	public function comprar()
-	{
-		chrome_log("Pedido/comprar");	 
-
-		if ($this->form_validation->run('comprar') == FALSE):
-
-			chrome_log("No paso validacion");
-			$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.');
-			//redirect('Login/index/','refresh');
-
-		else: 
-		 
-			chrome_log("Paso validacion");
-
-			//$this->pedido_model->abm_pedido('A',$this->input->post());
-
- 			
- 			/*
-			foreach ($this->cart->contents() as $item)
-			{
-				 
-			}*/
-
-
- 			
-	 
-		endif;
-
-
-	}
+ 
 
 }

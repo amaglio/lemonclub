@@ -11,7 +11,7 @@
     				<a href="<?=site_url('pages')?>"><img src="<?=base_url('assets/images/lemonlogo.png')?>"></a>
     			</div>
                 <div class="col-xs-2 area-botones" style="">
-                    <a class="" href="<?=site_url('menu')?>">SERVICIO COORPORATIVO</a>
+                    <a class="" href="<?=site_url('servicio_corporativo')?>">SERVICIO CORPORATIVO</a>
                 </div>
     			<div class="col-xs-3 area-carrito" style="text-align:right">
 
@@ -19,7 +19,10 @@
                             <i class="fa fa-shopping-cart fa-lg"></i> 
 
                             INGRES&Aacute; AL CARRITO
-   
+                            <?
+                                if($this->session->userdata('pedido_activo') != "")
+                                    echo "(1)";
+                            ?>
 
                     </a>
                     <?
@@ -51,6 +54,7 @@
             <li><a href="<?=site_url('menu')?>">MENU</a></li>
             <li><a href="<?=site_url('pages/contacto')?>">CONTACTO</a></li>
             <li><a href="<?=site_url('pedido')?>">CARRITO</a></li>
+            <li><a href="<?=site_url('servicio_corporativo')?>">SERVICIO CORPORATIVO</a></li>
             <?
             if($this->session->userdata('id_usuario') != "")
             {
