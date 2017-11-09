@@ -14,28 +14,37 @@ class Menu extends CI_Controller {
 	}
 
 	public function index($id = FALSE)
-	{
-        $data['tipos'] = $this->producto_tipo_model->get_items();
+	{       
+                $data['plato_dia'] = 0;
 
-        if($id == FALSE)
-        {
-        	$data['tipo_actual'] = $this->producto_tipo_model->get_primer_item();
-        }
-        else
-        {
-        	$data['tipo_actual'] = $this->producto_tipo_model->get_items($id);
-        }
+                $data['tipos'] = $this->producto_tipo_model->get_items();
 
-        if($data['tipo_actual'])
-        {
-        	$data['productos'] = $this->producto_model->get_items_x_tipo($data['tipo_actual']['id_producto_tipo']);
-        }
-        else
-        {
-        	redirect('menu');
-        }
+                if($id == FALSE)
+                {       
+                	 
+                        $data['tipo_actual'] = $this->producto_tipo_model->get_primer_item();
+                }
+                else
+                {
+                        $data['tipo_actual'] = $this->producto_tipo_model->get_items($id);
+                }
 
-        $this->load->view(self::$solapa.'/index', $data);
+                if($data['tipo_actual'])
+                {
+                	$data['productos'] = $this->producto_model->get_items_x_tipo($data['tipo_actual']['id_producto_tipo']);
+                }
+                else
+                {
+                	if($id == -1 )// traigo los platos del dia
+                        { 
+                                $data['productos'] = $this->producto_model->get_productos_dia();
+                                $data['plato_dia'] = 1;
+                        }
+                        else
+                                redirect('menu');
+                }
+
+                $this->load->view(self::$solapa.'/index', $data);
 	}
 
 }

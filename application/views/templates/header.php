@@ -2,7 +2,7 @@
     	<div class="container">
     		<div class="row">
     			<div class="col-xs-5 area-botones" style="">
-		            <a class="" href="<?=site_url('pages')?>">HOME</a>
+		            <a class="" href="<?=site_url('home')?>">HOME</a>
 		            <a class="" href="<?=site_url('menu')?>">MENU</a>
                     
 		            <a class="" href="<?=site_url('contacto')?>">CONTACTO</a>
@@ -50,7 +50,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="<?=site_url('pages')?>">HOME</a></li>
+            <li class="active"><a href="<?=site_url('home')?>">HOME</a></li>
             <li><a href="<?=site_url('menu')?>">MENU</a></li>
             <li><a href="<?=site_url('contacto')?>">CONTACTO</a></li>
             <li><a href="<?=site_url('pedido')?>">CARRITO</a></li>

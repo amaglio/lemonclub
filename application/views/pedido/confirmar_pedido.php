@@ -81,10 +81,10 @@ $this->load->view('templates/head');
 						</div>
 						<div class="form-group" id="area_envio" style="display:none;">
 						    <div class="col-sm-6">
-						    	<input type="text" class="form-control" id="calle" name="calle" placeholder="Calle" value="<?php echo set_value('calle'); ?>">
+						    	<input type="text" class="form-control" id="calle" name="calle" placeholder="Calle"  value="<?php echo set_value('calle'); ?>" required="required">
 						    </div>
 						    <div class="col-sm-6">
-						    	<input type="text" class="form-control" id="altura" name="altura" placeholder="Altura" value="<?php echo set_value('altura'); ?>">
+						    	<input type="text" class="form-control" id="altura" name="altura" placeholder="Altura"  value="<?php echo set_value('altura'); ?>" required="required">
 						    </div>
 						</div>
 						<div class="radio">

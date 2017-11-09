@@ -78,7 +78,20 @@ class Pedido_model extends CI_Model {
 
 	public function finalizar_pedido( $id_pedido, $id_usuario, $array )
 	{
-		$array = array(
+        if(isset($array['calle'])):
+
+			$array_delivery = array(
+	            'dirección' => $array['calle'],
+	            'altura' => $array['altura'],
+	            'id_pedido' => $id_pedido
+	        );
+
+        	$this->db->insert('pedido_delivery', $array_delivery);
+
+        endif;
+
+
+    	$array_pedido = array(
 			'id_pedido_estado' => PEDIDO_ESTADO_PENDIENTE,
             'id_usuario' => $id_usuario,
             'id_forma_pago' => $array['pago'],
@@ -86,7 +99,7 @@ class Pedido_model extends CI_Model {
         );
 
         $this->db->where( array('id_pedido' => $id_pedido) );
-        return $this->db->update('pedido', $array);
+        return $this->db->update('pedido', $array_pedido);
 	}
 
 	public function set_producto( $id_producto )
@@ -147,7 +160,7 @@ class Pedido_model extends CI_Model {
 	public function traer_descripcion_forma_pago( $id_forma_pago )
 	{	
 
-		chrome_log("Usuario_model/traer_descripcion_forma_pago");
+		chrome_log("Pedido_model/traer_descripcion_forma_pago");
 
 	 	$sql = "SELECT *
                 FROM forma_pago  
@@ -170,7 +183,7 @@ class Pedido_model extends CI_Model {
 	public function traer_descripcion_forma_entrega( $id_forma_entrega )
 	{	
 
-		chrome_log("Usuario_model/traer_descripcion_forma_entrega");
+		chrome_log("Pedido_model/traer_descripcion_forma_entrega");
 
 	 	$sql = "SELECT *
                 FROM forma_entrega  
@@ -188,7 +201,50 @@ class Pedido_model extends CI_Model {
 		}
 
 	}
- 
+
+ 	public function get_pedido_estados()
+	{	
+
+		chrome_log("Pedido_model/get_pedido_estados");
+
+	 	$sql = "SELECT *
+                FROM pedido_estado "; 
+
+		$query = $this->db->query($sql);
+
+		if($query->num_rows() > 0)
+		{ 
+			return $query->result_array();
+		}
+		else
+		{
+			return false;
+		}
+
+
+	}
+
+
+	function traer_pedidos_pendientes()
+    {
+   	
+    	$resultado = $this->db->query("	SELECT pe.*,
+    										   pd.dirección, pd.telefono, pd.nota, pd.altura,
+    										   fp.descripcion as forma_pago,
+    										   fe.descripcion as forma_entrega,
+    										   pes.descripcion as estado,
+    										   u.email
+						    			FROM pedido pe
+						    				 left join pedido_delivery pd ON pe.id_pedido = pd.id_pedido
+						    				 inner join forma_pago fp ON pe.id_forma_pago =  fp.id_forma_pago
+						    				 inner join forma_entrega fe ON pe.id_forma_entrega =  fe.id_forma_entrega
+						    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado
+						    				 inner join usuario u ON pe.id_usuario =  u.id_usuario
+						    			WHERE  pe.id_pedido_estado != 1
+						    			ORDER BY id_pedido DESC "  ); //traer_pedidos_pendientes
+
+    	return $resultado->result_array();
+    }
 
 }
 

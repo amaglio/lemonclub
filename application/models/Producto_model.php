@@ -36,6 +36,17 @@ class Producto_model extends CI_Model {
         return $query->result_array();
     }
 
+    function get_productos_dia()
+    {
+
+        $query = $this->db->query('SELECT *
+                                    FROM producto_dia pd,
+                                         producto p
+                                    WHERE pd.id_producto = p.id_producto');
+
+        return $query->result_array();
+    }
+
 }
 
 /* End of file  */

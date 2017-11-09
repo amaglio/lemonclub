@@ -182,20 +182,23 @@ public function pedidos()
 		$output->titulo = traer_titulo($this->uri->segment(2));
 		$this->load->view('administrador/index.php',(array)$output);
 
-		$pedidos = $this->Administrador_model->traer_pedidos_pendientes();
+		$pedidos = $this->Pedido_model->traer_pedidos_pendientes();
  
 		$array_pedidos = array();
 
 		foreach($pedidos as $row)
 		{
-	 
 			$informacion['informacion_pedido'] =  $row;
+			$informacion['total_pedido'] = $this->Pedido_model->get_total_pedido($row['id_pedido']);
 			$informacion['productos'] = $this->Pedido_model->get_pedido_productos($row['id_pedido']);
+
 			array_push($array_pedidos, $informacion);
 		}
 
-		 
-		$this->load->view('administrador/pedidos.php');
+		$data['estados_pedidos'] = $this->Pedido_model->get_pedido_estados();
+
+		$data['pedidos'] = $array_pedidos;
+		$this->load->view('administrador/pedidos.php',$data);
  
 }
 

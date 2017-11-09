@@ -250,7 +250,7 @@ public function logout()
 
 	$this->db->close();
 	session_destroy();
-	redirect('pages/index/','refresh');
+	redirect('home/index/','refresh');
 }
 
 public function comprobar_email_existente_validation($email=null)  

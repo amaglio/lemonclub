@@ -21,7 +21,7 @@ $this->load->view('templates/head');
 							<div class="carousel-caption">
 								<h3>Reinventando el</h3>
 								<p>Fast casual</p>
-								<button class="btn btn-mas-padding btn-amarillo">MENU DEL DÍA</button>
+								<a href="<?=site_url('menu/index/-1')?>"><button class="btn btn-mas-padding btn-amarillo">MENU DEL DÍA</button></a>
 							</div>
 						</div>
 						<div class="item">
@@ -29,7 +29,7 @@ $this->load->view('templates/head');
 							<div class="carousel-caption">
 								<h3>Reinventando el</h3>
 								<p>Fast casual</p>
-								<button class="btn btn-mas-padding btn-amarillo">MENU DEL DÍA</button>
+								<a href="<?=site_url('menu/index/-1')?>"><button class="btn btn-mas-padding btn-amarillo">MENU DEL DÍA</button></a>
 							</div>
 						</div>
 						<div class="item">
@@ -37,7 +37,7 @@ $this->load->view('templates/head');
 							<div class="carousel-caption">
 								<h3>Reinventando el</h3>
 								<p>Fast casual</p>
-								<button class="btn btn-mas-padding btn-amarillo">MENU DEL DÍA</button>
+								<a href="<?=site_url('menu/index/-1')?>"><button class="btn btn-mas-padding btn-amarillo">MENU DEL DÍA</button></a>
 							</div>
 						</div>
 					</div>

@@ -43,8 +43,19 @@ $this->load->view('templates/head');
 							$active = "class='active'";
 						}
 						echo '<a href="'.site_url('menu/index/'.$tipo['id_producto_tipo']).'" '.$active.'>'.$tipo['descripcion'].'</a>';
-					}
+					} ?>
+					
+					<?php
+
+						if($plato_dia == 1)
+							$active = "class='active'"; 
+						else
+							$active = "";
+
 					?>
+					
+				 	<a style="color:" href="<?=site_url('menu/index/-1')?>" <?=$active?> > <i class="fa fa-star-o" aria-hidden="true"></i> Menú del dia </a>
+					
 				</div>
 			</div>
 		</div>

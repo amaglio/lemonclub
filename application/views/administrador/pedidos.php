@@ -14,14 +14,106 @@
       border:1px solid silver;
     }
 
+    .estados_pedido{
+      font-weight: bold;
+      background-color: #80808012;
+      padding-left: 50px;
+      margin-left: 
+    }
+
+    .panel-default>.panel-heading{
+      background-color:black;
+
+    }
+    
+    .h4, h4{
+      color: white;
+    }
+
 </style>
 
 
+<?
 
-<div class="col-md-3">
-	 aaaaaa
+  $i=0;
 
-</div>
+  foreach ($pedidos as $row) 
+  {  
+        if(! ($i % 4) ){
+
+          if(! ($i % 4) && $i != 0 ) echo "</div>";
+
+          echo "<div class='row col-md-12'>";
+        } ?>
+
+        <div class="col-md-3">
+           <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    <h4>Pedido: <strong><?=$row['informacion_pedido']['id_pedido']?></strong></h4>
+                </div>
+                <div class="panel-body">
+
+                        <?
+                          foreach ($row['productos'] as $row2) 
+                          { ?>
+                              <div class="col-md-12">
+                                  <strong><?=$row2['nombre']?></strong>
+                                  <div class="pull-right"><span>$</span><span><?=$row2['precio']?></span></div>
+                              </div>
+                        <?
+                          }
+                        ?>
+
+                        <div class="col-md-12">
+                            <small>- <?=$row['informacion_pedido']['forma_pago']?></small><br>
+                            <small>- <?=$row['informacion_pedido']['forma_entrega']?></small>
+                            
+                            <? if($row['informacion_pedido']['forma_entrega'] == 'Delivery'): ?>
+                                
+                                <div class="pull-right">
+                                    <? if(isset($row['informacion_pedido']['dirección']))?>
+                                          <span><small><?="(".$row['informacion_pedido']['dirección']." ".$row['informacion_pedido']['altura'].")"?></small></span>
+
+                                </div>
+
+                            <?  endif;  ?>
+                            <hr>
+                        </div>
+
+                        <div class="col-md-12">
+                            <strong>Total</strong>
+                            <div class="pull-right"><span>$</span><span><?=$row['total_pedido']?></span></div>
+                            <hr>
+                        </div>
+                        
+
+                        <!-- <button type="button" class="btn btn-primary btn-lg btn-block">Checkout</button>-->
+                          <?  $estados = array(); ?>
+                                        
+                          <?  foreach ($estados_pedidos as $row3):  
+
+                                
+                                  $estados[$row3['id_pedido_estado']] = strtoupper($row3['descripcion']);
+
+                              endforeach; 
+                             
+                              echo form_dropdown('id_pedido_estado', $estados, $row['informacion_pedido']['id_pedido_estado']  ,'class="form-control estados_pedido" id="id_estado_cons_prg" name="id_estado_cons_prg" style="height:50px; font-size:15px; padding:0px" ' ); 
+                          ?>
+
+
+                        
+                </div>
+                
+            </div>
+
+        </div>
+ 
+
+      <?  
+      $i++;
+  } 
+
+?>
  
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
