@@ -5,7 +5,7 @@
 		            <a class="" href="<?=site_url('pages')?>">HOME</a>
 		            <a class="" href="<?=site_url('menu')?>">MENU</a>
                     
-		            <a class="" href="<?=site_url('pages/contacto')?>">CONTACTO</a>
+		            <a class="" href="<?=site_url('contacto')?>">CONTACTO</a>
     			</div>
     			<div class="col-xs-2 area-logo">
     				<a href="<?=site_url('pages')?>"><img src="<?=base_url('assets/images/lemonlogo.png')?>"></a>
@@ -52,7 +52,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="<?=site_url('pages')?>">HOME</a></li>
             <li><a href="<?=site_url('menu')?>">MENU</a></li>
-            <li><a href="<?=site_url('pages/contacto')?>">CONTACTO</a></li>
+            <li><a href="<?=site_url('contacto')?>">CONTACTO</a></li>
             <li><a href="<?=site_url('pedido')?>">CARRITO</a></li>
             <li><a href="<?=site_url('servicio_corporativo')?>">SERVICIO CORPORATIVO</a></li>
             <?

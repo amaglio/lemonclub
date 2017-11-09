@@ -2,7 +2,7 @@
 
 class Servicio_corporativo extends CI_Controller {
 
-	private static $solapa = "pedido";
+	private static $solapa = "servicio_corporativo";
 
 	public function __construct()
 	{

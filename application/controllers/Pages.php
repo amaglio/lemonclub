@@ -7,11 +7,7 @@ class Pages extends CI_Controller {
 	{
 		$this->load->view('pages/index');
 	}
-
-	public function contacto()
-	{
-		$this->load->view('pages/contacto');
-	}
+ 
 
 	public function construccion()
 	{

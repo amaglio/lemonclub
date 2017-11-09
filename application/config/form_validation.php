@@ -160,6 +160,32 @@ $config = array(
                                         ) 
                                 ),
 
+// --------------------------------- CONTACTO ------------------------------ 
+
+
+            'alta_contacto' => array(
+
+                                    array(
+                                            'field' => 'nombre',
+                                            'label' => 'nombre',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'apellido',
+                                            'label' => 'apellido',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'mail',
+                                            'label' => 'mail',
+                                            'rules' => 'required|trim|xss_clean|valid_email'
+                                        ),
+                                    array(
+                                            'field' => 'mensaje',
+                                            'label' => 'mensaje',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ) 
+                                ),
 /*               
 // --------------------------------- USUARIO ------------------------------
 
