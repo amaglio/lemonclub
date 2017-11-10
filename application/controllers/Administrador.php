@@ -177,7 +177,7 @@ public function pedidos()
 */
 public function pedidos()
 {
-		$datos['mensaje'] = $this->session->flashdata('mensaje');
+		$data['mensaje'] = $this->session->flashdata('mensaje');
 		$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
 		$output->titulo = traer_titulo($this->uri->segment(2));
 		$this->load->view('administrador/index.php',(array)$output);
@@ -301,15 +301,7 @@ public function ajax_ingrediente()
 		echo json_encode($result);
 	}
 }
-
-
-
-public function alta_pedido()
-{
-	 
-}
-
-
+ 
 
 /*
 public function offices_management()

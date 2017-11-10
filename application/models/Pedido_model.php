@@ -220,8 +220,6 @@ class Pedido_model extends CI_Model {
 		{
 			return false;
 		}
-
-
 	}
 
 
@@ -233,19 +231,34 @@ class Pedido_model extends CI_Model {
     										   fp.descripcion as forma_pago,
     										   fe.descripcion as forma_entrega,
     										   pes.descripcion as estado,
-    										   u.email
+    										   u.email,
+    										   ur.nombre
 						    			FROM pedido pe
-						    				 left join pedido_delivery pd ON pe.id_pedido = pd.id_pedido
-						    				 inner join forma_pago fp ON pe.id_forma_pago =  fp.id_forma_pago
-						    				 inner join forma_entrega fe ON pe.id_forma_entrega =  fe.id_forma_entrega
-						    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado
-						    				 inner join usuario u ON pe.id_usuario =  u.id_usuario
+							    				 left join pedido_delivery pd ON pe.id_pedido = pd.id_pedido
+							    				 inner join forma_pago fp ON pe.id_forma_pago =  fp.id_forma_pago
+							    				 inner join forma_entrega fe ON pe.id_forma_entrega =  fe.id_forma_entrega
+							    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado,
+						    				 usuario u
+						    				 	left join usuario_registrado ur ON ur.id_usuario =  u.id_usuario
 						    			WHERE  pe.id_pedido_estado != 1
+						    			AND pe.id_usuario =  u.id_usuario
 						    			ORDER BY id_pedido DESC "  ); //traer_pedidos_pendientes
 
     	return $resultado->result_array();
     }
 
+	public function procesa_cambiar_estado_pedido( $array )
+	{
+ 		$array_pedido = array(
+            'id_pedido_estado' => $array['id_pedido_estado']
+        );
+
+        $this->db->where( array('id_pedido' =>  $array['id_pedido'] ) );
+
+        return	$this->db->update('pedido', $array_pedido);
+	
+        //return $this->db->affected_rows();
+	}
 }
 
 /* End of file  */

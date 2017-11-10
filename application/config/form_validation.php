@@ -160,6 +160,20 @@ $config = array(
                                         ) 
                                 ),
 
+            'procesa_cambiar_estado_pedido' => array(
+
+                                    array(
+                                            'field' => 'id_pedido',
+                                            'label' => 'id_pedido',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'id_pedido_estado',
+                                            'label' => 'id_pedido_estado',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ) 
+                                ),
+
 // --------------------------------- CONTACTO ------------------------------ 
 
 

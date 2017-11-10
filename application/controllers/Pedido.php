@@ -309,6 +309,40 @@ class Pedido extends CI_Controller {
 		echo json_encode($return);
 	}
 
+	public function procesa_cambiar_estado_pedido()
+	{
+		chrome_log("Pedido/procesa_cambiar_estado_pedido");
+
+	 	if ($this->form_validation->run('procesa_cambiar_estado_pedido') == FALSE): 
+
+			chrome_log("No Paso validacion");
+			$this->session->set_flashdata('mensaje', 'Error en la validacion');
+			 
+		else:
+			chrome_log("Si Paso validacion");
+	 		 
+	 	 	$resultado = $this->pedido_model->procesa_cambiar_estado_pedido( $this->input->post() );
+
+	 	 	if ( $resultado ):  
+			 
+				chrome_log("Pudo validar ");
+
+				$this->session->set_flashdata('mensaje', 'Estado modificado exitosamente.');
+				
+			 				 
+			else:  
+			 	
+			 	$this->session->set_flashdata('mensaje', 'Error al cambia el estado, intente mas tarde.');
+
+			endif;  
+
+		endif; 	
+
+		redirect(base_url()."index.php/administrador/pedidos");
+	}
+
+
+
  
 
 }
