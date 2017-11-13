@@ -58,6 +58,8 @@ foreach($css_files as $file): ?>
 	    <ul class="nav navbar-nav">
 	    	<li <? echo ($this->uri->segment(2) == 'productos')? 'class="active"' : ' ' ;  ?> ><a  href='<?php echo site_url('administrador/productos')?>'><i class="fa fa-lemon-o" aria-hidden="true"></i> Productos</a></li>
 
+	    	<li <? echo ($this->uri->segment(2) == 'producto_dia')? 'class="active"' : ' ' ;  ?> ><a  href='<?php echo site_url('administrador/producto_dia')?>'><i class="fa fa-lemon-o" aria-hidden="true"></i> Producto Dia</a></li>
+
 	      	<li <? echo ($this->uri->segment(2) == 'tipos_productos')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/tipos_productos')?>'><i class="fa fa-tags" aria-hidden="true"></i> Tipos de productos</a></li>
 
 			<li <? echo ($this->uri->segment(2) == 'pedidos')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/pedidos')?>'><i class="fa fa-shopping-basket" aria-hidden="true"></i> Pedidos</a></li>
