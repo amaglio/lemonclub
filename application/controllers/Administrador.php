@@ -302,6 +302,24 @@ public function ajax_ingrediente()
 	}
 }
  
+public function producto_dia()
+{
+	$crud = new grocery_CRUD();
+
+	$crud->set_table('producto_dia');
+	$crud->columns('id_producto');
+	$crud->display_as('id_producto','Id');
+	$crud->set_relation('id_producto','producto','nombre');
+
+	$crud->set_language("spanish"); 
+
+	$crud->required_fields('id_producto');
+
+
+	$output = $crud->render();
+
+	$this->_example_output($output);
+}
 
 /*
 public function offices_management()
