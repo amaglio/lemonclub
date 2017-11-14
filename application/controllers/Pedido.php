@@ -25,6 +25,7 @@ class Pedido extends CI_Controller {
 	{
 		$data['pedido'] = $this->pedido_model->get_pedido( $this->session->userdata('id_pedido') );
 		$data['items'] = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
+		$data['cantidad'] = $this->pedido_model->get_cantidad_items_pedido( $this->session->userdata('id_pedido') );
 		$data['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
 
 		$this->load->view(self::$solapa.'/index', $data);

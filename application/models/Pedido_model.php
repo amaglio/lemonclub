@@ -33,6 +33,15 @@ class Pedido_model extends CI_Model {
 		return number_format($result['total'],2);
 	}
 
+	public function get_cantidad_items_pedido( $id ) 
+	{
+		$query = $this->db->query('SELECT SUM(PP.cantidad) as cantidad
+		                            FROM pedido_producto AS PP
+		                            WHERE PP.id_pedido='.$id);
+		$result = $query->row_array();
+		return $result['cantidad'];
+	}
+
 	public function set_pedido( $array = FALSE )
 	{
 		chrome_log("Pedido_model/set_pedido");

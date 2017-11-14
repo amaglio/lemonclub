@@ -21,7 +21,7 @@ $this->load->view('templates/head');
 	<div class="container carrito">
 		<div class="row">
 			<div class="col-xs-12 col-sm-10 col-sm-offset-1">
-				<div class="titulo"><i class="fa fa-shopping-cart fa-lg"></i> &nbsp; CARRITO (<?php echo $this->cart->total_items(); ?> ITEMS)</div>
+				<div class="titulo"><i class="fa fa-shopping-cart fa-lg"></i> &nbsp; CARRITO (<?php echo $cantidad; ?> ITEMS)</div>
 				<div class="table">
 					<div class="row hidden-xs">
 						<div class="col-xs-2 th"></div>
