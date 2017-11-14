@@ -38,7 +38,7 @@ $this->load->view('templates/head');
 	<div class="container confirmar">
 		<div class="row">
 			<div class="col-xs-12 col-sm-7 col-sm-offset-1">
-
+				<div id="area-mensaje"></div>
 				<?php 
 				echo validation_errors();
 				
@@ -57,6 +57,7 @@ $this->load->view('templates/head');
 				<div class="subtitulo"><?=$datos_usuario->tipo_usuario?></div>
 				<div class="formulario">
 					<form class="form-horizontal" id="form-confirmar" action="<?=site_url('pedido/finalizar_pedido')?>" method="POST">
+						<input type="hidden" name="id_pedido" value="<?php echo $this->session->userdata('id_pedido'); ?>">
 						<div class="form-group">
 						    <div class="col-sm-12">
 						    	<input type="email" class="form-control" id="mail" name="mail" placeholder="Email" value="<?=$datos_usuario->email?>" readonly="readonly">
@@ -80,11 +81,34 @@ $this->load->view('templates/head');
 						  </label>
 						</div>
 						<div class="form-group" id="area_envio" style="display:none;">
-						    <div class="col-sm-6">
-						    	<input type="text" class="form-control" id="calle" name="calle" placeholder="Calle"  value="<?php echo set_value('calle'); ?>" required="required">
-						    </div>
-						    <div class="col-sm-6">
-						    	<input type="text" class="form-control" id="altura" name="altura" placeholder="Altura"  value="<?php echo set_value('altura'); ?>" required="required">
+							<?php
+							foreach ($direcciones as $key_dir => $direccion)
+							{
+								echo '<div class="col-sm-12">
+										<div class="radio" style="margin-left:20px;">
+										  <label>
+										    <input type="radio" name="direccion" id="direccion'.$key_dir.'" value="1" onchange="select_dir_vieja(\''.$direccion['dirección'].'\', \''.$direccion['altura'].'\')">
+										    '.$direccion['dirección'].' '.$direccion['altura'].'
+										  </label>
+										</div>
+									</div>';
+							}
+							echo '<div class="col-sm-12">
+										<div class="radio" style="margin-left:20px;">
+										  <label>
+										    <input type="radio" name="direccion" id="direccion_nueva" value="1" checked onchange="select_dir_nueva()">
+										    Nueva dirección
+										  </label>
+										</div>
+									</div>';
+							?>
+							<div id="area_dir_nueva">
+							    <div class="col-sm-6">
+							    	<input type="text" class="form-control" id="calle" name="calle" placeholder="Calle"  value="<?php echo set_value('calle'); ?>" required="required">
+							    </div>
+							    <div class="col-sm-6">
+							    	<input type="text" class="form-control" id="altura" name="altura" placeholder="Altura"  value="<?php echo set_value('altura'); ?>" required="required">
+							    </div>
 						    </div>
 						</div>
 						<div class="radio">
@@ -108,12 +132,12 @@ $this->load->view('templates/head');
 						<!--<input type="submit" value="COMPRAR" name="comprar" id="btn-comprar" class="btn btn-block btn-amarillo confirmation-callback" style="margin-top:10px;">-->
 
 
-						<button  name="comprar" id="btn-comprar" class="btn btn-block btn-amarillo confirmation-callback" 
+						<button type="button" name="comprar" id="btn-comprar" class="btn btn-block btn-amarillo confirmation-callback" 
 						        data-btn-ok-label="Continuar" data-btn-ok-icon="glyphicon glyphicon-share-alt"
 						        data-btn-ok-class="btn btn-primary"
 						        data-btn-cancel-label="Cancelar" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
 						        data-btn-cancel-class="btn btn-danger"
-						        data-title="Is it ok?" data-content="This might be dangerous">
+						        data-title="Is it ok?" data-content="This might be dangerous" data-loading-text="Cargando...">
 						  COMPRAR
 						</button>
 
@@ -163,16 +187,19 @@ function select_takeaway()
 	$('#area_envio').hide();
 }
 
-$('#form-confirmar').submit(function( event ) {
+function select_dir_vieja(calle, altura)
+{
+	$('#area_dir_nueva').hide();
+	$('#calle').val(calle);
+	$('#altura').val(altura);
+}
 
-	$('#btn-comprar').button('loading');
-});
-
-
-
-</script>
-
-	<script>
+function select_dir_nueva()
+{
+	$('#area_dir_nueva').show();
+	$('#calle').val("");
+	$('#altura').val("");
+}
 	
 	$(function() {
 		
@@ -181,12 +208,52 @@ $('#form-confirmar').submit(function( event ) {
 		});
 
 		$('.confirmation-callback').confirmation({
-			onConfirm: function() {  $('#form-confirmar').submit() },
+			onConfirm: function() {  $('#form-confirmar').submit(); },
 			onCancel: function() {   },
 			title:'¿ Seguro desea confirmar el pedido ?'
 		});
 	});
+	
+	$('#form-confirmar').submit(function( event ) {
+		event.preventDefault();
+		$('#btn-comprar').button('loading');
+		$('#area-mensaje').html("");
+	  	$.ajax({
+	       type: 'POST',
+	        data: $(event.target).serialize(),
+	        cache: false,
+	        dataType: 'json',
+	        processData: false, // Don't process the files
+	        //contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+	       url: SITE_URL+"/pedido/finalizar_pedido_ajax",
+	       success: function(data){
+	          if(data.resultado == true)
+	          {
+	            var htmlData = '<div class="alert with-icon alert-success" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+	            htmlData += data.mensaje;
+	            htmlData += '</div>';
+	            $('#area-mensaje').html(htmlData);
 
+	            window.location.href = SITE_URL+"/pedido/success";
+	          }
+	          else
+	          {
+	            var htmlData = '<div class="alert with-icon alert-danger" role="alert">';
+	            htmlData += data.mensaje;
+	            htmlData += '</div>';
+	            $('#area-mensaje').html(htmlData);
+	          }
+	          $('#btn-comprar').button('reset');
+	       },
+	       error: function(x, status, error){
+	          	var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+	            htmlData += " Error: " + error;
+	            htmlData += '</div>';
+	            $('#area-mensaje').html(htmlData);
+	            $('#btn-comprar').button('reset');
+	       }
+	  	});
+	});
 	</script>
 
 </body>

@@ -168,7 +168,7 @@ $('#form-ingresar').submit(function( event ) {
           }
           else
           {
-            var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i> ';
+            var htmlData = '<div class="alert with-icon alert-danger" role="alert">';
             htmlData += data.mensaje;
             htmlData += '</div>';
      		$('#area-mensaje').html(htmlData);
@@ -248,7 +248,7 @@ $('#form-registro').submit(function( event ) {
           }
           else
           {
-            var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            var htmlData = '<div class="alert with-icon alert-danger" role="alert">';
             htmlData += data.mensaje;
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);

@@ -16,7 +16,7 @@ public function procesa_logueo()
 
 		chrome_log("No paso validacion");
 		$return["resultado"] = FALSE;
-		$return["mensaje"] =  "nada";
+		$return["mensaje"] =  validation_errors();
 
 	else: 
 	 
@@ -158,7 +158,7 @@ public function procesa_registrarse()
 
 		chrome_log("No Paso validacion");
 		$return["resultado"] = FALSE;
-		$return["mensaje"] = "Ha ocurrido un error en la validación, por favor, intenta mas tarde";
+		$return["mensaje"] = validation_errors();
  
 		 
 	else:

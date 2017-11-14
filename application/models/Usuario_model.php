@@ -250,7 +250,20 @@ public function traer_datos_usuario( $id_usuario )
 }
 
 
+public function traer_direcciones( $id_usuario ) 
+{
+	chrome_log("Usuario_model/traer_direcciones");
 
+ 	$sql = "SELECT  DISTINCT(pd.dirección), pd.altura
+ 			FROM 	pedido p
+ 					INNER JOIN pedido_delivery pd ON p.id_pedido = pd.id_pedido 
+ 			WHERE  
+ 					p.id_usuario = ? "; 
+
+	$query = $this->db->query($sql, array( $id_usuario ));
+
+	return $query->result_array();
+}
 
 
 }
