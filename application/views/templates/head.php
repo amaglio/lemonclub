@@ -21,4 +21,6 @@
     var BASE_URL = "<?=base_url()?>";
     </script>
 
+    <link rel="icon" type="image/png" href="<?=base_url('assets/images/favicon.ico')?>" />
+
 </head>
