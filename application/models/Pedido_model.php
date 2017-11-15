@@ -33,6 +33,15 @@ class Pedido_model extends CI_Model {
 		return number_format($result['total'],2);
 	}
 
+	public function get_cantidad_items_pedido( $id ) 
+	{
+		$query = $this->db->query('SELECT SUM(PP.cantidad) as cantidad
+		                            FROM pedido_producto AS PP
+		                            WHERE PP.id_pedido='.$id);
+		$result = $query->row_array();
+		return $result['cantidad'];
+	}
+
 	public function set_pedido( $array = FALSE )
 	{
 		chrome_log("Pedido_model/set_pedido");
@@ -78,7 +87,9 @@ class Pedido_model extends CI_Model {
 
 	public function finalizar_pedido( $id_pedido, $id_usuario, $array )
 	{
-        if(isset($array['calle'])):
+        //if(isset($array['calle'])):
+
+		if($array['entrega'] == FORMA_ENTREGA_DELIVERY ):
 
 			$array_delivery = array(
 	            'dirección' => $array['calle'],

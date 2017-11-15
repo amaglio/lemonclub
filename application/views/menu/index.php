@@ -67,7 +67,7 @@ $this->load->view('templates/head');
 			foreach ($productos as $key_prod => $producto)
 			{
 				echo '<div class="col-xs-12 col-sm-3 item">
-						<div class="area-imagen"><img src="'.base_url('assets/images/productos/'.$producto['path_imagen']).'" class="img-responsive"></div>
+						<div class="area-imagen" style="background:url('.base_url('assets/images/productos/'.$producto['path_imagen']).'); background-size:cover; background-position:center;"></div>
 						<div class="titulo">'.$producto['nombre'].'</div>
 						<div class="descripcion">'.$producto['descripcion'].'</div>
 						<div class="precio">$'.$producto['precio'].'</div>

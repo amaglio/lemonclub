@@ -451,6 +451,10 @@ MENU
 	text-align: center;
 	margin-top: 20px;
 }
+.area-menu-items .item .area-imagen{
+	width: 100%;
+	height: 200px;
+}
 .area-menu-items .item .titulo{
 	font-size: 18px;
 	color: #451602;
@@ -698,6 +702,17 @@ CONFIRMAR PEDIDO
 /*****************
 MEDIA
 *******************/
+@media (max-width: 1200px) {
+	.area-menu-items .item .area-imagen{
+		height: 160px;
+	}
+}
+
+@media (max-width: 992px) {
+	.area-menu-items .item .area-imagen{
+		height: 120px;
+	}
+}
 
 @media (max-width: 768px) {
 	.navbar{
@@ -775,5 +790,9 @@ MEDIA
 	.contacto{
 		padding: 10px 0px;
 		font-size: 14px;
+	}
+
+	.area-menu-items .item .area-imagen{
+		height: 200px;
 	}
 }
