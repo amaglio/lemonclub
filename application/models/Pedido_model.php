@@ -87,7 +87,9 @@ class Pedido_model extends CI_Model {
 
 	public function finalizar_pedido( $id_pedido, $id_usuario, $array )
 	{
-        if(isset($array['calle'])):
+        //if(isset($array['calle'])):
+
+		if($array['entrega'] == FORMA_ENTREGA_DELIVERY ):
 
 			$array_delivery = array(
 	            'dirección' => $array['calle'],
