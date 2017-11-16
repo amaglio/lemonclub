@@ -40,13 +40,19 @@
 
 	</style>
 
+
+
 <?php 
 foreach($css_files as $file): ?>
 	<link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
 <?php endforeach; ?>
+
 <?php foreach($js_files as $file): ?>
 	<script src="<?php echo $file; ?>"></script>
 <?php endforeach; ?>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 </head>
 <body style=" ">
 	
@@ -56,6 +62,7 @@ foreach($css_files as $file): ?>
 	      <a class="navbar-brand"  ><img   style="width:100px; margin-bottom:10px" src="<?=base_url()?>assets/images/lemonlogo_admin.png"  > </a>
 	    </div>
 	    <ul class="nav navbar-nav">
+		   
 	    	<li <? echo ($this->uri->segment(2) == 'productos')? 'class="active"' : ' ' ;  ?> ><a  href='<?php echo site_url('administrador/productos')?>'><i class="fa fa-lemon-o" aria-hidden="true"></i> Productos</a></li>
 
 	    	<li <? echo ($this->uri->segment(2) == 'producto_dia')? 'class="active"' : ' ' ;  ?> ><a  href='<?php echo site_url('administrador/producto_dia')?>'><i class="fa fa-lemon-o" aria-hidden="true"></i> Producto Dia</a></li>
@@ -66,9 +73,16 @@ foreach($css_files as $file): ?>
 
 	      	<li <? echo ($this->uri->segment(2) == 'ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/ingredientes')?>'><i class="fa fa-flask" aria-hidden="true"></i>Ingredientes</a></li>
 
-	      	<li <? echo ($this->uri->segment(2) == 'tipos_ingrediente')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/tipos_ingredientes')?>'><i class="fa fa-tag" aria-hidden="true"></i>Tipo de Ingredientes</a></li>
+	      	<li <? echo ($this->uri->segment(2) == 'tipos_ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/tipos_ingredientes')?>'><i class="fa fa-tag" aria-hidden="true"></i>Tipo de Ingredientes</a></li>
 
-	      	<li <? echo ($this->uri->segment(2) == 'usuarios')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/usuarios')?>'><i class="fa fa-users" aria-hidden="true"></i> Usuarios</a></li>
+			<li <? echo ($this->uri->segment(2) == 'usuarios_registrados' || $this->uri->segment(2) == 'usuarios_invitados' )? 'class="dropdown active"' :  'class="dropdown"' ;  ?>>
+	        	<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users" aria-hidden="true"></i> Usuarios<span class="caret"></span></a>
+	            <ul class="dropdown-menu" role="menu">
+	                <li <? echo ($this->uri->segment(2) == 'usuarios_registrados')? 'class="active"' : ' ' ;  ?> ><a href='<?php echo site_url('administrador/usuarios_registrados')?>'> <i class="fa fa-registered" aria-hidden="true"></i> Registrados</a></li>
+	                <li <? echo ($this->uri->segment(2) == 'usuarios_invitados')? 'class="active"' : ' ' ;  ?> ><a href='<?php echo site_url('administrador/usuarios_invitados')?>'>Invitados</a></li>
+	            </ul>
+	        </li>
+
 
 	      	<li ><a href='<?php echo site_url('login/logout')?>'><i class="fa fa-power-off" aria-hidden="true"></i> Salir</a></li>
 	    </ul>
@@ -87,9 +101,9 @@ foreach($css_files as $file): ?>
 		<?php echo $output; ?>
     </div>
 </body>
-<!-- Jquery  
+<!-- Jquery   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-  <!--Bootstrap 
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
+  <!--Bootstrap  -->
+  
 </html>
