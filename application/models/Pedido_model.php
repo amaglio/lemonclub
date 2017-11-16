@@ -219,7 +219,8 @@ class Pedido_model extends CI_Model {
 		chrome_log("Pedido_model/get_pedido_estados");
 
 	 	$sql = "SELECT *
-                FROM pedido_estado "; 
+                FROM pedido_estado 
+                WHERE id_pedido_estado != ".PEDIDO_ESTADO_SIN_CONFIRMAR; 
 
 		$query = $this->db->query($sql);
 
