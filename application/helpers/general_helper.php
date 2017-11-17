@@ -124,36 +124,28 @@ if(!function_exists('enviar_email'))
 {
     function enviar_email($email_to, $mensaje, $asunto )
     {   
-         //para el envío en formato HTML 
-        $headers = "MIME-Version: 1.0\r\n"; 
-        $headers .= "Content-type: text/html; charset=iso-8859-1\r\n"; 
+        $CI =& get_instance();
+    
+        $CI->load->library('email'); // load library 
 
-        //dirección del remitente 
-        $headers .= "From: Web <pepito@desarrolloweb.com>\r\n"; 
+        $config['mailtype'] = 'html';
 
-        //dirección de respuesta, si queremos que sea distinta que la del remitente 
-        $headers .= "Reply-To: mariano@desarrolloweb.com\r\n"; 
-
-        //ruta del mensaje desde origen a destino 
-        $headers .= "Return-path: holahola@desarrolloweb.com\r\n"; 
-
-        //direcciones que recibián copia 
-       // $headers .= "Cc: maria@desarrolloweb.com\r\n"; 
-
-        //direcciones que recibirán copia oculta 
-        //$headers .= "Bcc: pepe@pepe.com,juan@juan.com\r\n"; 
-
-        if(mail($email_to,$asunto,$mensaje,$headers)):
-
-            chrome_log("ENVIO EL EMAIL A"); 
-            return true;
-         
-        else:
-            
-            chrome_log("NO ENVIO EL EMAIL2");
-            return false;
+        $CI->email->initialize($config);
         
-        endif;  
+        $CI->email->from('info@lemonclub.com.ar', 'Lemon Club');
+        $CI->email->to($email_to);
+        //$CI->email->cc("contacto@3ddos.com.ar");
+        //$CI->email->cc('another@another-example.com');
+        //$CI->email->bcc('them@their-example.com');
+
+        $CI->email->subject($asunto);
+        $CI->email->message($mensaje); 
+
+        if ( ! $CI->email->send())
+        {
+            return false;
+        }
+        return true;
     }
 }
 

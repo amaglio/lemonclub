@@ -21,6 +21,9 @@ $this->load->view('templates/head');
 	<div class="container carrito">
 		<div class="row">
 			<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+
+				<div id="area-mensaje"></div>
+
 				<div class="titulo"><i class="fa fa-shopping-cart fa-lg"></i> &nbsp; CARRITO (<?php echo $cantidad; ?> ITEMS)</div>
 				<div class="table">
 					<div class="row hidden-xs">
@@ -51,14 +54,25 @@ $this->load->view('templates/head');
 					<div class="col-xs-6">Total</div>
 					<div class="col-xs-6" id="total">$<?php echo $total; ?></div>
 				</div>
-				<div class="row hidden-xs">
-					<div class="col-xs-12 col-sm-6" style="text-align:left"><a href="<?=site_url('menu')?>" class="btn btn-default btn-mas-padding">SEGUIR COMPRANDO</a></div>
-					<div class="col-xs-12 col-sm-6" style="text-align:right"><a href="<?=site_url('pedido/confirmar_pedido')?>" class="btn btn-amarillo btn-mas-padding">COMPRAR</a></div>
+				
+				<div class="row">
+					<div class="col-xs-12 col-sm-3 col-sm-push-9" style="text-align:right">
+						<?php
+							if($items && count($items))
+							{
+								echo '<a href="'.site_url('pedido/confirmar_pedido').'" class="btn btn-amarillo btn-block">COMPRAR</a>';
+							}
+							else
+							{
+								echo '<a href="javascript: mensaje_no_items();" class="btn btn-amarillo btn-block">COMPRAR</a>';
+							}
+						?>
+					</div>
+					<div class="col-xs-12 col-sm-3 col-sm-pull-3" style="text-align:left">
+						<a href="<?=site_url('menu')?>" class="btn btn-default btn-block">SEGUIR COMPRANDO</a>
+					</div>
 				</div>
-				<div class="row visible-xs">
-					<div class="col-xs-12" style="text-align:right"><a href="<?=site_url('pedido/confirmar_pedido')?>" class="btn btn-amarillo btn-block">COMPRAR</a></div>
-					<div class="col-xs-12" style="text-align:left"><a href="<?=site_url('menu')?>" class="btn btn-default btn-block">SEGUIR COMPRANDO</a></div>
-				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -133,6 +147,11 @@ function eliminar_producto(id)
       		$.notify("Ocurrio un error: " + status + " \nError: " + error, "error");
       	}
     });
+}
+
+function mensaje_no_items()
+{
+	$('#area-mensaje').html('<div id="no_items" class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>No hay items para comprar.</div>');
 }
 </script>
 
