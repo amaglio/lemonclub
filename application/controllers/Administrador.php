@@ -19,12 +19,15 @@ public function _example_output($output = null)
 
 	$output->titulo = traer_titulo($this->uri->segment(2));
 	$this->load->view('administrador/index.php',(array)$output);
+
 }
 
 public function index()
 {
-	
-	$this->_example_output((object)array('output' => '' , 'js_files' => array() , 'css_files' => array()));
+	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+	$output->titulo = traer_titulo($this->uri->segment(2));
+	$this->load->view('administrador/index.php',(array)$output);
+	$this->load->view('administrador/footer');
 }
 
 public function tipos_productos()
@@ -167,32 +170,6 @@ public function tipos_ingredientes()
 	$this->_example_output($output);
 }
 
-/*
-public function pedidos()
-{
-	$crud = new grocery_CRUD();
-
-	$crud->set_table('pedido');
-	$crud->columns('id_pedido','id_pedido_estado','id_sucursal');
-	$crud->display_as('id_pedido','Id')
-		 ->display_as('id_pedido_estado','Estado pedido')
-		 ->display_as('id_sucursal','Sucursal');
-	$crud->unset_delete();
-	$crud->set_language("spanish"); 
-	//$crud->required_fields('descripcion');
-	
-	$crud->set_relation('id_pedido_estado','pedido_estado','descripcion');
-	$crud->set_relation('id_sucursal','sucursal','nombre');
-	$crud->set_relation('id_forma_pago','forma_pago','descripcion');
-
-	$crud->unset_add();
-	$crud->unset_edit();
-
-	$output = $crud->render();
-
-	$this->_example_output($output);
-}
-*/
 public function pedidos()
 {
 		$data['mensaje'] = $this->session->flashdata('mensaje');
