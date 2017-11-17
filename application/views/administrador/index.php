@@ -33,11 +33,17 @@
 		}
  		
  		.alert-info{
-			    color: #000000;
-    background-color: #fce028;
-    border-color: #d8c129;
+			color: #000000;
+		    background-color: #fce028;
+		    border-color: #d8c129;
 		}
 
+
+
+		.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover{
+			background-color: #fce129;
+		}
+	
 	</style>
 
 
@@ -105,5 +111,6 @@ foreach($css_files as $file): ?>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <!--Bootstrap  -->
+
   
 </html>

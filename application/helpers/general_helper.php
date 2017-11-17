@@ -42,6 +42,14 @@ if(!function_exists('traer_titulo'))
                 $titulo = "Agregá, modificá o eliminá los <strong>tipos de ingredientes</strong>.";
                 break;
 
+            case 'usuarios_registrados':
+                $titulo = "Gestioná los <strong>usuarios registrados</strong> en el sistema.</strong>.";
+                break;
+
+            case 'usuarios_invitados':
+                $titulo = "Gestioná los <strong>usuarios que realizaron pedidos como invitados</strong>.";
+                break;
+
             default:
                $titulo = " Bienvenido al <strong>  Administrador de Lemon Club </strong> <br> Desde aquí podrá administrar los  <strong> productos, ingredientes y pedidos  </strong> del restaurant.";
                 break;

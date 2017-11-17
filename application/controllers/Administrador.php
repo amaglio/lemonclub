@@ -90,26 +90,16 @@ public function usuarios_invitados()
 	$crud = new grocery_CRUD();
 
 	$crud->set_table('usuario');
-	$crud->columns('id_usuario', 'email');
+	$crud->columns('email');
 	$crud->display_as('id_usuario','Usuario Registrado');
 
-	$crud->set_relation('id_usuario','usuario_registrado','{id_usuario} - {apellido},{nombre}');
+	$crud->set_relation('id_usuario','usuario_registrado','id_usuario' );
+	$crud->where('apellido', NULL);
+
 	$crud->unset_delete();
 	$crud->unset_add();
 	$crud->unset_edit();
-	//$crud->set_table('usuario');
-	//$crud->display_as('id_usuario','Id');
-
-	//$crud->add_action('Agregar Ingredientes',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/ingredientes.png', 'Administrador/agregar_ingrediente');
-
-	//$crud->set_relation('id_usuario','usuario_registrado','id_usuario');
-
-	//$crud->columns('id_usuario','nombre','apellido','email','telefono', 'direccion');
-
-	//$crud->set_language("spanish"); 
-
-	//$crud->required_fields('id_producto_tipo' , 'nombre' , 'precio');
-
+	$crud->unset_read();
 	$output = $crud->render();
 
 	$this->_example_output($output);
@@ -120,13 +110,14 @@ public function usuarios_registrados()
 	$crud = new grocery_CRUD();
 
 	$crud->set_table('usuario_registrado');
-	$crud->columns('id_usuario','nombre','apellido','email','telefono', 'direccion');
-	$crud->display_as('id_usuario','ID');
+	$crud->columns('id_usuario','nombre','apellido','telefono', 'direccion');
+	$crud->display_as('id_usuario','ID - Email');
 
-	//$crud->set_relation('id_usuario','usuario_registrado','{id_usuario} - {apellido},{nombre}');
+	$crud->set_relation('id_usuario','usuario','[{id_usuario}] - {email}');
 	$crud->unset_delete();
 	$crud->unset_add();
 	$crud->unset_edit();
+	$crud->unset_read();
  
 	$output = $crud->render();
 
