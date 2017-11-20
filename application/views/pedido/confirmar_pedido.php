@@ -131,15 +131,23 @@ $this->load->view('templates/head');
 
 						<!--<input type="submit" value="COMPRAR" name="comprar" id="btn-comprar" class="btn btn-block btn-amarillo confirmation-callback" style="margin-top:10px;">-->
 
-
-						<button type="button" name="comprar" id="btn-comprar" class="btn btn-block btn-amarillo confirmation-callback" 
-						        data-btn-ok-label="Continuar" data-btn-ok-icon="glyphicon glyphicon-share-alt"
-						        data-btn-ok-class="btn btn-primary"
-						        data-btn-cancel-label="Cancelar" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
-						        data-btn-cancel-class="btn btn-danger"
-						        data-title="Is it ok?" data-content="This might be dangerous" data-loading-text="Cargando...">
-						  COMPRAR
-						</button>
+						<?php
+							if($items && count($items))
+							{
+								echo '<button type="button" name="comprar" id="btn-comprar" class="btn btn-block btn-amarillo confirmation-callback" 
+								        data-btn-ok-label="Continuar" data-btn-ok-icon="glyphicon glyphicon-share-alt"
+								        data-btn-ok-class="btn btn-primary"
+								        data-btn-cancel-label="Cancelar" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
+								        data-btn-cancel-class="btn btn-danger"
+								        data-title="Is it ok?" data-content="This might be dangerous" data-loading-text="Cargando...">
+								  COMPRAR
+								</button>';
+							}
+							else
+							{
+								echo '<a href="javascript: mensaje_no_items();" class="btn btn-amarillo btn-block">COMPRAR</a>';
+							}
+						?>
 
 					</form>
 				</div>
@@ -254,6 +262,11 @@ function select_dir_nueva()
 	       }
 	  	});
 	});
+
+	function mensaje_no_items()
+	{
+		$('#area-mensaje').html('<div id="no_items" class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>No hay items para comprar.</div>');
+	}
 	</script>
 
 </body>

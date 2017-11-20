@@ -10,25 +10,28 @@
     			<div class="col-xs-2 area-logo">
     				<a href="<?=site_url('pages')?>"><img src="<?=base_url('assets/images/lemonlogo.png')?>"></a>
     			</div>
-                <div class="col-xs-2 area-botones" style="">
-                    <a class="" href="<?=site_url('servicio_corporativo')?>">SERVICIO CORPORATIVO</a>
+                <div class="col-xs-2 area-botones" style="text-align:center; padding:30px 0px;">
+                    <a class="" href="<?=site_url('servicio_corporativo')?>">SERVICIO<br>CORPORATIVO</a>
                 </div>
     			<div class="col-xs-3 area-carrito" style="text-align:right">
-
-    				<a href="<?=site_url('pedido')?>" class="btn btn-amarillo">
+                    <?php
+    				echo '<a href="'.site_url('pedido').'" class="btn btn-amarillo">
                             <i class="fa fa-shopping-cart fa-lg"></i> 
-
-                            INGRES&Aacute; AL CARRITO
-                            <?
-                                if($this->session->userdata('pedido_activo') != "")
-                                    echo "(1)";
-                            ?>
-
-                    </a>
-                    <?
+                            CARRITO';
+                            if($this->session->userdata('pedido_activo') != "")
+                            {
+                                $cantidad_aux = $this->pedido_model->get_cantidad_items_pedido( $this->session->userdata('id_pedido') );
+                                echo "(".$cantidad_aux.")";
+                            }
+                    echo '</a> ';
+                    
                     if($this->session->userdata('id_usuario') != "")
                     {
-                        echo '<a href="'.site_url('usuario/logout').'" class="btn btn-amarillo">CERRAR SESIÓN</a>';
+                        echo '<a href="'.site_url('usuario/logout').'" class="btn btn-amarillo"><i class="fa fa-sign-out fa-lg"></i> CERRAR SESIÓN</a> ';
+                    }
+                    else
+                    {
+                        echo '<a href="'.site_url('usuario/ingresar').'" class="btn btn-amarillo"><i class="fa fa-user fa-lg"></i> INGRESAR</a> ';
                     }
                     ?>
     			</div>
@@ -59,6 +62,10 @@
             if($this->session->userdata('id_usuario') != "")
             {
                 echo '<li><a href="'.site_url('usuario/logout').'">CERRAR SESIÓN</a></li>';
+            }
+            else
+            {
+                echo '<li><a href="'.site_url('usuario/ingresar').'"><i class="fa fa-user"></i> INGRESAR</a></li>';
             }
             ?>
           </ul>

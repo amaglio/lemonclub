@@ -6,6 +6,7 @@ public function __construct()
 {
 	parent::__construct();
 	$this->load->model('Login_model');
+	$this->load->model('pedido_model');
 }
 
 public function index()

@@ -2,10 +2,93 @@
 
 class Usuario extends CI_Controller {
 
+private static $solapa = "usuario";
+
 public function __construct()
 {
 	parent::__construct();
 	$this->load->model('Usuario_model');
+	$this->load->model('pedido_model');
+}
+
+public function ingresar()
+{
+	$data['error'] = FALSE;
+	$data['success'] = FALSE;
+
+	if($this->session->userdata('id_usuario') != "")
+	{
+		redirect('pedido/confirmar_pedido');
+	}
+
+	if($this->session->userdata('id_pedido') != "")
+	{
+		$data['pedido'] = $this->pedido_model->get_pedido( $this->session->userdata('id_pedido') );
+		$data['items'] = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
+		$data['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
+	}
+	else
+	{
+		$data['pedido'] = FALSE;
+		$data['items'] = array();
+		$data['total'] = 0.00;
+	}
+
+	
+	//$this->form_validation->set_rules('ingresar', 'ingresar', 'required');
+
+	if($this->input->post('ingresar') == 1)
+	{
+		$this->form_validation->set_rules('email', 'email', 'required');
+		$this->form_validation->set_rules('clave', 'contraseña', 'required');
+
+		if($this->form_validation->run() !== FALSE)
+		{
+			if($this->Usuario_model->loguearse($this->input->post()))
+			{
+				redirect(self::$solapa.'/confirmar_pedido');
+			}
+			else
+			{
+				$data['error'] = "El email o la contraseña son incorrectos.";
+			}
+		}
+	}
+	elseif($this->input->post('ingresar') == 2)
+	{
+		$this->form_validation->set_rules('email', 'email', 'required');
+
+		if($this->form_validation->run() !== FALSE)
+		{
+			//Enviar email
+
+			$data['success'] = "Ingresa al link que te enviamos por email para validar tu cuenta.";
+		}
+	}
+	elseif($this->input->post('ingresar') == 3)
+	{
+		$this->form_validation->set_rules('nombre', 'nombre', 'required');
+		$this->form_validation->set_rules('apellido', 'apellido', 'required');
+		$this->form_validation->set_rules('email', 'email', 'required|valid_email');
+		$this->form_validation->set_rules('clave', 'contraseña', 'required');
+		$this->form_validation->set_rules('clave2', 'repetir contraseña', 'required|matches[clave]');
+
+		if($this->form_validation->run() !== FALSE)
+		{
+			$result = $this->Usuario_model->registrar_usuario($this->input->post());
+    		if($result)
+    		{
+    			$data['success'] = "El usuario fue registrado con exito.<br>Ingresa al link que te enviamos por email para validar tu cuenta.";
+    		}
+    		else
+    		{
+    			$data['error'] = "Ocurrio un error al regitrar el usuario.";
+    		}
+		}
+	}
+    
+
+	$this->load->view(self::$solapa.'/ingresar', $data);
 }
 
 public function procesa_logueo()

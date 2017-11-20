@@ -9,8 +9,9 @@ class Menu extends CI_Controller {
 	{
 		parent::__construct();
 
-        $this->load->model('producto_tipo_model');
-        $this->load->model('producto_model');
+                $this->load->model('producto_tipo_model');
+                $this->load->model('producto_model');
+                $this->load->model('pedido_model');
 	}
 
 	public function index($id = FALSE)

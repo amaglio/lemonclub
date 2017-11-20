@@ -49,7 +49,7 @@ $this->load->view('templates/head');
 				    <div role="tabpanel" class="tab-pane active" id="ingresar">
 				    	<div class="formulario">
 				    		<p>Si ya estas registrado ingresa con tu email y contraseña.</p>
-							<form class="form-horizontal" action="<?=site_url('pedido/ingresar')?>" method="POST" id="form-ingresar">
+							<form class="form-horizontal" action="#" method="POST" id="form-ingresar">
 								<div class="form-group">
 								    <div class="col-sm-12">
 								    	<input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo set_value('email'); ?>">
@@ -68,7 +68,7 @@ $this->load->view('templates/head');
 				    <div role="tabpanel" class="tab-pane" id="invitado">
 				    	<div class="formulario">
 				    		<p>No necesitas registrarte, pero te enviaremos un email para validar tu correo.</p>
-							<form class="form-horizontal" action="<?=site_url('pedido/ingresar')?>" method="POST" id="form-invitado">
+							<form class="form-horizontal" action="#" method="POST" id="form-invitado">
 								<div class="form-group">
 								    <div class="col-sm-12">
 								    	<input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo set_value('email'); ?>" required="required" >
@@ -84,7 +84,7 @@ $this->load->view('templates/head');
 				    		<p>Registrate para que sea más rapido y facil realizar futuros pedidos.</p>
 
 
-							<form class="form-horizontal" action="<?=site_url('pedido/ingresar')?>" method="POST" id="form-registro">
+							<form class="form-horizontal" action="#" method="POST" id="form-registro">
 
 								<div class="form-group">
 								    <div class="col-sm-6">

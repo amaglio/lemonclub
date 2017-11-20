@@ -11,15 +11,11 @@ class Servicio_corporativo extends CI_Controller {
 		$this->load->model('pedido_model');
 		$this->load->model('producto_model');
 		$this->load->model('Usuario_model');
-
- 
 	}
 
 	public function index()
 	{
 		$this->load->view('construccion');
 	}
-
- 
 
 }
