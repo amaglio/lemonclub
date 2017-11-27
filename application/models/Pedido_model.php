@@ -26,7 +26,7 @@ class Pedido_model extends CI_Model {
 
 	public function get_total_pedido( $id ) 
 	{
-		$query = $this->db->query('SELECT SUM(PP.cantidad*PP.precio) as total
+		$query = $this->db->query('SELECT SUM(PP.cantidad*PP.precio_unitario) as total
 		                            FROM pedido_producto AS PP
 		                            WHERE PP.id_pedido='.$id);
 		$result = $query->row_array();
@@ -92,7 +92,7 @@ class Pedido_model extends CI_Model {
 		if($array['entrega'] == FORMA_ENTREGA_DELIVERY ):
 
 			$array_delivery = array(
-	            'dirección' => $array['calle'],
+	            'direccion' => $array['calle'],
 	            'altura' => $array['altura'],
 	            'id_pedido' => $id_pedido
 	        );
@@ -143,7 +143,7 @@ class Pedido_model extends CI_Model {
 			$array = array(
 	            'id_pedido' => $this->session->userdata('id_pedido'),
 	            'id_producto' => $producto['id_producto'],
-	            'precio' => $producto['precio']
+	            'precio_unitario' => $producto['precio']
 	        );
 	        $result = $this->db->insert('pedido_producto', $array);
 		}

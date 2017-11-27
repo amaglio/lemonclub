@@ -22,7 +22,6 @@ class Menu extends CI_Controller {
 
                 if($id == FALSE)
                 {       
-                	 
                         $data['tipo_actual'] = $this->producto_tipo_model->get_primer_item();
                 }
                 else
@@ -42,7 +41,9 @@ class Menu extends CI_Controller {
                                 $data['plato_dia'] = 1;
                         }
                         else
-                                redirect('menu');
+                        {
+                                redirect('menu/index/-1');
+                        }
                 }
 
                 $this->load->view(self::$solapa.'/index', $data);
