@@ -187,7 +187,81 @@ class Pedido_model extends CI_Model {
 		{
 			return false;
 		}
+	}
 
+	public function buscar_pedidos($array)
+	{
+		chrome_log("Pedido_model/buscar_pedidos");
+
+		//var_dump($array);
+
+		$filtros = $ordenar = "";
+
+		if($array['id_forma_entrega'] != -1 ):
+			$filtros .= " AND pe.id_forma_entrega = ".$array['id_forma_entrega'];
+		endif;
+
+		if($array['id_pedido_estado'] != -1 ):
+			$filtros .= " AND pe.id_pedido_estado = ".$array['id_pedido_estado'];
+		endif;
+
+		if($array['email']):
+			$filtros .= " AND u.email LIKE '%".$array['email']."%'";	
+		endif;
+
+		// ORDENAR
+
+		switch ($array['ordenar']) 
+		{
+			case 'hora_entrega':
+				$ordenar = 'pe.hora_entrega';
+				break;
+		
+			case 'pedido_estado':
+				$ordenar = 'pe.id_pedido_estado';
+				break;
+
+			case 'forma_entrega':
+				$ordenar = 'pe.id_forma_entrega';
+				break;
+
+			default:
+				$ordenar = 'pe.id_pedido';
+				break;
+		}
+
+		$ordenar = $ordenar." ".$array['ordenar_direccion'];
+
+	 	$sql = 		"SELECT pe.*,
+						   pd.direccion, pd.telefono, pd.nota, pd.altura,
+						   fp.descripcion as forma_pago,
+						   fe.descripcion as forma_entrega,
+						   pes.descripcion as estado,
+						   u.email,
+						   ur.nombre
+	    			FROM pedido pe
+		    				 left join pedido_delivery pd ON pe.id_pedido = pd.id_pedido
+		    				 inner join forma_pago fp ON pe.id_forma_pago =  fp.id_forma_pago
+		    				 inner join forma_entrega fe ON pe.id_forma_entrega =  fe.id_forma_entrega
+		    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado,
+	    				 usuario u
+	    				 	left join usuario_registrado ur ON ur.id_usuario =  u.id_usuario
+	    			WHERE  pe.id_usuario =  u.id_usuario 
+	    				   $filtros
+	    			ORDER BY $ordenar "; 
+
+		$query = $this->db->query($sql);
+
+		//echo $sql;
+
+		if($query->num_rows() > 0)
+		{ 
+			return $query->result_array();
+ 		}
+		else
+		{
+			return false;
+		}
 
 	}
 
@@ -234,12 +308,32 @@ class Pedido_model extends CI_Model {
 		}
 	}
 
+	public function get_forma_entrega()
+	{	
+
+		chrome_log("Pedido_model/get_forma_entrega");
+
+	 	$sql = "SELECT *
+                FROM forma_entrega  "; 
+
+		$query = $this->db->query($sql);
+
+		if($query->num_rows() > 0)
+		{ 
+			return $query->result_array();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 
 	function traer_pedidos_pendientes()
     {
    	
     	$resultado = $this->db->query("	SELECT pe.*,
-    										   pd.dirección, pd.telefono, pd.nota, pd.altura,
+    										   pd.direccion, pd.telefono, pd.nota, pd.altura,
     										   fp.descripcion as forma_pago,
     										   fe.descripcion as forma_entrega,
     										   pes.descripcion as estado,

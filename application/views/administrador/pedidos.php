@@ -34,9 +34,13 @@
 
 <? echo "<div class='col-md-12'>".mensaje_resultado($mensaje)."</div>" ?>
 
-<?
+<? echo $menu_pedidos;
 
   $i=0;
+
+  //var_dump($pedidos);
+
+if( count($pedidos) > 0):
 
   foreach ($pedidos as $row) 
   {  
@@ -77,13 +81,14 @@
 
                           <div class="col-md-12">
                               <small>- <?=$row['informacion_pedido']['forma_pago']?></small><br>
-                              <small>- <?=$row['informacion_pedido']['forma_entrega']?></small>
+                              <small>- <?=$row['informacion_pedido']['forma_entrega']?></small><br>
+                              <small>- <?=$row['informacion_pedido']['hora_entrega']?></small>
                               
                               <? if($row['informacion_pedido']['forma_entrega'] == 'Delivery'): ?>
                                   
                                   <div class="pull-right">
-                                      <? if(isset($row['informacion_pedido']['dirección']))?>
-                                            <span><small><?="(".$row['informacion_pedido']['dirección']." ".$row['informacion_pedido']['altura'].")"?></small></span>
+                                      <? if(isset($row['informacion_pedido']['direccion']))?>
+                                            <span><small><?="(".$row['informacion_pedido']['direccion']." ".$row['informacion_pedido']['altura'].")"?></small></span>
 
                                   </div>
 
@@ -124,6 +129,17 @@
       <?  
       $i++;
   } 
+
+else: ?>
+  
+   <div class="col-md-12">
+        <div class="alert alert-danger" style="padding:5px 30px 5px 15px">
+          <h5 style="color:#000; font-weight:bold">No hay pedidos que cumplan los filtros</h5>
+        </div>
+    </div>
+
+<?
+endif;
 
 ?>
  
@@ -279,5 +295,3 @@
 
   
 </script>
-
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

@@ -11,6 +11,7 @@ public function __construct()
 	$this->load->helper('url');
 	$this->load->model('Administrador_model');
 	$this->load->model('Pedido_model');
+	$this->load->model('Producto_model');
 	$this->load->library('grocery_CRUD'); 
 }
 
@@ -193,6 +194,55 @@ public function pedidos()
 		$data['estados_pedidos'] = $this->Pedido_model->get_pedido_estados();
 
 		$data['pedidos'] = $array_pedidos;
+
+		$filtros['forma_entrega'] = $this->Pedido_model->get_forma_entrega();
+		$filtros['productos'] = $this->Producto_model->get_items();
+		$filtros['estados'] = $this->Pedido_model->get_pedido_estados();
+
+		$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
+		
+		$this->load->view('administrador/pedidos.php',$data);
+ 
+}
+
+public function buscar_pedidos()
+{
+		$data['mensaje'] = $this->session->flashdata('mensaje');
+		$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+		$output->titulo = traer_titulo($this->uri->segment(2));
+		$this->load->view('administrador/index.php',(array)$output);
+
+		$pedidos = $this->Pedido_model->buscar_pedidos( $this->input->post() );
+ 	
+		$array_pedidos = array();
+ 
+
+		if( $pedidos ): 
+
+			foreach($pedidos as $row)
+			{
+				$informacion['informacion_pedido'] =  $row;
+				$informacion['total_pedido'] = $this->Pedido_model->get_total_pedido($row['id_pedido']);
+				$informacion['productos'] = $this->Pedido_model->get_pedido_productos($row['id_pedido']);
+
+				array_push($array_pedidos, $informacion);
+			}
+		else:
+
+			$array_pedidos = NULL;
+		
+		endif;
+
+		$data['estados_pedidos'] = $this->Pedido_model->get_pedido_estados();
+
+		$data['pedidos'] = $array_pedidos;
+
+		$filtros['forma_entrega'] = $this->Pedido_model->get_forma_entrega();
+		$filtros['productos'] = $this->Producto_model->get_items();
+		$filtros['estados'] = $this->Pedido_model->get_pedido_estados();
+
+		$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
+		
 		$this->load->view('administrador/pedidos.php',$data);
  
 }
@@ -207,24 +257,24 @@ public function f_agregar_textarea()
 
 public function agregar_ingrediente()
 {
-	 	$datos['mensaje'] = $this->session->flashdata('mensaje');
-		$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
-		$output->titulo = traer_titulo($this->uri->segment(2));
+ 	$datos['mensaje'] = $this->session->flashdata('mensaje');
+	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+	$output->titulo = traer_titulo($this->uri->segment(2));
 
-		$this->load->view('administrador/index.php',(array)$output);
+	$this->load->view('administrador/index.php',(array)$output);
 
-		$id_producto = $this->uri->segment(3);
+	$id_producto = $this->uri->segment(3);
 
-		$datos['producto_info'] = $this->Administrador_model->traer_informacion_producto($id_producto);
-		$datos['ingredientes_producto'] = $this->Administrador_model->traer_ingredientes_producto($id_producto);
+	$datos['producto_info'] = $this->Administrador_model->traer_informacion_producto($id_producto);
+	$datos['ingredientes_producto'] = $this->Administrador_model->traer_ingredientes_producto($id_producto);
 
-		$this->load->view('administrador/agregar_ingredientes_producto.php',$datos); 
+	$this->load->view('administrador/agregar_ingredientes_producto.php',$datos); 
 
-		/*
+	/*
 
-		$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
-		$output->titulo = "Disponible en la <b>  etapa 2 <b>";
-		$this->load->view('administrador/index.php',(array)$output);*/
+	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+	$output->titulo = "Disponible en la <b>  etapa 2 <b>";
+	$this->load->view('administrador/index.php',(array)$output);*/
 }
 
 
