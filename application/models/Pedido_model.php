@@ -193,9 +193,7 @@ class Pedido_model extends CI_Model {
 	{
 		chrome_log("Pedido_model/buscar_pedidos");
 
-		//var_dump($array);
-
-		$filtros = $ordenar = "";
+		$filtros = $ordenar = $productos = "";
 
 		if($array['id_forma_entrega'] != -1 ):
 			$filtros .= " AND pe.id_forma_entrega = ".$array['id_forma_entrega'];
@@ -209,7 +207,28 @@ class Pedido_model extends CI_Model {
 			$filtros .= " AND u.email LIKE '%".$array['email']."%'";	
 		endif;
 
-		// ORDENAR
+
+		if(isset($array['id_productos'])):
+			
+			$i = 0;
+
+			foreach ($array['id_productos'] as $row) 
+			{
+				if($i == 0)
+					$productos .= " AND ";
+				else
+					$productos .= " OR";
+
+				$productos .= " pp.id_producto = ".$row;
+
+				$i++;
+
+			}
+
+ 		endif;
+ 	 
+		$filtros .= " AND pe.fecha_pedido BETWEEN '".$array['fecha_desde']."' AND '".$array['fecha_hasta']."'";	
+ 
 
 		switch ($array['ordenar']) 
 		{
@@ -232,27 +251,31 @@ class Pedido_model extends CI_Model {
 
 		$ordenar = $ordenar." ".$array['ordenar_direccion'];
 
-	 	$sql = 		"SELECT pe.*,
-						   pd.direccion, pd.telefono, pd.nota, pd.altura,
-						   fp.descripcion as forma_pago,
-						   fe.descripcion as forma_entrega,
-						   pes.descripcion as estado,
-						   u.email,
-						   ur.nombre
+	 	$sql = 		"SELECT distinct(pe.id_pedido),
+	 	                    pe.*,
+						    pd.direccion, pd.telefono, pd.nota, pd.altura,
+						    fp.descripcion as forma_pago,
+						    fe.descripcion as forma_entrega,
+						    pes.descripcion as estado,
+						    u.email,
+						    ur.nombre
 	    			FROM pedido pe
 		    				 left join pedido_delivery pd ON pe.id_pedido = pd.id_pedido
 		    				 inner join forma_pago fp ON pe.id_forma_pago =  fp.id_forma_pago
 		    				 inner join forma_entrega fe ON pe.id_forma_entrega =  fe.id_forma_entrega
 		    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado,
 	    				 usuario u
-	    				 	left join usuario_registrado ur ON ur.id_usuario =  u.id_usuario
-	    			WHERE  pe.id_usuario =  u.id_usuario 
+	    				 	left join usuario_registrado ur ON ur.id_usuario =  u.id_usuario,
+	    				 pedido_producto pp
+	    			WHERE   pe.id_usuario =  u.id_usuario 
+	    			AND 	pe.id_pedido = pp.id_pedido
 	    				   $filtros
+	    				   $productos
 	    			ORDER BY $ordenar "; 
 
 		$query = $this->db->query($sql);
 
-		//echo $sql;
+		echo $sql;
 
 		if($query->num_rows() > 0)
 		{ 

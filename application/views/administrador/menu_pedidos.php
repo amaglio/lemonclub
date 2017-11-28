@@ -10,7 +10,7 @@
     padding: 15px 5px;
     /*margin: 0 0 10px 10px;*/
     min-width: 80px;
-    height: 100px;
+    height: 80px;
     text-align: center;
     color: #FFF;
     font-weight: bold;
@@ -22,7 +22,7 @@
 
 </style>
 
-<div class="row" style="background-color: rgba(128, 128, 128, 0.4); margin: 0px 20px 20px 20px; border-radius:4px; border:1px solid grey; padding:10px">
+<div class="row" style="background-color: rgb(252, 224, 40); margin: 0px 20px 20px 20px; border-radius:4px; border:1px solid #d8c02b; padding:10px">
 	
 	<form autocomplete="off" id="form_buscar_pedidos" method="post" action="<?=base_url()?>index.php/administrador/buscar_pedidos">
 
@@ -67,13 +67,13 @@
 		   	<input class="form-control" type="date" name="fecha_desde" value="<?php echo date('Y-m-d'); ?>">
 
 		  	<label for="fecha_hasta" style="margin-top:10px">Fecha Hasta</label>
-		   	<input class="form-control" type="date" name="fecha_hasta" value="<?php echo date('Y-m-d'); ?>">
+		   	<input class="form-control" type="date" name="fecha_hasta" value="<?php echo date('Y-m-d', strtotime("+ 1 day")) ; ?>">
 
 		</div>
 		
 	</div>
 
-	<!-- Fecha desde, Fecha Hasta  value="13:00:00"-->
+	<!-- Hora desde, Hora Hasta  value="13:00:00"-->
 	<div class="col-md-2">
 		<div class="form-group">
 
@@ -92,11 +92,11 @@
 		<div class="form-group">
 
 		    <label for="id_productos" >Producto</label><br>
-		    <select class="selectpicker" data-live-search="true" multiple name="id_productos">
+		    <select class="selectpicker" data-live-search="true" multiple name="id_productos[]">
  
 			  <? foreach ($productos as $row): ?>
 
-		    	<option><?=$row['nombre']?></option>
+		    	<option value="<?=$row['id_producto']?>"><?=$row['nombre']?></option>
 
 	 			<? endforeach; ?>
 			</select><br>

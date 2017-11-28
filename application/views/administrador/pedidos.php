@@ -82,7 +82,8 @@ if( count($pedidos) > 0):
                           <div class="col-md-12">
                               <small>- <?=$row['informacion_pedido']['forma_pago']?></small><br>
                               <small>- <?=$row['informacion_pedido']['forma_entrega']?></small><br>
-                              <small>- <?=$row['informacion_pedido']['hora_entrega']?></small>
+                              <small>- <?=$row['informacion_pedido']['hora_entrega']?></small><br>
+                              <small>- <?=$row['informacion_pedido']['fecha_pedido']?></small>
                               
                               <? if($row['informacion_pedido']['forma_entrega'] == 'Delivery'): ?>
                                   
