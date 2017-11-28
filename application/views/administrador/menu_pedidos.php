@@ -67,7 +67,7 @@
 		   	<input class="form-control" type="date" name="fecha_desde" value="<?php echo date('Y-m-d'); ?>">
 
 		  	<label for="fecha_hasta" style="margin-top:10px">Fecha Hasta</label>
-		   	<input class="form-control" type="date" name="fecha_hasta" value="<?php echo date('Y-m-d', strtotime("+ 1 day")) ; ?>">
+		   	<input class="form-control" type="date" name="fecha_hasta" value="<?php echo date('Y-m-d', strtotime("+ 1 day") ) ; ?>">
 
 		</div>
 		
