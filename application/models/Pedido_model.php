@@ -189,105 +189,6 @@ class Pedido_model extends CI_Model {
 		}
 	}
 
-	public function buscar_pedidos($array)
-	{
-		chrome_log("Pedido_model/buscar_pedidos");
-
-		$filtros = $ordenar = $productos = "";
-
-		if($array['id_forma_entrega'] != -1 ):
-			$filtros .= " AND pe.id_forma_entrega = ".$array['id_forma_entrega'];
-		endif;
-
-		if($array['id_pedido_estado'] != -1 ):
-			$filtros .= " AND pe.id_pedido_estado = ".$array['id_pedido_estado'];
-		endif;
-
-		if($array['email']):
-			$filtros .= " AND u.email LIKE '%".$array['email']."%'";	
-		endif;
-
-
-		if(isset($array['id_productos'])):
-			
-			$i = 0;
-
-			foreach ($array['id_productos'] as $row) 
-			{
-				if($i == 0)
-					$productos .= " AND ";
-				else
-					$productos .= " OR";
-
-				$productos .= " pp.id_producto = ".$row;
-
-				$i++;
-
-			}
-
- 		endif;
- 	 
-		$filtros .= " AND pe.fecha_pedido BETWEEN '".$array['fecha_desde']."' AND '".$array['fecha_hasta']."'";	
- 
-
-		switch ($array['ordenar']) 
-		{
-			case 'hora_entrega':
-				$ordenar = 'pe.hora_entrega';
-				break;
-		
-			case 'pedido_estado':
-				$ordenar = 'pe.id_pedido_estado';
-				break;
-
-			case 'forma_entrega':
-				$ordenar = 'pe.id_forma_entrega';
-				break;
-
-			default:
-				$ordenar = 'pe.id_pedido';
-				break;
-		}
-
-		$ordenar = $ordenar." ".$array['ordenar_direccion'];
-
-	 	$sql = 		"SELECT distinct(pe.id_pedido),
-	 	                    pe.*,
-						    pd.direccion, pd.telefono, pd.nota, pd.altura,
-						    fp.descripcion as forma_pago,
-						    fe.descripcion as forma_entrega,
-						    pes.descripcion as estado,
-						    u.email,
-						    ur.nombre
-	    			FROM pedido pe
-		    				 left join pedido_delivery pd ON pe.id_pedido = pd.id_pedido
-		    				 inner join forma_pago fp ON pe.id_forma_pago =  fp.id_forma_pago
-		    				 inner join forma_entrega fe ON pe.id_forma_entrega =  fe.id_forma_entrega
-		    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado,
-	    				 usuario u
-	    				 	left join usuario_registrado ur ON ur.id_usuario =  u.id_usuario,
-	    				 pedido_producto pp
-	    			WHERE   pe.id_usuario =  u.id_usuario 
-	    			AND 	pe.id_pedido = pp.id_pedido
-	    				   $filtros
-	    				   $productos
-	    			ORDER BY $ordenar "; 
-
-		$query = $this->db->query($sql);
-
-		echo $sql;
-
-		if($query->num_rows() > 0)
-		{ 
-			return $query->result_array();
- 		}
-		else
-		{
-			return false;
-		}
-
-	}
-
 	public function traer_descripcion_forma_entrega( $id_forma_entrega )
 	{	
 
@@ -388,6 +289,192 @@ class Pedido_model extends CI_Model {
 	
         //return $this->db->affected_rows();
 	}
+
+	public function buscar_pedidos($array , &$texto_filtros)  
+	{
+		chrome_log("Pedido_model/buscar_pedidos");
+
+		$filtros = $ordenar = $productos = "";
+
+		if($array['id_forma_entrega'] != -1 ):
+
+			$filtros .= " AND pe.id_forma_entrega = ".$array['id_forma_entrega'];
+			$valor = $this->get_nombre_forma_entrega($array['id_forma_entrega']); 
+			$texto_filtros .= "<span class='label label-primary'> Forma entrega: $valor </span> &nbsp;";
+
+		endif;
+
+		if($array['id_pedido_estado'] != -1 ):
+
+			$filtros .= " AND pe.id_pedido_estado = ".$array['id_pedido_estado'];
+			$valor = $this->get_nombre_estado_pedido($array['id_pedido_estado']); 
+			$texto_filtros .= "<span class='label label-primary'> Forma entrega: $valor </span> &nbsp;";
+
+		endif;
+
+		if($array['email']):
+			$filtros .= " AND u.email LIKE '%".$array['email']."%'";
+			$valor = $array['email'];
+			$texto_filtros .= "<span class='label label-primary'> Email: $valor </span> &nbsp;";
+		endif;
+
+
+		if(isset($array['id_productos'])):
+			
+			$texto_filtros .= "<span class='label label-primary'> Productos: ";
+
+			$i = 0;
+
+			foreach ($array['id_productos'] as $row) 
+			{	
+				$texto_filtros .= $this->get_nombre_producto($row).". ";
+
+				if($i == 0)
+					$productos .= " AND ";
+				else
+					$productos .= " OR";
+
+				$productos .= " pp.id_producto = ".$row;
+
+				$i++;
+
+			}
+
+			$texto_filtros .= "</span> &nbsp;";
+
+ 		endif;
+ 	 
+		$filtros .= " AND pe.fecha_pedido BETWEEN '".$array['fecha_desde']."' AND '".$array['fecha_hasta']."'";	
+		$texto_filtros .= "<span class='label label-primary'> Fecha desde: ".$array['fecha_desde']." - Fecha hasta: ".$array['fecha_hasta']."</span> &nbsp;";
+ 
+		$filtros .= " AND pe.hora_entrega BETWEEN '".$array['hora_desde']."' AND '".$array['hora_hasta']."'";
+		$texto_filtros .= "<span class='label label-primary'> Hora desde: ".$array['hora_desde']." - Hora hasta: ".$array['hora_hasta']."</span> &nbsp;";
+
+		$texto_filtros .= "<span class='label label-info'> Ordenado por: ";
+
+		switch ($array['ordenar']) 
+		{
+			
+
+			case 'hora_entrega':
+				$ordenar = 'pe.hora_entrega';
+				$texto_filtros .= "hora de entrega";
+				break;
+		
+			case 'pedido_estado':
+				$ordenar = 'pe.id_pedido_estado';
+				$texto_filtros .= "estado pedido";
+				break;
+
+			case 'forma_entrega':
+				$ordenar = 'pe.id_forma_entrega';
+				$texto_filtros .= "forma de entrega";
+				break;
+
+			default:
+				$ordenar = 'pe.id_pedido';
+				$texto_filtros .= "numero de pedido";
+				break;
+		}
+
+		$texto_filtros .= "</span> &nbsp;";
+
+
+		$ordenar = $ordenar." ".$array['ordenar_direccion'];
+
+	 	$sql = 		"SELECT distinct(pe.id_pedido),
+	 	                    pe.*,
+						    pd.direccion, pd.telefono, pd.nota, pd.altura,
+						    fp.descripcion as forma_pago,
+						    fe.descripcion as forma_entrega,
+						    pes.descripcion as estado,
+						    u.email,
+						    ur.nombre
+	    			FROM pedido pe
+		    				 left join pedido_delivery pd ON pe.id_pedido = pd.id_pedido
+		    				 inner join forma_pago fp ON pe.id_forma_pago =  fp.id_forma_pago
+		    				 inner join forma_entrega fe ON pe.id_forma_entrega =  fe.id_forma_entrega
+		    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado,
+	    				 usuario u
+	    				 	left join usuario_registrado ur ON ur.id_usuario =  u.id_usuario,
+	    				 pedido_producto pp
+	    			WHERE   pe.id_usuario =  u.id_usuario 
+	    			AND 	pe.id_pedido = pp.id_pedido
+	    				   $filtros
+	    				   $productos
+	    			ORDER BY $ordenar "; 
+
+		$query = $this->db->query($sql);
+
+		//echo $sql;
+
+		if($query->num_rows() > 0)
+		{ 
+			return $query->result_array();
+ 		}
+		else
+		{
+			return false;
+		}
+
+	}
+
+	// Traer nombres
+
+	public function get_nombre_forma_entrega($id_forma_entrega)
+	{	
+
+		chrome_log("Pedido_model/get_nombre_forma_entrega");
+
+	 	$sql = "SELECT descripcion
+                FROM forma_entrega  
+                WHERE id_forma_entrega = ? "; 
+
+		$query = $this->db->query($sql, array($id_forma_entrega ) );
+
+		if($query->num_rows() > 0)
+			return $query->row()->descripcion;
+		else
+			return false;
+
+	}
+
+	public function get_nombre_estado_pedido($id_pedido_estado)
+	{	
+
+		chrome_log("Pedido_model/get_nombre_estado_pedido");
+
+	 	$sql = "SELECT descripcion
+                FROM pedido_estado  
+                WHERE id_pedido_estado = ? "; 
+
+		$query = $this->db->query($sql, array($id_pedido_estado ) );
+
+		if($query->num_rows() > 0)
+			return $query->row()->descripcion;
+		else
+			return false;
+
+	}
+
+	public function get_nombre_producto($id_producto)
+	{	
+
+		chrome_log("Pedido_model/get_nombre_producto");
+
+	 	$sql = "SELECT nombre
+                FROM producto  
+                WHERE id_producto = ? "; 
+
+		$query = $this->db->query($sql, array($id_producto ) );
+
+		if($query->num_rows() > 0)
+			return $query->row()->nombre;
+		else
+			return false;
+
+	}
+
 }
 
 /* End of file  */

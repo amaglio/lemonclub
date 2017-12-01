@@ -201,9 +201,14 @@ public function pedidos()
 
 		$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
 		
-		$this->load->view('administrador/pedidos.php',$data);
+
+		//$this->load->view('administrador/pedidos.php',$data);
+
+		$this->load->view('administrador/pedidos_tabla.php',$data);
  
 }
+
+
 
 public function buscar_pedidos()
 {
@@ -212,11 +217,12 @@ public function buscar_pedidos()
 		$output->titulo = traer_titulo($this->uri->segment(2));
 		$this->load->view('administrador/index.php',(array)$output);
 
-		$pedidos = $this->Pedido_model->buscar_pedidos( $this->input->post() );
+		$texto_filtros = "";
+
+		$pedidos = $this->Pedido_model->buscar_pedidos( $this->input->post(), $texto_filtros );
  	
 		$array_pedidos = array();
  
-
 		if( $pedidos ): 
 
 			foreach($pedidos as $row)
@@ -240,6 +246,8 @@ public function buscar_pedidos()
 		$filtros['forma_entrega'] = $this->Pedido_model->get_forma_entrega();
 		$filtros['productos'] = $this->Producto_model->get_items();
 		$filtros['estados'] = $this->Pedido_model->get_pedido_estados();
+		
+		$filtros['texto_filtros'] = $texto_filtros;
 
 		$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
 		

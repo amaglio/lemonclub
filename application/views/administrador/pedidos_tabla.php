@@ -46,67 +46,80 @@
 </style>
 
 <div class="content-wrapper">
-    <section class="content-header">
-      <h4>
-         <i class="fa fa-comments" aria-hidden="true"></i>  <a style="color:#000" href="<?=base_url()?>index.php/entrevista/"> Pedidos Entrevistas </a>
-      </h4>
-    </section>
+ 
     <div class="panel-body">
  
  
          <div class="col-md-12" style="margin-top:10px">   
-              
-              <div class="box box-Orange">
-                <div class="box-header with-border" style="padding-bottom:10px">
-                  <h3 class="box-title">Pedidos de Entrevistas </strong></h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div>
-                </div>
-                <div class="box-body" id="resultado">
 
- 
+                <div class="box-body" id="resultado">
                     
                     <table style="font-size:12px"  class="table table-striped table-bordered entrevistas" cellspacing="0" width="100%">
                         <thead>
                             <tr style="background-color:rgba(0, 128, 0, 0.23)">
                                 <th><i class="fa fa-calendar"></i></th>
                                 <th>Hora</th>
-                                <th>Nombre</th>
-                                <th>Tipo Doc</th>
-                                <th>Doc</th>
-                                <th>Tipo</th>
-                                <th>PRG</th> 
-                                <th>Entrevistador</th>
-                                <th>Alta</th>
-                                <th>Baja</th>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Productos</th>
+                                <th>Forma entrega</th>
+                                <th>Forma Pago</th>
+                                <th>Estado</th> 
                             </tr>
                         </thead>
-                        <tfoot>
-                      
-                           <tr  style="background-color:rgba(128, 128, 128, 0.19)">
-                              <td style="text-align:center"></td>
-                              <td style="text-align:center"></td>
-                              <td style="text-align:center"></td>
-                              <td style="text-align:center"></td>
-                              <td style="text-align:center"></td>
-                              <td style="text-align:center"></td>
-                              <td style="text-align:center"></td> 
-                              <td style="text-align:center"></td>
-                              <td style="text-align:center"></td>
-                              <td style="text-align:center"></td>
-                          </tr>
-                          <tr  style="background-color:rgba(128, 128, 128, 0.19)">
-                              <th colspan="8" style="text-align:right">Total:</th>
-                              <th style="text-align:center"></th>
-                              <th style="text-align:center"></th> 
-                          </tr>
-                          <tr  style="background-color:rgba(128, 128, 128, 0.19)">
-                               <th colspan="8" style="text-align:right">Neto:</th>
-                              <th colspan="2" id="neto" style="text-align:center" ></th>  
-                          </tr>
-                        </tfoot>
+
+                          <?  if( count($pedidos) > 0):
+
+                                foreach ($pedidos as $row) 
+                                {  ?>
+
+                                  <tr>
+                                    <td><?=$row['informacion_pedido']['fecha_pedido']?></td>
+                                    <td><?=$row['informacion_pedido']['hora_entrega']?></td>
+                                    <td><?=$row['informacion_pedido']['id_pedido']?></td>
+                                    <td><?=$row['informacion_pedido']['email']?></td>
+                                    <td>
+                                        <?
+                                          foreach ($row['productos'] as $row2) 
+                                          { ?>
+                                              <div class="col-md-12">
+                                                  <strong><?=$row2['nombre']?></strong>
+                                                  <div class="pull-right"><span>$</span><span><?=$row2['precio']?></span></div>
+                                              </div>
+                                        <?
+                                          }
+                                        ?>
+
+                                    </td>
+                                    <td><?=$row['informacion_pedido']['forma_entrega']?></td>
+                                    <td><?=$row['informacion_pedido']['forma_pago']?></td>
+                                    <td>
+
+                                        <form autocomplete="off" id="form_cambiar_estado_<?=$row['informacion_pedido']['id_pedido']?>" method="post" action="<?=base_url()?>index.php/pedido/procesa_cambiar_estado_pedido">
+
+                                          <?  $estados = array(); ?>
+                                            
+                                          <?  foreach ($estados_pedidos as $row3):  
+
+                                                
+                                                  $estados[$row3['id_pedido_estado']] = strtoupper($row3['descripcion']);
+
+                                              endforeach; 
+                                             
+                                              echo form_dropdown('id_pedido_estado', $estados, $row['informacion_pedido']['id_pedido_estado']  ,'class="form-control estados_pedido" id="id_estado_cons_prg" name="id_estado_cons_prg" style=" font-size:12px; padding:0px" ' ); 
+                                          ?>
+
+                                          <button type="submit" class="btn btn-primary btn-xs btn-block">Cambiar</button>
+
+                                        </form>
+
+                                    </td>
+                                  </tr>
+                            <?  }
+
+                              endif;
+
+                          ?>
                         <tbody>
                           
       
@@ -219,91 +232,9 @@ q(document).ready(function() {
                 }
 
             });
-    
-     table.columns().every( function () {
-        var that = this;
-        
-
-        q( 'input', this.footer() ).on( 'keyup change', function () {
-            
-          if ( that.search() !== this.value ) {
-                that
-                    .search( this.value )
-                    .draw();
-            }
-
-        } );
-    } );
+ 
 
 } );
 
 </script>
-
  
-
-<script src="<?=base_url()?>assets/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-<script src="<?=base_url()?>assets/js/bootstrap.min.js" type="text/javascript"></script>    
-
-<script>
-   var jg = jQuery.noConflict();
-</script>
-
-<script src="<?=base_url()?>assets/js/editar_experiencia.js" type="text/javascript"></script>   
-
-
-
-<!-- bootstrap datepicker -->
-<script src="<?=base_url()?>assets/plugins/datepicker/bootstrap-datepicker.js"></script>
-
-<script type="text/javascript">
-
-jg('.calendario').datepicker({
-  autoclose: true,
-  format: 'dd/mm/yyyy'
-});
-
-
-</script>
-
-<!-- VALIDATE -->
-
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-1.4.4.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-ui-1.8.10.custom.min.js"></script>
-
-<script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/jquery.validate.js" ></script>
-<script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/additional-methods.js" ></script> 
-
-<script>
-var jq = jQuery.noConflict();
-</script>
-
-<script type="text/javascript">
-
-    jq(function(){
-
-            jq('#f_entrevistas').validate({
-
-                rules :{
-
-                        fecha_desde : {
-                            required : true
-                        },
-                        fecha_hasta: {
-                            required : true
-                        }
-                },
-                messages : {
-
-                        fecha_desde : {
-                            required : "Debe elegir la fecha desde"
-                        },
-                        fecha_hasta: {
-                            required : "Debe elegir la fecha hasta"
-                        }
-                } 
-
-            });    
-    });     
- 
-
- </script>

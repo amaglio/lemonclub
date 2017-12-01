@@ -20,7 +20,20 @@
     margin-top: 20px
 }
 
+.label{
+	font-size: 85%;
+}
+
 </style>
+
+<?php if(isset($texto_filtros)): ?>
+
+<div class=" "  style=" margin: 0px 20px 20px 20px;"  >
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <?php echo $texto_filtros; ?>
+</div>
+
+<? endif; ?>
 
 <div class="row" style="background-color: rgb(252, 224, 40); margin: 0px 20px 20px 20px; border-radius:4px; border:1px solid #d8c02b; padding:10px">
 	
@@ -78,10 +91,10 @@
 		<div class="form-group">
 
 		  	<label for="fecha_desde">Hora desde</label>
-		   	<input class="form-control" type="time" name="hora_desde"  value="08:00:00" >
+		   	<input class="form-control" type="time" name="hora_desde"  value="08:00:00"   >
 
 		  	<label for="fecha_hasta" style="margin-top:10px">Fecha Hasta</label>
-		   	<input class="form-control" type="time" name="hora_hasta" value="<?=date('H:i:s'); ?>">
+		   	<input class="form-control" type="time" name="hora_hasta" value="15:00:00">
 
 		</div>
 		
@@ -140,6 +153,7 @@
 
 	</form>
 </div>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.js"></script>
 
