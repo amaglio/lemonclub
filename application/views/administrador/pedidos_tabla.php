@@ -45,18 +45,21 @@
 
 </style>
 
+<? echo "<div class='col-md-12'>".mensaje_resultado($mensaje)."</div>" ?>
+
+<? echo $menu_pedidos; ?>
+
 <div class="content-wrapper">
  
     <div class="panel-body">
  
- 
-         <div class="col-md-12" style="margin-top:10px">   
+        <div class="col-md-12" style="margin-top:10px">   
 
                 <div class="box-body" id="resultado">
                     
                     <table style="font-size:12px"  class="table table-striped table-bordered entrevistas" cellspacing="0" width="100%">
                         <thead>
-                            <tr style="background-color:rgba(0, 128, 0, 0.23)">
+                            <tr style=" background-color: rgb(0, 0, 0); color: white;">
                                 <th><i class="fa fa-calendar"></i></th>
                                 <th>Hora</th>
                                 <th>ID</th>
@@ -128,17 +131,11 @@
                  
                 
                 </div>
-              </div>
         </div>
-
-      
+    </div>
      
-          
-  </div>
-
-
 </div>
-
+ 
 <script src="<?php echo base_url(); ?>assets/js/datatable/jquery-1.12.4.js " type="text/javascript" ></script>
 <script src="<?php echo base_url(); ?>assets/js/datatable/jquery.dataTables.min.js" type="text/javascript" ></script>
 <script src="<?php echo base_url(); ?>assets/js/datatable/dataTables.buttons.min.js" type="text/javascript" ></script>
@@ -170,66 +167,18 @@ q(document).ready(function() {
                 "info":     true,
                 "bFilter": true,
                 "language": {
-                    "lengthMenu": "Mostrando _MENU_ pedidos entrevistas por pagina.",
-                    "zeroRecords": "Ningun pedido de entrevista fue encontrado.",
+                    "lengthMenu": "Mostrando _MENU_ pedido por pagina.",
+                    "zeroRecords": "Ningun pedido fue encontrado.",
                     "info": "<b> Mostrando pagina _PAGE_ de _PAGES_ </b>",
-                    "infoEmpty": "Ningun pedido de entrevista disponible",
-                    "infoFiltered": "(Filtrado de _MAX_ pedidos de entrevistas totales)",
+                    "infoEmpty": "Ningun pedid disponible",
+                    "infoFiltered": "(Filtrado de _MAX_ pedido  totales)",
                     "sSearch": " Buscar    ",
                     "oPaginate": {
                                     "sNext": "Pag. sig.",
                                     "sPrevious": "Pag. ant."
                                   }
                 },
-                "lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]],
-                "footerCallback": function ( row, data, start, end, display ) 
-                {   
-
-                    var api = this.api(), data;
-
-                    //console.log(" ");
-                    var cantidad_baja = 0;
-                    var cantidad_entrevistas = 0;
-
-                    $.each(display, function(key, value) {
-                      
-                        var fila_visible = value;
-                        var array_fila = data[fila_visible];
-                        
-                        //console.log(array_fila[9]);
-                        if(array_fila[9] != "")
-                        { 
-                          cantidad_baja++;
-                        }
-
-                        if(array_fila[8] != "")
-                        { 
-                          cantidad_entrevistas++;
-                        }
-
-                        
-                    });
-
-                    //console.log("Cantidad Entre:" + cantidad_entrevistas);
-                    console.log( row + 1 );
-
-                    q('tr:eq(1) th:eq(1)', api.table().footer()).html( cantidad_entrevistas );
-                    q('tr:eq(1) th:eq(2)', api.table().footer()).html( cantidad_baja );
-                    q('tr:eq(2) th:eq(1)', api.table().footer()).html( cantidad_entrevistas-cantidad_baja );
-
-                    /*
-                    q( api.column( 9 ).footer() ).html(
-                        cantidad_baja
-                    );
-
-                     q( api.column( 8 ).footer() ).html(
-                        cantidad_entrevistas
-                    );
-
-                    //$('tr:eq(1) td:eq(3)', api.table().footer()).html( 'aaaa')
-                    $('tr:eq(1) th:eq(1)', api.table().footer()).html( cantidad_entrevistas-cantidad_baja )
-                   */
-                }
+                "lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]] 
 
             });
  

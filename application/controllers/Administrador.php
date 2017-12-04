@@ -12,6 +12,7 @@ public function __construct()
 	$this->load->model('Administrador_model');
 	$this->load->model('Pedido_model');
 	$this->load->model('Producto_model');
+	$this->load->model('Estadisticas_model');
 	$this->load->library('grocery_CRUD'); 
 }
 
@@ -171,7 +172,7 @@ public function tipos_ingredientes()
 	$this->_example_output($output);
 }
 
-public function pedidos()
+public function pedidos($vista=null)
 {
 		$data['mensaje'] = $this->session->flashdata('mensaje');
 		$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
@@ -201,16 +202,18 @@ public function pedidos()
 
 		$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
 		
+		if($vista == 'tabla')
+			$this->load->view('administrador/pedidos_tabla.php',$data);
+		else
+			$this->load->view('administrador/pedidos.php',$data);
 
-		//$this->load->view('administrador/pedidos.php',$data);
-
-		$this->load->view('administrador/pedidos_tabla.php',$data);
+		
  
 }
 
 
 
-public function buscar_pedidos()
+public function buscar_pedidos($vista=null)
 {
 		$data['mensaje'] = $this->session->flashdata('mensaje');
 		$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
@@ -251,7 +254,27 @@ public function buscar_pedidos()
 
 		$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
 		
-		$this->load->view('administrador/pedidos.php',$data);
+		if($vista == 'tabla')
+			$this->load->view('administrador/pedidos_tabla.php',$data);
+		else
+			$this->load->view('administrador/pedidos.php',$data);
+
+ 
+}
+
+public function estadisticas( )
+{
+	$data['mensaje'] = $this->session->flashdata('mensaje');
+	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+	$output->titulo = traer_titulo($this->uri->segment(2));
+	$this->load->view('administrador/index.php',(array)$output);
+
+	//$data['cantidad_pedidos'] = $this->Estadisticas_model->get_cantidad_pedidos();
+
+
+	$this->load->view('administrador/estadisticas.php',$data);
+
+		
  
 }
 

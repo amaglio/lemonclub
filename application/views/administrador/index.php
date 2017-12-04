@@ -81,9 +81,9 @@ foreach($css_files as $file): ?>
 
 			<li <? echo ($this->uri->segment(2) == 'pedidos')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/pedidos')?>'><i class="fa fa-shopping-basket" aria-hidden="true"></i> Pedidos</a></li>
 
-	      	<li <? echo ($this->uri->segment(2) == 'ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/ingredientes')?>'><i class="fa fa-flask" aria-hidden="true"></i>Ingredientes</a></li>
+	      	<li <? echo ($this->uri->segment(2) == 'ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/ingredientes')?>'><i class="fa fa-flask" aria-hidden="true"></i> Ingredientes</a></li>
 
-	      	<li <? echo ($this->uri->segment(2) == 'tipos_ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/tipos_ingredientes')?>'><i class="fa fa-tag" aria-hidden="true"></i>Tipo de Ingredientes</a></li>
+	      	<li <? echo ($this->uri->segment(2) == 'tipos_ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/tipos_ingredientes')?>'><i class="fa fa-tag" aria-hidden="true"></i> Tipo de Ingredientes</a></li>
 
 			<li <? echo ($this->uri->segment(2) == 'usuarios_registrados' || $this->uri->segment(2) == 'usuarios_invitados' )? 'class="dropdown active"' :  'class="dropdown"' ;  ?>>
 	        	<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users" aria-hidden="true"></i> Usuarios<span class="caret"></span></a>
@@ -93,6 +93,7 @@ foreach($css_files as $file): ?>
 	            </ul>
 	        </li>
 
+	        <li <? echo ($this->uri->segment(2) == 'estadisticas')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/estadisticas')?>'><i class="fa fa-bar-chart" aria-hidden="true"></i> Estadisticas</a></li>
 
 	      	<li ><a href='<?php echo site_url('login/logout')?>'><i class="fa fa-power-off" aria-hidden="true"></i> Salir</a></li>
 	    </ul>

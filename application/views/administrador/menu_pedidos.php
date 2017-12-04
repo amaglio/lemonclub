@@ -26,6 +26,7 @@
 
 </style>
 
+
 <?php if(isset($texto_filtros)): ?>
 
 <div class=" "  style=" margin: 0px 20px 20px 20px;"  >
@@ -37,7 +38,9 @@
 
 <div class="row" style="background-color: rgb(252, 224, 40); margin: 0px 20px 20px 20px; border-radius:4px; border:1px solid #d8c02b; padding:10px">
 	
-	<form autocomplete="off" id="form_buscar_pedidos" method="post" action="<?=base_url()?>index.php/administrador/buscar_pedidos">
+	<form autocomplete="off" id="form_buscar_pedidos" method="post" action="<?=base_url()?>index.php/administrador/buscar_pedidos/<?=$this->uri->segment(3);?>">
+
+ 
 
 	<!-- Tipo entrega, Estado -->
 	<div class="col-md-2">
@@ -146,7 +149,9 @@
 	</div>
  
 	<div class="col-md-1">
- 
+ 		<a href='<?php echo site_url('administrador/pedidos/tabla/')?>'> <i class="fa fa-2x fa-bars" aria-hidden="true"></i></a>
+ 		<a style="padding-left: 10px" href='<?php echo site_url('administrador/pedidos/lista/')?>'> <i class="fa fa-2x fa-table" aria-hidden="true"></i></a>
+
 		  <input type="submit" id="buscar" name="Buscar" value="Buscar" class="btn btn-primary btn-block">
 		 
 	</div>

@@ -294,6 +294,9 @@ class Pedido_model extends CI_Model {
 	{
 		chrome_log("Pedido_model/buscar_pedidos");
 
+		if( !$array)
+			redirect('administrador/pedidos/','refresh');
+
 		$filtros = $ordenar = $productos = "";
 
 		if($array['id_forma_entrega'] != -1 ):
@@ -388,21 +391,20 @@ class Pedido_model extends CI_Model {
 						    fp.descripcion as forma_pago,
 						    fe.descripcion as forma_entrega,
 						    pes.descripcion as estado,
-						    u.email,
-						    ur.nombre
+						    u.email 
 	    			FROM pedido pe
 		    				 left join pedido_delivery pd ON pe.id_pedido = pd.id_pedido
 		    				 inner join forma_pago fp ON pe.id_forma_pago =  fp.id_forma_pago
 		    				 inner join forma_entrega fe ON pe.id_forma_entrega =  fe.id_forma_entrega
-		    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado,
-	    				 usuario u
-	    				 	left join usuario_registrado ur ON ur.id_usuario =  u.id_usuario,
+		    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado
+		    				 inner join usuario u ON pe.id_usuario =  u.id_usuario,
 	    				 pedido_producto pp
-	    			WHERE   pe.id_usuario =  u.id_usuario 
-	    			AND 	pe.id_pedido = pp.id_pedido
+	    			WHERE  pe.id_pedido = pp.id_pedido
 	    				   $filtros
 	    				   $productos
 	    			ORDER BY $ordenar "; 
+
+		//echo $sql;
 
 		$query = $this->db->query($sql);
 
