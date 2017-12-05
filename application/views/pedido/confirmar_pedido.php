@@ -74,6 +74,7 @@ $this->load->view('templates/head');
 						
 						<hr>
 
+						<h4>Forma de Entrega</h4>
 						<div class="radio">
 						  <label>
 						    <input type="radio" name="entrega" id="entrega1" value="<?php echo FORMA_ENTREGA_DELIVERY; ?>" onchange="select_delivery()">
@@ -87,8 +88,8 @@ $this->load->view('templates/head');
 								echo '<div class="col-sm-12">
 										<div class="radio" style="margin-left:20px;">
 										  <label>
-										    <input type="radio" name="direccion" id="direccion'.$key_dir.'" value="1" onchange="select_dir_vieja(\''.$direccion['dirección'].'\', \''.$direccion['altura'].'\')">
-										    '.$direccion['dirección'].' '.$direccion['altura'].'
+										    <input type="radio" name="direccion" id="direccion'.$key_dir.'" value="1" onchange="select_dir_vieja(\''.$direccion['direccion'].'\', \''.$direccion['altura'].'\')">
+										    '.$direccion['direccion'].' '.$direccion['altura'].'
 										  </label>
 										</div>
 									</div>';
@@ -120,12 +121,18 @@ $this->load->view('templates/head');
 
 						<hr>
 						
-						<div class="radio">
-						  <label>
-						    <input type="radio" name="pago" id="pago1" value="1" checked>
-						    Pago en efectivo
-						  </label>
-						</div>
+						<h4>Forma de Pago</h4>
+						<?php
+						foreach ($formas_pago as $key => $forma_pago)
+						{
+							echo '<div class="radio">
+									  <label>
+									    <input type="radio" name="pago" id="pago'.$forma_pago['id_forma_pago'].'" value="'.$forma_pago['id_forma_pago'].'" checked>
+									    '.$forma_pago['descripcion'].'
+									  </label>
+									</div>';
+						}
+						?>
 
 						<hr>
 
@@ -242,7 +249,10 @@ function select_dir_nueva()
 	            htmlData += '</div>';
 	            $('#area-mensaje').html(htmlData);
 
-	            window.location.href = SITE_URL+"/pedido/success";
+	            if(data.link)
+	            {
+	            	window.location.href = data.link;
+	            }
 	          }
 	          else
 	          {

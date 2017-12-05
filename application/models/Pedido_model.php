@@ -328,6 +328,26 @@ class Pedido_model extends CI_Model {
 		}
 	}
 
+	public function get_forma_pago()
+	{	
+
+		chrome_log("Pedido_model/get_forma_pago");
+
+	 	$sql = "SELECT *
+                FROM forma_pago  "; 
+
+		$query = $this->db->query($sql);
+
+		if($query->num_rows() > 0)
+		{ 
+			return $query->result_array();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 
 	function traer_pedidos_pendientes()
     {

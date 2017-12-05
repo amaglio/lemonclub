@@ -49,6 +49,8 @@ class Pedido extends CI_Controller {
 		$data['cantidad'] = $this->pedido_model->get_cantidad_items_pedido( $this->session->userdata('id_pedido') );
 		$data['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
 
+		$data['formas_pago'] = $this->pedido_model->get_forma_pago();
+
 		$this->load->view(self::$solapa.'/confirmar_pedido', $data);
 	}
 
@@ -144,15 +146,15 @@ class Pedido extends CI_Controller {
  		
  		$return["resultado"] = TRUE;
  		/*
- 		$this->session->set_userdata('id_pedido',11);
- 		$_POST['id_pedido'] = 11;
+ 		//$this->session->set_userdata('id_pedido',12);
+ 		$_POST['id_pedido'] = $this->session->userdata('id_pedido');
  		$_POST['mail'] = "fabianmayoral@hotmail.com";
- 		$_POST['nombre'] = "fabianmayoral@hotmail.com";
- 		$_POST['apellido'] = "fabianmayoral@hotmail.com";
- 		$_POST['calle'] = "fabianmayoral@hotmail.com";
- 		$_POST['altura'] = "fabianmayoral@hotmail.com";
- 		$_POST['pago'] = 1;
- 		$_POST['entrega'] = FORMA_ENTREGA_DELIVERY;
+ 		$_POST['nombre'] = "fabian";
+ 		$_POST['apellido'] = "mayoral";
+ 		$_POST['calle'] = "cerrito";
+ 		$_POST['altura'] = 620;
+ 		$_POST['pago'] = FORMA_PAGO_ONLINE;
+ 		$_POST['entrega'] = FORMA_ENTREGA_TAKEAWAY;
 		*/
 		if ($this->form_validation->run('finalizar_pedido') == FALSE):
 
@@ -161,7 +163,7 @@ class Pedido extends CI_Controller {
 			$return["mensaje"] = validation_errors(); 
 			
 		else: 
-			
+		
 			if( $this->input->post('entrega') == FORMA_ENTREGA_DELIVERY )
     		{
     			if($this->input->post('calle') == "" || $this->input->post('altura') == "")
@@ -202,13 +204,15 @@ class Pedido extends CI_Controller {
 
 		        		if($this->input->post('altura'))
 		        			$mensaje .= 'Altura: '.$this->input->post('altura').'<br>';
-
 	        		}
 	        		else
 	        		{
 	        			$mensaje .= 'Forma entrega:  TAKE AWAY <br>';
 	        		}
 
+
+	        		$mensaje .= 'Forma de pago:  '.$descripcion_forma_pago.' <br>';
+	        		
 	       
 	        		$pedido = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
 
@@ -228,12 +232,59 @@ class Pedido extends CI_Controller {
 
 	        		$asunto = "Lemonclub: Nuevo pedido";
 
-	        		enviar_email("info@lemonclub.com.ar", $mensaje, $asunto );
+	        		//enviar_email("info@lemonclub.com.ar", $mensaje, $asunto );
+
+	        		//////////////////
+	        		// MERCADO PAGO //
+	        		//////////////////
+	        		if( $this->input->post('pago') == FORMA_PAGO_ONLINE )
+	        		{
+	  					//$CI = &get_instance();
+					    $this->config->load("mercadopago", TRUE);
+					    $config = $this->config->item('mercadopago');
+					    $this->load->library('Mercadopago', $config);
+					    //$this->mercadopago->sandbox_mode(TRUE);
+
+					    $items = array();
+					    foreach ($pedido as $key => $value) 
+					    {
+					    	$aux = array();
+					    	$aux['title'] = $value['nombre'];
+					    	$aux['quantity'] = intval($value['cantidad']);
+					    	$aux['currency_id'] = "ARS";
+					    	$aux['unit_price'] = floatval($value['precio']);
+					    	$items[] = $aux;
+					    }
+					    $pedido_data = array (
+						    "items" => $items,
+						    "payer" => array(
+								"name" => $usuario->nombre,
+					            "surname" => $usuario->apellido,
+					            "email" => $usuario->email
+							),
+							"back_urls" => array(
+								"success" => site_url('pedido/success'),
+					            "failure" => site_url('pedido/failure'),
+					            "pending" => site_url('pedido/pending')
+							),
+							"notification_url" => site_url('pedido/nuevo_pago')
+						);
+
+						$preference = $this->mercadopago->create_preference($pedido_data);
+						//$return["link"] = $preference['response']['init_point']; //PRODUCCION
+						$return["link"] = $preference['response']['sandbox_init_point']; //SANDBOX
+	        		}
+	        		else
+	        		{
+	        			$return["link"] = site_url('pedido/success');
+	        		}
+	        		//////////////////////
+	        		// FIN MERCADO PAGO //
+	        		//////////////////////
 
 	        		$this->session->unset_userdata('id_pedido');
 	        		$this->session->unset_userdata('pedido_activo');
 
-		          	//redirect(self::$solapa.'/success');
 		          	$return["resultado"] = TRUE;
 	        		$return['mensaje'] = "Su pedido ha sido enviado.";
 	        	}
@@ -251,6 +302,16 @@ class Pedido extends CI_Controller {
 	public function success()
 	{
 		$this->load->view(self::$solapa.'/success');
+	}
+
+	public function failure()
+	{
+		$this->load->view(self::$solapa.'/failure');
+	}
+
+	public function pending()
+	{
+		$this->load->view(self::$solapa.'/pending');
 	}
 
 	public function agregar_producto_ajax()
