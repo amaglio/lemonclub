@@ -206,9 +206,6 @@ public function pedidos($vista=null)
 			$this->load->view('administrador/pedidos_tabla.php',$data);
 		else
 			$this->load->view('administrador/pedidos.php',$data);
-
-		
- 
 }
 
 
@@ -268,17 +265,60 @@ public function estadisticas( )
 	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
 	$output->titulo = traer_titulo($this->uri->segment(2));
 	$this->load->view('administrador/index.php',(array)$output);
+ 
 
-	//$data['cantidad_pedidos'] = $this->Estadisticas_model->get_cantidad_pedidos();
+	$fecha_desde = date('Y-m-d', strtotime( '-20 days' ));
+	$fecha_hasta = date('Y-m-d', strtotime( '+1 days' ));
 
+	$data['texto_filtros'] = "<span class='label label-primary'> HOY :  ".$fecha_desde." al  ".$fecha_hasta."</span> &nbsp;";
+
+	$data['estadisticas_productos'] = $this->Estadisticas_model->get_cantidad_productos( $fecha_desde, $fecha_hasta );
+
+	$data['estadisticas_email'] = $this->Estadisticas_model->get_cantidad_email( $fecha_desde, $fecha_hasta);
+	$data['cantidad_pedidos'] = $this->Estadisticas_model->get_cantidad_pedidos( $fecha_desde, $fecha_hasta);
+	$data['estadisticas_forma_entrega'] = $this->Estadisticas_model->get_cantidad_forma_entrega( $fecha_desde, $fecha_hasta);
+	$data['estadisticas_forma_pago'] = $this->Estadisticas_model->get_cantidad_forma_pago( $fecha_desde, $fecha_hasta);
 
 	$this->load->view('administrador/estadisticas.php',$data);
 
-		
- 
 }
 
+public function buscar_estaditicas()
+{	
+	chrome_log("buscar_estaditicas");
 
+	if ($this->form_validation->run('buscar_estaditicas') == FALSE):
+
+		chrome_log("No paso validacion");
+		$return["resultado"] = FALSE;
+		$return["mensaje"] = validation_errors(); 
+		
+	else: 
+
+		chrome_log("Paso validacion");
+		$data['mensaje'] = $this->session->flashdata('mensaje');
+		$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+		$output->titulo = traer_titulo($this->uri->segment(2));
+		$this->load->view('administrador/index.php',(array)$output);
+
+		$fecha_desde = $this->input->post('fecha_desde');
+		$fecha_hasta = $this->input->post('fecha_hasta');
+
+		$data['texto_filtros'] = "<span class='label label-primary'> ".$fecha_desde." al  ".$fecha_hasta."</span> &nbsp;";
+
+		$data['estadisticas_productos'] = $this->Estadisticas_model->get_cantidad_productos( $fecha_desde, $fecha_hasta );
+
+		$data['estadisticas_email'] = $this->Estadisticas_model->get_cantidad_email( $fecha_desde, $fecha_hasta);
+		$data['cantidad_pedidos'] = $this->Estadisticas_model->get_cantidad_pedidos( $fecha_desde, $fecha_hasta);
+		$data['estadisticas_forma_entrega'] = $this->Estadisticas_model->get_cantidad_forma_entrega( $fecha_desde, $fecha_hasta);
+		$data['estadisticas_forma_pago'] = $this->Estadisticas_model->get_cantidad_forma_pago( $fecha_desde, $fecha_hasta);
+
+		$this->load->view('administrador/estadisticas.php',$data);
+
+	endif;
+
+ 
+}
 public function f_agregar_textarea()
 {
 

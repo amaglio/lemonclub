@@ -200,6 +200,26 @@ $config = array(
                                             'rules' => 'required|trim|xss_clean'
                                         ) 
                                 ),
+
+// --------------------------------- ESTADISTICAS ------------------------------ 
+
+
+            'buscar_estaditicas' => array(
+
+                                    array(
+                                            'field' => 'fecha_desde',
+                                            'label' => 'fecha_desde',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'fecha_hasta',
+                                            'label' => 'fecha_hasta',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ) 
+                                ),
+
+
+
 /*               
 // --------------------------------- USUARIO ------------------------------
 
