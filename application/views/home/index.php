@@ -45,16 +45,17 @@ $this->load->view('templates/head');
 			</div>
 		</div>
 
-		<div class="row ">
-			<div class="col-md-10 col-md-offset-1 btns-index">
+		<div class="row cont-btns-index">
+			<div class="col-sm-10 xol-sm-offset-1 btns-index">
 				<?php
 				foreach ($tipos as $key => $tipo)
 				{
-					echo '<a class="btn-index btn1-index" style="background:url(\''.base_url('assets/images/'.$tipo['imagen']).'\'); background-size:cover; background-position:center;" href="'.site_url('menu/index/'.$tipo['id_producto_tipo']).'">
-							<button class="btn btn-amarillo">'.strtoupper($tipo['descripcion']).'</button>
+					echo '<a class="btn-index" style="background:url(\''.base_url('assets/images/'.$tipo['imagen']).'\'); background-size:cover; background-position:center;" href="'.site_url('menu/index/'.$tipo['id_producto_tipo']).'">
+							<div class="btn btn-amarillo">'.strtoupper($tipo['descripcion']).'</div>
 						</a>';
 				}
 				?>
+				
 			</div>
 		</div>
 	</div>

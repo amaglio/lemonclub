@@ -348,16 +348,23 @@ INDEX
 	margin: 0px;
 }
 
-.btns-index{
+.cont-btns-index{
 	margin-top: 0px;
-	margin-bottom: 100px;
+}
+.btns-index{
 	text-align: center;
+	left: 50%;
+	margin: -100px auto 0px -450px;
+	/*width: 900px;*/
 }
 .btn-index{
 	text-align: center;
-	height: 300px;
+	height: 240px;
+	width: 200px;
 	padding: 100px 50px;
-	margin: 0px 10px;
+	margin: -50px 10px 50px 10px;
+	display: block;
+	float: left;
 }
 
 .btn1-index{
