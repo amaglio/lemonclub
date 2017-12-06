@@ -278,6 +278,7 @@ public function estadisticas( )
 	$data['cantidad_pedidos'] = $this->Estadisticas_model->get_cantidad_pedidos( $fecha_desde, $fecha_hasta);
 	$data['estadisticas_forma_entrega'] = $this->Estadisticas_model->get_cantidad_forma_entrega( $fecha_desde, $fecha_hasta);
 	$data['estadisticas_forma_pago'] = $this->Estadisticas_model->get_cantidad_forma_pago( $fecha_desde, $fecha_hasta);
+	$data['estadisticas_estados'] = $this->Estadisticas_model->get_cantidad_estado( $fecha_desde, $fecha_hasta);
 
 	$this->load->view('administrador/estadisticas.php',$data);
 
@@ -312,7 +313,8 @@ public function buscar_estaditicas()
 		$data['cantidad_pedidos'] = $this->Estadisticas_model->get_cantidad_pedidos( $fecha_desde, $fecha_hasta);
 		$data['estadisticas_forma_entrega'] = $this->Estadisticas_model->get_cantidad_forma_entrega( $fecha_desde, $fecha_hasta);
 		$data['estadisticas_forma_pago'] = $this->Estadisticas_model->get_cantidad_forma_pago( $fecha_desde, $fecha_hasta);
-
+		$data['estadisticas_estados'] = $this->Estadisticas_model->get_cantidad_estado( $fecha_desde, $fecha_hasta);
+		
 		$this->load->view('administrador/estadisticas.php',$data);
 
 	endif;

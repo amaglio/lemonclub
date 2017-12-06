@@ -70,7 +70,19 @@ class Estadisticas_model extends CI_Model {
 									GROUP BY fp.id_forma_pago"  );
 		return $query->result_array();
 	}
- 
+
+	 public function get_cantidad_estado( $fecha_desde, $fecha_hasta ) 
+	{
+		$query = $this->db->query(" SELECT  count(pe.id_pedido_estado) cantidad, pee.descripcion
+									FROM 	pedido pe,
+											pedido_estado pee
+									WHERE
+										 pe.id_pedido_estado = pee.id_pedido_estado  
+									AND  pe.fecha_pedido BETWEEN '$fecha_desde' AND '$fecha_hasta'
+									AND pe.id_pedido_estado != 1 
+									GROUP BY pe.id_pedido_estado "  );
+		return $query->result_array();
+	}
 }
 
 /* End of file  */

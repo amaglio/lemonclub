@@ -288,6 +288,43 @@
             </div>
           </div>
 
+           <div class="panel panel-default">
+            <div class="panel-heading">Cantidad por estado</div>
+            <div class="panel-body">
+
+                <table style="font-size:12px"  class="table table-striped table-bordered tabla_estadistica" cellspacing="0" width="100%">
+                        <thead>
+                            <tr class="fila_head">
+                                <th>Estado</th>
+                                <th>Cantidad</th> 
+                            </tr>
+                        </thead>
+
+                          <?  if( count($estadisticas_estados) > 0):
+
+
+                                foreach ($estadisticas_estados as $row) 
+                                {  ?>
+
+                                  <tr>
+                                    <td><?=$row['descripcion']?></td>
+                                    <td><?=$row['cantidad']?></td>
+                                    </td>
+                                  </tr>
+                            <?  }
+
+                              endif;
+
+                          ?>
+                        <tbody>
+                          
+      
+                        </tbody>
+                  </table>
+
+            </div>
+          </div>
+
         </div>
 
          
