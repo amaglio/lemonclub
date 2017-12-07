@@ -121,6 +121,18 @@ $this->load->view('templates/head');
 
 						<hr>
 						
+						<h4>Horario de Entrega</h4>
+						<?php
+						echo '<select name="horario" class="form-control">';
+						foreach ($horarios as $key => $horario)
+						{
+							echo '<option value="'.$horario.'">'.substr($horario,0,5).'</option>';
+						}
+						echo '</select>';
+						?>
+
+						<hr>
+
 						<h4>Forma de Pago</h4>
 						<?php
 						foreach ($formas_pago as $key => $forma_pago)

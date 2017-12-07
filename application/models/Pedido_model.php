@@ -106,7 +106,9 @@ class Pedido_model extends CI_Model {
 			'id_pedido_estado' => PEDIDO_ESTADO_PENDIENTE,
             'id_usuario' => $id_usuario,
             'id_forma_pago' => $array['pago'],
-            'id_forma_entrega' => $array['entrega']
+            'id_forma_entrega' => $array['entrega'],
+            'hora_entrega' => $array['horario'],
+            'fecha_pedido' => date('Y-m-d H:i:s')
         );
 
         $this->db->where( array('id_pedido' => $id_pedido) );
@@ -349,7 +351,7 @@ class Pedido_model extends CI_Model {
 	}
 
 
-	function traer_pedidos_pendientes()
+	public function traer_pedidos_pendientes()
     {
    	
     	$resultado = $this->db->query("	SELECT pe.*,
@@ -366,7 +368,7 @@ class Pedido_model extends CI_Model {
 							    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado,
 						    				 usuario u
 						    				 	left join usuario_registrado ur ON ur.id_usuario =  u.id_usuario
-						    			WHERE  pe.id_pedido_estado != 1
+						    			WHERE pe.id_pedido_estado != 1
 						    			AND pe.id_usuario =  u.id_usuario
 						    			ORDER BY id_pedido DESC "  ); //traer_pedidos_pendientes
 
@@ -384,6 +386,76 @@ class Pedido_model extends CI_Model {
         return	$this->db->update('pedido', $array_pedido);
 	
         //return $this->db->affected_rows();
+	}
+
+	/***************
+	HORARIOS
+	****************/
+	public function get_horarios_disponibles()
+	{
+		$fecha = date('Y-m-d');
+		$return = array();
+
+		$horarios = $this->get_horarios_entrega();
+		$margen = $this->get_margen_horarios();
+
+		foreach ($horarios as $key => $horario)
+		{
+			$hora = $horario['hora_inicio'];
+			if(strtotime($hora) < strtotime(date('H:i:s')))
+			{
+				$nuevaHora = strtotime( '+1 hour' , strtotime(date('H:00:00')) );
+				$hora = date( 'H:i:00' , $nuevaHora );
+			}
+			while(strtotime($hora) <= strtotime($horario['hora_fin']))
+			{
+				//echo $hora." - ".$horario['hora_fin']."<br>";
+				$cant_pedido = $this->get_pedidos_horario($hora, $fecha);
+				$disponibilidad = $margen['capacidad_entrega'] - $cant_pedido;
+				if($disponibilidad > 0)
+				{
+					$return[] = $hora;
+				}
+
+				$nuevaHora = strtotime( '+'.$margen['margen_entrega'].' minute' , strtotime($hora) );
+				$hora = date( 'H:i:00' , $nuevaHora );
+			}
+		}
+
+    	return $return;
+	}
+
+	public function get_margen_horarios()
+	{
+ 		$resultado = $this->db->query("	SELECT *
+						    			FROM sucursal AS S
+						    			WHERE S.id_sucursal = 1" );
+
+    	return $resultado->row_array();
+	}
+
+	public function get_horarios_entrega()
+	{
+		$dia = date('w');
+
+ 		$resultado = $this->db->query("	SELECT *
+						    			FROM horarios AS H
+						    			WHERE H.id_sucursal = 1
+						    			AND H.dia = ".$dia."
+						    			ORDER BY H.id_horario " );
+
+    	return $resultado->result_array();
+	}
+
+	public function get_pedidos_horario($hora = "00:00:00", $fecha = "0000-00-00")
+	{
+ 		$resultado = $this->db->query("	SELECT COUNT(1) as cant
+						    			FROM pedido AS P
+						    			WHERE P.hora_entrega = '".$hora."'
+						    			AND P.fecha_pedido >= '".$fecha." 00:00:00'
+						    			AND P.fecha_pedido <= '".$fecha." 23:59:59'" );
+
+    	return $resultado->row()->cant;
 	}
 }
 

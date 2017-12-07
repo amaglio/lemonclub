@@ -8,6 +8,8 @@ class Pedido extends CI_Controller {
 	{
 		parent::__construct();
 
+		date_default_timezone_set ( "America/Argentina/Buenos_Aires" );
+
 		$this->load->model('pedido_model');
 		$this->load->model('producto_model');
 		$this->load->model('Usuario_model');
@@ -49,6 +51,7 @@ class Pedido extends CI_Controller {
 		$data['cantidad'] = $this->pedido_model->get_cantidad_items_pedido( $this->session->userdata('id_pedido') );
 		$data['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
 
+		$data['horarios'] = $this->pedido_model->get_horarios_disponibles();
 		$data['formas_pago'] = $this->pedido_model->get_forma_pago();
 
 		$this->load->view(self::$solapa.'/confirmar_pedido', $data);
@@ -155,6 +158,7 @@ class Pedido extends CI_Controller {
  		$_POST['altura'] = 620;
  		$_POST['pago'] = FORMA_PAGO_ONLINE;
  		$_POST['entrega'] = FORMA_ENTREGA_TAKEAWAY;
+ 		$_POST['horario'] = "12:00:00";
 		*/
 		if ($this->form_validation->run('finalizar_pedido') == FALSE):
 
