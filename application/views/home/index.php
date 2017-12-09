@@ -45,20 +45,17 @@ $this->load->view('templates/head');
 			</div>
 		</div>
 
-		<div class="row ">
-			<div class="col-md-10 col-md-offset-1 btns-index">
-				<a class="btn-index btn1-index" href="<?php echo site_url('menu/index/4'); ?>">
-					<button class="btn btn-amarillo"><strong>ENSALADAS</strong><br>Y WRAPS</button>
-				</a>
-				<a class="btn-index btn2-index" href="<?php echo site_url('menu/index/1'); ?>">
-					<button class="btn btn-amarillo"><strong>SANDWICHS</strong><br>Y PANINIS</button>
-				</a>
-				<a class="btn-index btn3-index" href="<?php echo site_url('menu/index/3'); ?>">
-					<button class="btn btn-amarillo"><strong>PLATOS</strong><br>CALIENTES</button>
-				</a>
-				<a class="btn-index btn4-index" href="<?php echo site_url('menu/index/2'); ?>">
-					<button class="btn btn-amarillo"><strong>CAFETERÍA</strong><br>Y PASTELERÍA</button>
-				</a>
+		<div class="row cont-btns-index">
+			<div class="col-sm-10 xol-sm-offset-1 btns-index">
+				<?php
+				foreach ($tipos as $key => $tipo)
+				{
+					echo '<a class="btn-index" style="background:url(\''.base_url('assets/images/'.$tipo['imagen']).'\'); background-size:cover; background-position:center;" href="'.site_url('menu/index/'.$tipo['id_producto_tipo']).'">
+							<div class="btn btn-amarillo">'.strtoupper($tipo['descripcion']).'</div>
+						</a>';
+				}
+				?>
+				
 			</div>
 		</div>
 	</div>
