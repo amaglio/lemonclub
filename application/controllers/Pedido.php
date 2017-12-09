@@ -361,7 +361,8 @@ class Pedido extends CI_Controller {
 
 			chrome_log("No Paso validacion");
 			$this->session->set_flashdata('mensaje', 'Error en la validacion');
-			 
+			echo validation_errors(); 
+
 		else:
 			chrome_log("Si Paso validacion");
 	 		 
@@ -382,7 +383,10 @@ class Pedido extends CI_Controller {
 
 		endif; 	
 
-		redirect(base_url()."index.php/administrador/pedidos");
+		$this->load->library('user_agent');
+		$url = $this->agent->referrer();
+		
+		redirect($url);
 	}
 
 
