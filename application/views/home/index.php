@@ -46,7 +46,7 @@ $this->load->view('templates/head');
 		</div>
 
 		<div class="row cont-btns-index">
-			<div class="col-sm-12 btns-index">
+			<div class="col-xs-12 btns-index">
 				<?php
 				/*
 				foreach ($tipos as $key => $tipo)
@@ -84,10 +84,37 @@ $this->load->view('templates/footer');
 
 	<!-- AnythingSlider initialization -->
 	<script>
+		var res = $( window ).width();
+		var cant = 6;
+		if(res > 1200)
+		{
+			cant = 6;
+		}
+		else if(res > 1000)
+		{
+			cant = 5;
+		}
+		else if(res > 800)
+		{
+			cant = 4;
+		}
+		else if(res > 600)
+		{
+			cant = 3;
+		}
+		else if(res > 400)
+		{
+			cant = 2;
+		}
+		else
+		{
+			cant = 1;
+		}
+		//alert(res+" "+cant);
 		// DOM Ready
 		$(function(){
 			$('#slider').anythingSlider({
-			    showMultiple: 6,
+			    showMultiple: cant,
 			    buildArrows         : false,      // If true, builds the forwards and backwards buttons
 				buildNavigation     : false,      // If true, builds a list of anchor links to link to each panel
 				buildStartStop      : false,      // If true, builds the start/stop button
