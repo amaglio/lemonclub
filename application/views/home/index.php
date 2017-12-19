@@ -46,16 +46,30 @@ $this->load->view('templates/head');
 		</div>
 
 		<div class="row cont-btns-index">
-			<div class="col-sm-10 xol-sm-offset-1 btns-index">
+			<div class="col-sm-12 btns-index">
 				<?php
+				/*
 				foreach ($tipos as $key => $tipo)
 				{
 					echo '<a class="btn-index" style="background:url(\''.base_url('assets/images/'.$tipo['imagen']).'\'); background-size:cover; background-position:center;" href="'.site_url('menu/index/'.$tipo['id_producto_tipo']).'">
 							<div class="btn btn-amarillo">'.strtoupper($tipo['descripcion']).'</div>
 						</a>';
 				}
+				*/
 				?>
-				
+				<ul id="slider">
+					<?php
+					foreach ($tipos as $key => $tipo)
+					{
+						echo '<li>
+								<div class="btn-index" style="background:url(\''.base_url('assets/images/'.$tipo['imagen']).'\'); background-size:cover; background-position:center;" href="'.site_url('menu/index/'.$tipo['id_producto_tipo']).'">
+									<div class="btn btn-amarillo">'.strtoupper($tipo['descripcion']).'</div>
+								</div>
+							</li>';
+					}
+					?>
+
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -63,6 +77,24 @@ $this->load->view('templates/head');
 <?php
 $this->load->view('templates/footer');
 ?>
+
+<!-- Anything Slider -->
+<link rel="stylesheet" href="<?=base_url()?>assets/css/anythingslider.css">
+<script src="<?=base_url()?>assets/js/jquery.anythingslider.min.js"></script>
+
+	<!-- AnythingSlider initialization -->
+	<script>
+		// DOM Ready
+		$(function(){
+			$('#slider').anythingSlider({
+			    showMultiple: 6,
+			    buildArrows         : false,      // If true, builds the forwards and backwards buttons
+				buildNavigation     : false,      // If true, builds a list of anchor links to link to each panel
+				buildStartStop      : false,      // If true, builds the start/stop button
+				autoPlay            : true
+			});
+		});
+	</script>
 
 </body>
 </html>

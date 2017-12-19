@@ -349,22 +349,18 @@ INDEX
 }
 
 .cont-btns-index{
+	text-align: center;
 	margin-top: 0px;
 }
 .btns-index{
 	text-align: center;
-	left: 50%;
-	margin: -100px auto 0px -450px;
-	/*width: 900px;*/
+	margin: -100px auto 20px auto;
 }
 .btn-index{
 	text-align: center;
 	height: 240px;
 	width: 200px;
 	padding: 100px 50px;
-	margin: -50px 10px 50px 10px;
-	display: block;
-	float: left;
 }
 
 .btn1-index{
@@ -707,6 +703,23 @@ CONFIRMAR PEDIDO
 .confirmar .seguir{
 	padding: 20px 60px;
 }
+
+
+.notifyjs-foo-base {
+  /*background: #FFC200;*/
+  background: #dff0d8;
+  padding: 10px;
+  width: 300px;
+  text-align: center;
+}
+.notifyjs-foo-base .title {
+  font-size: 16px;
+}
+.notifyjs-foo-base button {
+  font-size: 16px;
+}
+
+
 /*****************
 MEDIA
 *******************/

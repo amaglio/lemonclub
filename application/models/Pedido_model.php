@@ -39,7 +39,14 @@ class Pedido_model extends CI_Model {
 		                            FROM pedido_producto AS PP
 		                            WHERE PP.id_pedido='.$id);
 		$result = $query->row_array();
-		return $result['cantidad'];
+		if($result && $result['cantidad'])
+		{
+			return $result['cantidad'];
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	public function set_pedido( $array = FALSE )

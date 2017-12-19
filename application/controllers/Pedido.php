@@ -329,9 +329,9 @@ class Pedido extends CI_Controller {
 			if($result)
 			{
 				$return['error'] = FALSE;
-				$return['data'] = "El producto fue agregado al carrito.";
+				$return['data'] = "El producto fue agregado.";
+				$return['cantidad'] = $this->pedido_model->get_cantidad_items_pedido($this->session->userdata('id_pedido'));
 				$this->session->set_userdata('pedido_activo', 1);
-
 			}
 			else
 			{
@@ -364,6 +364,7 @@ class Pedido extends CI_Controller {
 				$return['error'] = FALSE;
 				$return['data'] = "La cantidad fue modificada.";
 				$return['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
+				$return['cantidad'] = $this->pedido_model->get_cantidad_items_pedido($this->session->userdata('id_pedido'));
 
 				if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) > 0)
 					$this->session->set_userdata('pedido_activo', 1);
@@ -398,6 +399,7 @@ class Pedido extends CI_Controller {
 				$return['error'] = FALSE;
 				$return['data'] = "La cantidad fue modificada.";
 				$return['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
+				$return['cantidad'] = $this->pedido_model->get_cantidad_items_pedido($this->session->userdata('id_pedido'));
 
 				if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) == 0)
 					$this->session->unset_userdata('pedido_activo');

@@ -60,7 +60,7 @@ $this->load->view('templates/head');
 								    	<input type="password" class="form-control" name="clave" placeholder="Contraseña" value="<?php echo set_value('clave'); ?>">
 								    </div>
 								</div>
-								<button type="submit" id="btn-ingresar" value="1" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">INGRESAR</button>
+								<button type="submit" id="btn-ingresar" value="1" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;" data-loading-text="Cargando...">INGRESAR</button>
 							</form>
 						</div>
 				    </div>
@@ -74,7 +74,7 @@ $this->load->view('templates/head');
 								    	<input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo set_value('email'); ?>" required="required" >
 								    </div>
 								</div>
-								<button type="submit" id="btn-invitado" value="2" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">INGRESAR</button>
+								<button type="submit" id="btn-invitado" value="2" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;" data-loading-text="Cargando...">INGRESAR</button>
 							</form>
 						</div>
 				    </div>
@@ -107,7 +107,7 @@ $this->load->view('templates/head');
 								    	<input type="password" class="form-control" name="clave2" placeholder="Repetir Contraseña" value="<?php echo set_value('clave2'); ?>">
 								    </div>
 								</div>
-								<button type="submit" id="btn-registro" value="3" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">REGISTRAR</button>
+								<button type="submit" id="btn-registro" value="3" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;" data-loading-text="Cargando...">REGISTRAR</button>
 							</form>
 						</div>
 				    </div>

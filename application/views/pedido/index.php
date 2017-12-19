@@ -60,11 +60,11 @@ $this->load->view('templates/head');
 						<?php
 							if($items && count($items))
 							{
-								echo '<a href="'.site_url('pedido/confirmar_pedido').'" class="btn btn-amarillo btn-block">COMPRAR</a>';
+								echo '<a href="'.site_url('pedido/confirmar_pedido').'" class="btn btn-amarillo btn-block">FINALIZAR COMPRA</a>';
 							}
 							else
 							{
-								echo '<a href="javascript: mensaje_no_items();" class="btn btn-amarillo btn-block">COMPRAR</a>';
+								echo '<a href="javascript: mensaje_no_items();" class="btn btn-amarillo btn-block">FINALIZAR COMPRA</a>';
 							}
 						?>
 					</div>
@@ -100,6 +100,7 @@ function modificar_cantidad(id, qty)
 	        	if(data.error == false)
 		        {
 		        	$('#total').html("$"+data.total);
+		        	$('#cant_items_carrito_header').html("("+data.cantidad+")");
 		          	$('#cant_'+id).notify(data.data, { className:'success', position:"top" });
 		        }
 		        else
@@ -135,6 +136,7 @@ function eliminar_producto(id)
         	if(data.error == false)
 	        {
 	        	$('#total').html("$"+data.total);
+	        	$('#cant_items_carrito_header').html("("+data.cantidad+")");
 	          	$('#item_'+id).remove();
 	        }
 	        else
