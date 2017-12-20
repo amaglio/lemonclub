@@ -11,7 +11,7 @@ $this->load->view('templates/head');
 	$this->load->view('templates/header');
 	?>
 
-	<div class="container-fluid area-banner">
+	<div class="container-fluid area-banner" style="background: url('<?=base_url("assets/images/fondos/carrito.jpg")?>'); background-size: cover; background-position: top;">
 		<div class="row">
 			<div class="col-xs-12">
 			</div>
