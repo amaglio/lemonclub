@@ -22,7 +22,7 @@ $this->load->view('templates/head');
 
 	<div class="container confirmar">
 		<div class="row">
-			<div class="col-xs-12 col-sm-7 col-sm-offset-1">
+			<div class="col-xs-12 col-sm-7 col-md-7 col-md-offset-1">
 				<?php
 				echo validation_errors();
 				
@@ -116,8 +116,8 @@ $this->load->view('templates/head');
 				<div class="seguir"><a href="<?=site_url('menu')?>" class="btn btn-default btn-block">SEGUIR COMPRANDO</a></div>
 			</div>
 
-			<div class="col-xs-12 col-sm-3">
-				<div class="titulo">DETALLE DE COMPRA</div>
+			<div class="col-xs-12 col-sm-5 col-md-3">
+				<div class="titulo" style="width:100%;">DETALLE DE COMPRA</div>
 				<div class="formulario">
 					<?php
 					foreach ($items as $item)

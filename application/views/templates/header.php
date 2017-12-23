@@ -1,28 +1,28 @@
     <div class="container-fluid barra-menu hidden-xs">
     	<div class="container">
     		<div class="row">
-    			<div class="col-xs-5 area-botones" style="">
+    			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-5 area-botones" style="">
 		            <a class="" href="<?=site_url('home')?>">HOME</a>
 		            <a class="" href="<?=site_url('menu/index/-1')?>">MENU</a>
 		            <a class="" href="<?=site_url('contacto')?>">CONTACTO</a>
     			</div>
-    			<div class="col-xs-2 area-logo">
+    			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 area-logo">
     				<a href="<?=site_url('home')?>"><img src="<?=base_url('assets/images/lemonlogo.png')?>"></a>
     			</div>
-                <div class="col-xs-2 area-botones">
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-2 area-botones">
                     <a class="" href="<?=site_url('servicio_corporativo')?>">SERVICIO CORPORATIVO</a>
                 </div>
-    			<div class="col-xs-3 area-carrito" style="text-align:right">
+    			<div class="col-xs-3 col-sm-3 col-md-3 area-carrito" style="text-align:right">
                     <?php
     				echo '<a href="'.site_url('pedido').'" class="btn btn-amarillo">
                             <i class="fa fa-shopping-cart fa-lg"></i> 
-                            CARRITO <span id="cant_items_carrito_header">';
+                            <span class="hidden-sm hidden-md">CARRITO </span><span id="cant_items_carrito_header">';
                             if($this->session->userdata('pedido_activo') != "")
                             {
                                 $cantidad_aux = $this->pedido_model->get_cantidad_items_pedido( $this->session->userdata('id_pedido') );
                                 echo "(".$cantidad_aux.")";
                             }
-                    echo '</span></a> ';
+                    echo '</span></a>';
                     
                     if($this->session->userdata('id_usuario') != "")
                     {
