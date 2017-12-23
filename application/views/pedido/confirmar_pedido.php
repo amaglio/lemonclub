@@ -81,12 +81,21 @@ $this->load->view('templates/head');
 						<hr>
 
 						<h4>Forma de Entrega</h4>
-						<div class="radio">
+						<div class="radio  col-xs-12 col-sm-6">
 						  <label>
 						    <input type="radio" name="entrega" id="entrega1" value="<?php echo FORMA_ENTREGA_DELIVERY; ?>" onchange="select_delivery()">
 						    Quiero que me lo envien
 						  </label>
 						</div>
+						<div class="radio col-xs-12 col-sm-6">
+						  <label>
+						    <input type="radio" name="entrega" id="entrega2" value="<?php echo FORMA_ENTREGA_TAKEAWAY; ?>" onchange="select_takeaway()" checked>
+						    Quiero pasarlo a buscar
+						  </label>
+						</div>
+
+						<div class="clearfix"></div>
+
 						<div class="form-group" id="area_envio" style="display:none;">
 							<?php
 							foreach ($direcciones as $key_dir => $direccion)
@@ -118,23 +127,24 @@ $this->load->view('templates/head');
 							    </div>
 						    </div>
 						</div>
-						<div class="radio">
-						  <label>
-						    <input type="radio" name="entrega" id="entrega2" value="<?php echo FORMA_ENTREGA_TAKEAWAY; ?>" onchange="select_takeaway()" checked>
-						    Quiero pasarlo a buscar
-						  </label>
-						</div>
 
 						<hr>
 						
 						<h4>Horario de Entrega</h4>
 						<?php
-						echo '<select name="horario" class="form-control">';
-						foreach ($horarios as $key => $horario)
+						if(count($horarios) > 0)
 						{
-							echo '<option value="'.$horario.'">'.substr($horario,0,5).'</option>';
+							echo '<select name="horario" class="form-control">';
+							foreach ($horarios as $key => $horario)
+							{
+								echo '<option value="'.$horario.'">'.substr($horario,0,5).'</option>';
+							}
+							echo '</select>';
 						}
-						echo '</select>';
+						else
+						{
+							echo '<strong style="color:#CC0000;">Ya no se pueden hacer pedidos para el día de hoy.</strong>';
+						}
 						?>
 
 						<hr>
@@ -143,13 +153,14 @@ $this->load->view('templates/head');
 						<?php
 						foreach ($formas_pago as $key => $forma_pago)
 						{
-							echo '<div class="radio">
+							echo '<div class="radio col-xs-12 col-sm-6">
 									  <label>
 									    <input type="radio" name="pago" id="pago'.$forma_pago['id_forma_pago'].'" value="'.$forma_pago['id_forma_pago'].'" checked>
 									    '.$forma_pago['descripcion'].'
 									  </label>
 									</div>';
 						}
+						echo '<div class="clearfix"></div>';
 						?>
 
 						<hr>

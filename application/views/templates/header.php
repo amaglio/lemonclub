@@ -22,7 +22,7 @@
                                 $cantidad_aux = $this->pedido_model->get_cantidad_items_pedido( $this->session->userdata('id_pedido') );
                                 echo "(".$cantidad_aux.")";
                             }
-                    echo '</span></a>';
+                    echo '</span></a> ';
                     
                     if($this->session->userdata('id_usuario') != "")
                     {
