@@ -26,7 +26,7 @@ $this->load->view('templates/head');
 	$this->load->view('templates/header');
 	?>
 
-	<div class="container-fluid area-banner">
+	<div class="container-fluid area-banner" style="background: url('<?=base_url("assets/images/fondos/carrito.jpg")?>'); background-size: cover; background-position: top;">
 		<div class="row">
 			<div class="col-xs-12">
 				<p>Confirmá</p>
@@ -37,7 +37,7 @@ $this->load->view('templates/head');
 
 	<div class="container confirmar">
 		<div class="row">
-			<div class="col-xs-12 col-sm-7 col-sm-offset-1">
+			<div class="col-xs-12 col-sm-7 col-md-7 col-md-offset-1">
 				<div id="area-mensaje"></div>
 				<?php 
 				echo validation_errors();
@@ -63,6 +63,10 @@ $this->load->view('templates/head');
 						    	<input type="email" class="form-control" id="mail" name="mail" placeholder="Email" value="<?=$datos_usuario->email?>" readonly="readonly">
 						    </div>
 						</div>
+						<?
+						if($datos_usuario->tipo_usuario == "Usuario Registrado")
+						{
+						?>
 						<div class="form-group">
 						    <div class="col-sm-6">
 						    	<input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="<?=$datos_usuario->nombre?>" readonly="readonly">
@@ -71,15 +75,27 @@ $this->load->view('templates/head');
 						    	<input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" value="<?=$datos_usuario->apellido?>" readonly="readonly">
 						    </div>
 						</div>
-						
+						<?
+						}
+						?>
 						<hr>
 
-						<div class="radio">
+						<h4>Forma de Entrega</h4>
+						<div class="radio  col-xs-12 col-sm-6">
 						  <label>
 						    <input type="radio" name="entrega" id="entrega1" value="<?php echo FORMA_ENTREGA_DELIVERY; ?>" onchange="select_delivery()">
 						    Quiero que me lo envien
 						  </label>
 						</div>
+						<div class="radio col-xs-12 col-sm-6">
+						  <label>
+						    <input type="radio" name="entrega" id="entrega2" value="<?php echo FORMA_ENTREGA_TAKEAWAY; ?>" onchange="select_takeaway()" checked>
+						    Quiero pasarlo a buscar
+						  </label>
+						</div>
+
+						<div class="clearfix"></div>
+
 						<div class="form-group" id="area_envio" style="display:none;">
 							<?php
 							foreach ($direcciones as $key_dir => $direccion)
@@ -87,8 +103,8 @@ $this->load->view('templates/head');
 								echo '<div class="col-sm-12">
 										<div class="radio" style="margin-left:20px;">
 										  <label>
-										    <input type="radio" name="direccion" id="direccion'.$key_dir.'" value="1" onchange="select_dir_vieja(\''.$direccion['dirección'].'\', \''.$direccion['altura'].'\')">
-										    '.$direccion['dirección'].' '.$direccion['altura'].'
+										    <input type="radio" name="direccion" id="direccion'.$key_dir.'" value="1" onchange="select_dir_vieja(\''.$direccion['direccion'].'\', \''.$direccion['altura'].'\')">
+										    '.$direccion['direccion'].' '.$direccion['altura'].'
 										  </label>
 										</div>
 									</div>';
@@ -111,21 +127,41 @@ $this->load->view('templates/head');
 							    </div>
 						    </div>
 						</div>
-						<div class="radio">
-						  <label>
-						    <input type="radio" name="entrega" id="entrega2" value="<?php echo FORMA_ENTREGA_TAKEAWAY; ?>" onchange="select_takeaway()" checked>
-						    Quiero pasarlo a buscar
-						  </label>
-						</div>
 
 						<hr>
 						
-						<div class="radio">
-						  <label>
-						    <input type="radio" name="pago" id="pago1" value="1" checked>
-						    Pago en efectivo
-						  </label>
-						</div>
+						<h4>Horario de Entrega</h4>
+						<?php
+						if(count($horarios) > 0)
+						{
+							echo '<select name="horario" class="form-control">';
+							foreach ($horarios as $key => $horario)
+							{
+								echo '<option value="'.$horario.'">'.substr($horario,0,5).'</option>';
+							}
+							echo '</select>';
+						}
+						else
+						{
+							echo '<strong style="color:#CC0000;">Ya no se pueden hacer pedidos para el día de hoy.</strong>';
+						}
+						?>
+
+						<hr>
+
+						<h4>Forma de Pago</h4>
+						<?php
+						foreach ($formas_pago as $key => $forma_pago)
+						{
+							echo '<div class="radio col-xs-12 col-sm-6">
+									  <label>
+									    <input type="radio" name="pago" id="pago'.$forma_pago['id_forma_pago'].'" value="'.$forma_pago['id_forma_pago'].'" checked>
+									    '.$forma_pago['descripcion'].'
+									  </label>
+									</div>';
+						}
+						echo '<div class="clearfix"></div>';
+						?>
 
 						<hr>
 
@@ -155,8 +191,8 @@ $this->load->view('templates/head');
 				<div class="seguir"><a href="<?=site_url('menu')?>" class="btn btn-default btn-block">SEGUIR COMPRANDO</a></div>
 			</div>
 
-			<div class="col-xs-12 col-sm-3">
-				<div class="titulo">DETALLE DE COMPRA</div>
+			<div class="col-xs-12 col-sm-5 col-md-3">
+				<div class="titulo" style="width:100%;">DETALLE DE COMPRA</div>
 				<div class="formulario">
 					<?php
 					foreach ($items as $item)
@@ -242,7 +278,10 @@ function select_dir_nueva()
 	            htmlData += '</div>';
 	            $('#area-mensaje').html(htmlData);
 
-	            window.location.href = SITE_URL+"/pedido/success";
+	            if(data.link)
+	            {
+	            	window.location.href = data.link;
+	            }
 	          }
 	          else
 	          {

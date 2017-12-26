@@ -348,17 +348,21 @@ INDEX
 	margin: 0px;
 }
 
-.btns-index{
-	margin-top: 0px;
-	margin-bottom: 100px;
+.cont-btns-index{
 	text-align: center;
+	margin-top: 0px;
+}
+.btns-index{
+	text-align: center;
+	margin: -140px auto 20px auto;
 }
 .btn-index{
 	text-align: center;
-	height: 300px;
+	height: 220px;
+	width: 200px;
 	padding: 100px 50px;
-	margin: 0px 10px;
 }
+
 .btn1-index{
 	background: url('../images/btn1.jpg');
 	background-size: cover;
@@ -699,6 +703,23 @@ CONFIRMAR PEDIDO
 .confirmar .seguir{
 	padding: 20px 60px;
 }
+
+
+.notifyjs-foo-base {
+  /*background: #FFC200;*/
+  background: #dff0d8;
+  padding: 10px;
+  width: 300px;
+  text-align: center;
+}
+.notifyjs-foo-base .title {
+  font-size: 16px;
+}
+.notifyjs-foo-base button {
+  font-size: 16px;
+}
+
+
 /*****************
 MEDIA
 *******************/
@@ -712,6 +733,11 @@ MEDIA
 	.area-menu-items .item .area-imagen{
 		height: 120px;
 	}
+	/*
+	.btns-index{
+		margin: -50px auto 0px -350px;
+	}
+	*/
 }
 
 @media (max-width: 768px) {
@@ -734,17 +760,24 @@ MEDIA
 	.carousel-caption p{
 		font-size: 30px;
 	}
-
+	
+	.cont-btns-index{
+		margin: 0px;
+	}
 	.btns-index{
-		margin-bottom: 0px;
+		left: 0px;
+		margin: 0px;
+		padding: 0px;
 	}
 	.btn-index{
 		display: block;
-		height: 150px;
-		padding: 50px 10px;
-		margin: 10px 0px;
+		/*height: 150px;
+		padding: 50px 0px;*/
+		margin: 10px 0px 0px 0px;
+		width: 100%;
+		float: none;
 	}
-
+	
 	.area-banner{
 		margin-top: 0px;
 		height: 150px;

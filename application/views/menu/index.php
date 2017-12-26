@@ -35,6 +35,13 @@ $this->load->view('templates/head');
 			<div class="col-xs-12">
 				<div class="menu">
 					<?php
+					if($plato_dia == 1)
+						$active = "class='active'"; 
+					else
+						$active = "";
+					
+					echo '<a style="color:" href="'.site_url('menu/index/-1').'" '.$active.' > <i class="fa fa-star-o" aria-hidden="true"></i> Menú del dia </a>';
+
 					foreach ($tipos as $key_tipo => $tipo)
 					{
 						$active = "";
@@ -43,19 +50,8 @@ $this->load->view('templates/head');
 							$active = "class='active'";
 						}
 						echo '<a href="'.site_url('menu/index/'.$tipo['id_producto_tipo']).'" '.$active.'>'.$tipo['descripcion'].'</a>';
-					} ?>
-					
-					<?php
-
-						if($plato_dia == 1)
-							$active = "class='active'"; 
-						else
-							$active = "";
-
+					}
 					?>
-					
-				 	<a style="color:" href="<?=site_url('menu/index/-1')?>" <?=$active?> > <i class="fa fa-star-o" aria-hidden="true"></i> Menú del dia </a>
-					
 				</div>
 			</div>
 		</div>
@@ -98,7 +94,18 @@ function comprar(id)
       	{
         	if(data.error == false)
 	        {
-	          	$('#btn_'+id).notify(data.data, { className:'success', position:"top" });
+	          	//$('#btn_'+id).notify(data.data, { className:'success', position:"top" });
+	          	$('#cant_items_carrito_header').html("("+data.cantidad+")");
+
+				$('#btn_'+id).notify({
+				  title: data.data,
+				  button: 'Ir al carrito'
+				}, { 
+				  style: 'foo',
+				  clickToHide: false,
+				  position:"top center"
+				});
+				
 	        }
 	        else
 	        {
@@ -113,6 +120,24 @@ function comprar(id)
       	}
     });
 }
+
+//add a new style 'foo'
+$.notify.addStyle('foo', {
+  html: 
+    "<div>" +
+      "<div class='clearfix'>" +
+        "<div class='title' data-notify-html='title'/>" +
+        "<div class='buttons'>" +
+          "<i class='fa fa-shopping-cart'></i> <button class='btn btn-link yes' data-notify-text='button'>Ir al carrito</button>" +
+        "</div>" +
+      "</div>" +
+    "</div>"
+});
+
+$(document).on('click', '.notifyjs-foo-base .yes', function() {
+  $(this).trigger('notify-hide');
+  location.href = "<?=site_url('pedido')?>";
+});
 </script>
 
 </body>

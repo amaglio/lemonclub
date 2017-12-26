@@ -45,20 +45,31 @@ $this->load->view('templates/head');
 			</div>
 		</div>
 
-		<div class="row ">
-			<div class="col-md-10 col-md-offset-1 btns-index">
-				<a class="btn-index btn1-index" href="<?php echo site_url('menu/index/4'); ?>">
-					<button class="btn btn-amarillo"><strong>ENSALADAS</strong><br>Y WRAPS</button>
-				</a>
-				<a class="btn-index btn2-index" href="<?php echo site_url('menu/index/1'); ?>">
-					<button class="btn btn-amarillo"><strong>SANDWICHS</strong><br>Y PANINIS</button>
-				</a>
-				<a class="btn-index btn3-index" href="<?php echo site_url('menu/index/3'); ?>">
-					<button class="btn btn-amarillo"><strong>PLATOS</strong><br>CALIENTES</button>
-				</a>
-				<a class="btn-index btn4-index" href="<?php echo site_url('menu/index/2'); ?>">
-					<button class="btn btn-amarillo"><strong>CAFETERÍA</strong><br>Y PASTELERÍA</button>
-				</a>
+		<div class="row cont-btns-index">
+			<div class="col-xs-12 btns-index">
+				<?php
+				/*
+				foreach ($tipos as $key => $tipo)
+				{
+					echo '<a class="btn-index" style="background:url(\''.base_url('assets/images/'.$tipo['imagen']).'\'); background-size:cover; background-position:center;" href="'.site_url('menu/index/'.$tipo['id_producto_tipo']).'">
+							<div class="btn btn-amarillo">'.strtoupper($tipo['descripcion']).'</div>
+						</a>';
+				}
+				*/
+				?>
+				<ul id="slider">
+					<?php
+					foreach ($tipos as $key => $tipo)
+					{
+						echo '<li>
+								<div class="btn-index" style="background:url(\''.base_url('assets/images/'.$tipo['imagen']).'\'); background-size:cover; background-position:center;" onclick="abrir_menu('.$tipo['id_producto_tipo'].')">
+									<div class="btn btn-amarillo">'.strtoupper($tipo['descripcion']).'</div>
+								</div>
+							</li>';
+					}
+					?>
+
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -66,6 +77,56 @@ $this->load->view('templates/head');
 <?php
 $this->load->view('templates/footer');
 ?>
+
+<!-- Anything Slider -->
+<link rel="stylesheet" href="<?=base_url()?>assets/css/anythingslider.css">
+<script src="<?=base_url()?>assets/js/jquery.anythingslider.min.js"></script>
+
+	<!-- AnythingSlider initialization -->
+	<script>
+		var res = $( window ).width();
+		var cant = 6;
+		if(res > 1200)
+		{
+			cant = 6;
+		}
+		else if(res > 1000)
+		{
+			cant = 5;
+		}
+		else if(res > 800)
+		{
+			cant = 4;
+		}
+		else if(res > 600)
+		{
+			cant = 3;
+		}
+		else if(res > 400)
+		{
+			cant = 2;
+		}
+		else
+		{
+			cant = 1;
+		}
+		//alert(res+" "+cant);
+		// DOM Ready
+		$(function(){
+			$('#slider').anythingSlider({
+			    showMultiple: cant,
+			    buildArrows         : false,      // If true, builds the forwards and backwards buttons
+				buildNavigation     : false,      // If true, builds a list of anchor links to link to each panel
+				buildStartStop      : false,      // If true, builds the start/stop button
+				autoPlay            : true
+			});
+		});
+
+		function abrir_menu(id)
+		{
+			location.href = "<?=site_url('menu/index/')?>"+id;
+		}
+	</script>
 
 </body>
 </html>
