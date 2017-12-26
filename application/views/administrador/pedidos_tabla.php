@@ -1,7 +1,8 @@
 <link href="<?php echo base_url(); ?>assets/css/datatable/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo base_url(); ?>assets/css/datatable/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <style type="text/css">
   
@@ -45,9 +46,11 @@
 
 </style>
 
-<? echo "<div class='col-md-12'>".mensaje_resultado($mensaje)."</div>" ?>
-
 <? echo $menu_pedidos; ?>
+
+<? echo "<div class='col-md-12'>".mensaje_resultado($mensaje)."</div>"; ?>
+ 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <div class="content-wrapper">
  
@@ -99,6 +102,8 @@
                                     <td>
 
                                         <form autocomplete="off" id="form_cambiar_estado_<?=$row['informacion_pedido']['id_pedido']?>" method="post" action="<?=base_url()?>index.php/pedido/procesa_cambiar_estado_pedido">
+
+                                          <input type="hidden" name="id_pedido" id="id_pedido" value="<?=$row['informacion_pedido']['id_pedido']?>" >
 
                                           <?  $estados = array(); ?>
                                             
@@ -186,4 +191,14 @@ q(document).ready(function() {
 } );
 
 </script>
- 
+ <script type="text/javascript">
+    $(function() 
+    {
+        $( ".mensaje_resultado" ).hide( 8000, function() {
+            $( ".mensaje_resultado" ).remove();
+        });
+
+    });
+
+  
+</script>

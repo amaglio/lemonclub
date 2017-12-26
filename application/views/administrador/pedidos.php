@@ -4,6 +4,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 
+
 <style type="text/css">
 	.error{
 		color:red;
@@ -36,9 +37,12 @@
 
 </style>
 
-<? echo "<div class='col-md-12'>".mensaje_resultado($mensaje)."</div>" ?>
+ 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-<? echo $menu_pedidos;
+<? echo $menu_pedidos; ?>
+
+<? echo "<div class='col-md-12'>".mensaje_resultado($mensaje)."</div>";
 
   $i=0;
 

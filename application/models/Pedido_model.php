@@ -357,8 +357,6 @@ class Pedido_model extends CI_Model {
 
 		switch ($array['ordenar']) 
 		{
-			
-
 			case 'hora_entrega':
 				$ordenar = 'pe.hora_entrega';
 				$texto_filtros .= "hora de entrega";
