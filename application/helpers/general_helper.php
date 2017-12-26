@@ -128,9 +128,19 @@ if(!function_exists('enviar_email'))
     
         $CI->load->library('email'); // load library 
 
-        $config['mailtype'] = 'html';
+        //$config['mailtype'] = 'html';
+        $configuracion_ucema = array(
+            'protocol' => 'smtp',
+            'smtp_host' => '10.0.0.3',
+            'smtp_port' => 25,
+            'smtp_user' => '',
+            'smtp_pass' => '',
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'newline' => "\r\n"
+        );
 
-        $CI->email->initialize($config);
+        $CI->email->initialize($configuracion_ucema);
         
         $CI->email->from('info@lemonclub.com.ar', 'Lemon Club');
         $CI->email->to($email_to);
