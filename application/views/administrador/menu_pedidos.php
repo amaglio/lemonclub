@@ -94,10 +94,10 @@
 		<div class="form-group">
 
 		  	<label for="fecha_desde">Hora desde</label>
-		   	<input class="form-control" type="time" name="hora_desde"  value="08:00:00"   >
+		   	<input class="form-control" type="time" name="hora_desde"  value="00:00:00"   >
 
 		  	<label for="fecha_hasta" style="margin-top:10px">Fecha Hasta</label>
-		   	<input class="form-control" type="time" name="hora_hasta" value="15:00:00">
+		   	<input class="form-control" type="time" name="hora_hasta" value="00:00:00">
 
 		</div>
 		
