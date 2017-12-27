@@ -305,7 +305,20 @@ class Pedido extends CI_Controller {
 
 	public function success()
 	{
-		$this->load->view(self::$solapa.'/success');
+		if($this->session->userdata('id_usuario') != "")
+		{
+			$data['datos_usuario'] = $this->Usuario_model->traer_datos_usuario($this->session->userdata('id_usuario'));
+			if($data['datos_usuario']->tipo_usuario == "Usuario Registrado")
+			{
+				session_destroy();
+			}
+
+			$this->load->view(self::$solapa.'/success');
+		}
+		else
+		{
+			redirect('home');
+		}
 	}
 
 	public function failure()
