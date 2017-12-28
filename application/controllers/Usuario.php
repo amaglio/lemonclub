@@ -162,7 +162,8 @@ public function procesa_usuario_invitado()
 
 			$mensaje =  '<h2>TERMINÁ TU PEDIDO!</h2><hr><br>';
 			$mensaje .= 'Has recibido este e-mail por que se efectuó una solicitud de usuario invitado en lemonclub.com.<br>';
-			$mensaje .= 'En caso de querer continuar con el proceso de compra, haga click en el siguiente link  <a href="'.$enlace.'"> Validar Email </a>.<br>';
+			$mensaje .= 'En caso de querer continuar con el proceso de compra, haga click en el siguiente link <a href="'.$enlace.'"> Validar Email </a>.<br><br>';
+			$mensaje .= 'Si el link no funciona, podes copiar y pegar el enlace "'.$enlace.'" en tu navegador.<br><br>';
 			$mensaje .= 'Recordá que podes registarte, asi haces tu pedido mas fácil.';
 			$mensaje .= '<h4>Gracias por elegirnos! </h4> ';
 			$mensaje .= 'Si usted no realizo el pedido, puede ignorar este mensaje.<br>';
@@ -206,7 +207,7 @@ public function procesa_validar_usuario_invitado($id_usuario, $token) // Valida 
 	if ($this->form_validation->run('validar_usuario_invitado') == FALSE):
 
 		chrome_log("No paso validacion");
-		$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.');
+		$this->session->set_flashdata('mensaje', 'El link al que accediste es incorrecto o ya ha sido utilizado.');
  
 	else: 
 	 
@@ -223,14 +224,14 @@ public function procesa_validar_usuario_invitado($id_usuario, $token) // Valida 
 		else: 
 
 			chrome_log("No pudo validar el usuario invitado");
- 			$this->session->set_flashdata('mensaje', 'Ha ocurrido un error, por favor, intentá mas tarde.');
+ 			$this->session->set_flashdata('mensaje', 'El link al que accediste es incorrecto o ya ha sido utilizado.');
 
 		endif; 
  
  
 	endif;	
 
-	show_404('error', "Página no encontrada");
+	$this->load->view('errors/html/mensaje');
 }
 
 public function procesa_registrarse() 
