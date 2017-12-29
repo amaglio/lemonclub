@@ -156,14 +156,50 @@ public function procesa_usuario_invitado()
 
 			$return["resultado"] = TRUE;
 			$return["mensaje"] = 'Se le ha enviado un email, por favor ingresá a tu email y continua el pedido. La próxima vez podes registrarte y hacer tu pedido aún mas fácil.';
-
  
 			$enlace = base_url().'index.php/usuario/procesa_validar_usuario_invitado/'.$id_usuario.'/'.$token;
 
 			$mensaje =  '<h2>TERMINÁ TU PEDIDO!</h2><hr><br>';
 			$mensaje .= 'Has recibido este e-mail por que se efectuó una solicitud de usuario invitado en lemonclub.com.<br>';
-			$mensaje .= 'En caso de querer continuar con el proceso de compra, haga click en el siguiente link <a href="'.$enlace.'"> Validar Email </a>.<br><br>';
-			$mensaje .= 'Si el link no funciona, podes copiar y pegar el enlace "'.$enlace.'" en tu navegador.<br><br>';
+			$mensaje .= 'En caso de querer continuar con el proceso de compra, haga click en el siguiente link <a href="'.$enlace.'"> Validar Email </a>.<br>';
+			$mensaje .= '<br>';
+			$mensaje .= 'Si el link no funciona, podes copiar y pegar el enlace "'.$enlace.'" en tu navegador.<br>';
+			$mensaje .= '<br>';
+
+			$pedido = $this->pedido_model->get_pedido( $this->session->userdata('id_pedido') );
+			$items = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
+			//$cantidad = $this->pedido_model->get_cantidad_items_pedido( $this->session->userdata('id_pedido') );
+			$total = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
+
+			$mensaje .= '<hr>';
+			$mensaje .= 'DETALLE DEL PEDIDO<br>';
+			$mensaje .= '<table class="table">
+					<tr>
+						<th colspan="2">PRODUCTO</th>
+						<th>PRECIO</th>
+						<th>CANT.</th>
+					</tr>';
+					
+					foreach ($items as $key => $item)
+					{
+						$mensaje .= '<tr class="item">
+								<td><img src="'.base_url('assets/images/productos/'.$item['path_imagen']).'" width="100"></td>
+								<td>
+									<span class="title">'.$item['nombre'].'</span><br>
+									<span class="descripcion">'.$item['descripcion'].'</span>
+								</td>
+								<td class="precio">$'.$this->cart->format_number($item['precio']).'</td>
+								<td class="cantidad">'.$item['cantidad'].'</dt>
+							</tr>';
+					}
+					
+			$mensaje .= '<tr class="total">
+						<td colspan="4"><b>Total: $ '.$total.'</b></td>
+					</tr>
+				</table>';
+			$mensaje .= '<hr>';
+
+			$mensaje .= '<br>';
 			$mensaje .= 'Recordá que podes registarte, asi haces tu pedido mas fácil.';
 			$mensaje .= '<h4>Gracias por elegirnos! </h4> ';
 			$mensaje .= 'Si usted no realizo el pedido, puede ignorar este mensaje.<br>';
