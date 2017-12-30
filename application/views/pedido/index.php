@@ -11,7 +11,7 @@ $this->load->view('templates/head');
 	$this->load->view('templates/header');
 	?>
 
-	<div class="container-fluid area-banner">
+	<div class="container-fluid area-banner" style="background: url('<?=base_url("assets/images/fondos/carrito.jpg")?>'); background-size: cover; background-position: top;">
 		<div class="row">
 			<div class="col-xs-12">
 			</div>
@@ -20,7 +20,7 @@ $this->load->view('templates/head');
 
 	<div class="container carrito">
 		<div class="row">
-			<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+			<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
 
 				<div id="area-mensaje"></div>
 
@@ -60,11 +60,11 @@ $this->load->view('templates/head');
 						<?php
 							if($items && count($items))
 							{
-								echo '<a href="'.site_url('pedido/confirmar_pedido').'" class="btn btn-amarillo btn-block">COMPRAR</a>';
+								echo '<a href="'.site_url('pedido/confirmar_pedido').'" class="btn btn-amarillo btn-block">FINALIZAR COMPRA</a>';
 							}
 							else
 							{
-								echo '<a href="javascript: mensaje_no_items();" class="btn btn-amarillo btn-block">COMPRAR</a>';
+								echo '<a href="javascript: mensaje_no_items();" class="btn btn-amarillo btn-block">FINALIZAR COMPRA</a>';
 							}
 						?>
 					</div>
@@ -100,6 +100,7 @@ function modificar_cantidad(id, qty)
 	        	if(data.error == false)
 		        {
 		        	$('#total').html("$"+data.total);
+		        	$('#cant_items_carrito_header').html("("+data.cantidad+")");
 		          	$('#cant_'+id).notify(data.data, { className:'success', position:"top" });
 		        }
 		        else
@@ -135,6 +136,7 @@ function eliminar_producto(id)
         	if(data.error == false)
 	        {
 	        	$('#total').html("$"+data.total);
+	        	$('#cant_items_carrito_header').html("("+data.cantidad+")");
 	          	$('#item_'+id).remove();
 	        }
 	        else

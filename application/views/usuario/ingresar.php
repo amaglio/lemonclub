@@ -22,7 +22,7 @@ $this->load->view('templates/head');
 
 	<div class="container confirmar">
 		<div class="row">
-			<div class="col-xs-12 col-sm-7 col-sm-offset-1">
+			<div class="col-xs-12 col-sm-7 col-md-7 col-md-offset-1">
 				<?php
 				echo validation_errors();
 				
@@ -60,7 +60,7 @@ $this->load->view('templates/head');
 								    	<input type="password" class="form-control" name="clave" placeholder="Contraseña" value="<?php echo set_value('clave'); ?>">
 								    </div>
 								</div>
-								<button type="submit" id="btn-ingresar" value="1" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">INGRESAR</button>
+								<button type="submit" id="btn-ingresar" value="1" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;" data-loading-text="Cargando...">INGRESAR</button>
 							</form>
 						</div>
 				    </div>
@@ -74,7 +74,7 @@ $this->load->view('templates/head');
 								    	<input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo set_value('email'); ?>" required="required" >
 								    </div>
 								</div>
-								<button type="submit" id="btn-invitado" value="2" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">INGRESAR</button>
+								<button type="submit" id="btn-invitado" value="2" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;" data-loading-text="Cargando...">INGRESAR</button>
 							</form>
 						</div>
 				    </div>
@@ -107,7 +107,7 @@ $this->load->view('templates/head');
 								    	<input type="password" class="form-control" name="clave2" placeholder="Repetir Contraseña" value="<?php echo set_value('clave2'); ?>">
 								    </div>
 								</div>
-								<button type="submit" id="btn-registro" value="3" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;">REGISTRAR</button>
+								<button type="submit" id="btn-registro" value="3" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;" data-loading-text="Cargando...">REGISTRAR</button>
 							</form>
 						</div>
 				    </div>
@@ -116,8 +116,8 @@ $this->load->view('templates/head');
 				<div class="seguir"><a href="<?=site_url('menu')?>" class="btn btn-default btn-block">SEGUIR COMPRANDO</a></div>
 			</div>
 
-			<div class="col-xs-12 col-sm-3">
-				<div class="titulo">DETALLE DE COMPRA</div>
+			<div class="col-xs-12 col-sm-5 col-md-3">
+				<div class="titulo" style="width:100%;">DETALLE DE COMPRA</div>
 				<div class="formulario">
 					<?php
 					foreach ($items as $item)
