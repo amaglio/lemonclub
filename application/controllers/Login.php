@@ -32,7 +32,7 @@ public function procesa_logueo()
 			
 			$this->session->set_userdata('administrador_lemon',  "aaaaa" );
 
-			redirect('Administrador/index/','refresh');
+			redirect('Administrador/pedidos/','refresh');
  
 	endif;	
 }

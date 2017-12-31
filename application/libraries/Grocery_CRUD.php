@@ -2739,7 +2739,10 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		{
 			$field_info = $types[$field->field_name];
 
-			$field_value = !empty($field_values) && isset($field_values->{$field->field_name}) ? $field_values->{$field->field_name} : null;
+			//Modificado por Adrian 29/12 para que tome los valores default de la BD
+			//$field_value = !empty($field_values) && isset($field_values->{$field->field_name}) ? $field_values->{$field->field_name} : null;
+			$field_value = !empty($field_values) && isset($field_values->{$field->field_name}) ? $field_values->{$field->field_name} : $field_info->default;
+
 
 			if(!isset($this->callback_add_field[$field->field_name]))
 			{

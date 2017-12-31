@@ -62,7 +62,7 @@ $this->load->view('templates/head');
 					foreach ($tipos as $key => $tipo)
 					{
 						echo '<li>
-								<div class="btn-index" style="background:url(\''.base_url('assets/images/'.$tipo['imagen']).'\'); background-size:cover; background-position:center;" onclick="abrir_menu('.$tipo['id_producto_tipo'].')">
+								<div class="btn-index" style="background:url(\''.base_url('assets/images/'.$tipo['path_imagen']).'\'); background-size:cover; background-position:center;" onclick="abrir_menu('.$tipo['id_producto_tipo'].')">
 									<div class="btn btn-amarillo">'.strtoupper($tipo['descripcion']).'</div>
 								</div>
 							</li>';
