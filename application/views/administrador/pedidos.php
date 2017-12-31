@@ -65,8 +65,10 @@ if( count($pedidos) > 0):
             
             <input type="hidden" name="id_pedido" id="id_pedido" value="<?=$row['informacion_pedido']['id_pedido']?>" >
             <div class="panel panel-default">
+
                   <div class="panel-heading text-center">
-                      <h4>Pedido: <strong><?=$row['informacion_pedido']['id_pedido']?></strong></h4>
+
+                      <h4>Pedido: <strong><?=$row['informacion_pedido']['id_pedido']?></strong></h4> <i class="fa fa-print" aria-hidden="true"></i>
                       <h5><strong>[ <?=$row['informacion_pedido']['email']?> ]</strong>
                       <? if(isset($row['informacion_pedido']['nombre'])) echo '<i class="fa fa-registered" aria-hidden="true"></i>';?> 
                         

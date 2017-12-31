@@ -153,12 +153,16 @@ $this->load->view('templates/head');
 						<?php
 						foreach ($formas_pago as $key => $forma_pago)
 						{
-							echo '<div class="radio col-xs-12 col-sm-6">
-									  <label>
-									    <input type="radio" name="pago" id="pago'.$forma_pago['id_forma_pago'].'" value="'.$forma_pago['id_forma_pago'].'" checked>
-									    '.$forma_pago['descripcion'].'
-									  </label>
-									</div>';
+							echo '<div class="radio col-xs-12 col-sm-6">';
+								echo '<label>';
+									echo '<input type="radio" name="pago" id="pago'.$forma_pago['id_forma_pago'].'" value="'.$forma_pago['id_forma_pago'].'" checked>';
+									echo $forma_pago['descripcion'];
+									if($forma_pago['id_forma_pago'] == FORMA_PAGO_ONLINE)
+									{
+										echo ' <img src="'.base_url('assets/images/mercadopago.png').'" width="30">';
+									}
+								echo '</label>';
+							echo '</div>';
 						}
 						echo '<div class="clearfix"></div>';
 						?>

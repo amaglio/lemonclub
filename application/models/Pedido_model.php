@@ -286,7 +286,7 @@ class Pedido_model extends CI_Model {
     {
    	
     	$resultado = $this->db->query("	SELECT pe.*,
-    										   pd.direccion, pd.telefono, pd.nota, pd.altura,
+    										   pd.direccion, pd.telefono, pd.nota,
     										   fp.descripcion as forma_pago,
     										   fe.descripcion as forma_entrega,
     										   pes.descripcion as estado,
@@ -503,7 +503,6 @@ class Pedido_model extends CI_Model {
 			return false;
 
 	}
-
  
 	/***************
 	HORARIOS

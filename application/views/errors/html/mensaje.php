@@ -14,7 +14,7 @@ $this->load->view('templates/head');
 	<div class="container-fluid area-banner" style="background: url('<?=base_url("assets/images/fondos/carrito.jpg")?>'); background-size: cover; background-position: top;">
 		<div class="row">
 			<div class="col-xs-12">
-				<p>PEDIDO CONFIRMADO</p>
+				<p>Error</p>
 			</div>
 		</div>
 	</div>
@@ -22,12 +22,11 @@ $this->load->view('templates/head');
 	<div class="container confirmar">
 		<div class="row">
 			<div class="col-xs-12 col-sm-3">
-				<img src="<?=base_url('assets/images/success.png')?>" class="img-responsive" style="margin:auto;">
+				<img src="<?=base_url('assets/images/failure.png')?>" class="img-responsive" style="margin:auto;">
 			</div>
 			<div class="col-xs-12 col-sm-9">
 				<p style="font-size:20px; text-align:center; padding: 30px;">
-				Su pedido fue enviado exitosamente.<br>
-				Gracias por confiar en Lemon Club!
+				<?=$this->session->userdata('mensaje')?>
 				</p>
 				<div class="seguir"><a href="<?=site_url('menu')?>" class="btn btn-default btn-block">SEGUIR COMPRANDO</a></div>
 			</div>

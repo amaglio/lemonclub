@@ -149,7 +149,43 @@ if(!function_exists('enviar_email'))
         //$CI->email->bcc('them@their-example.com');
 
         $CI->email->subject($asunto);
-        $CI->email->message($mensaje); 
+
+        $cuerpo = "<table width='100%' border='0' cellpadding='0' cellspacing='0' align='center' style='font-family: Arial, sans-serif;'>
+            <tr>
+                <td width='100%' valign='top' bgcolor='#ffffff' style='padding-top:20px'>";
+
+        $cuerpo .= "<table width='580' bgcolor='#222222' border='0' cellpadding='0' cellspacing='0' align='center'>
+                <tr>
+                    <td style='padding:0; text-align:center;'>
+                        <a href='".site_url()."'><img src='".base_url('assets/images/lemonlogo.png')."' alt='' border='0' width='100px' style='margin:auto;'/></a>
+                    </td>
+                </tr>
+            </table>";
+                    
+        $cuerpo .= "<!-- One Column -->
+                    <table width='580' border='0' cellpadding='0' cellspacing='0' align='center' bgcolor='#FFC50A'>
+                        <tr>
+                            <td valign='top' style='padding:10px; color:#333333; text-align:left;' bgcolor='#FFC50A'>
+                                ".$mensaje."
+                            </td>
+                        </tr>           
+                    </table>";
+
+        $cuerpo .= "<table width='580' border='0' cellpadding='0' cellspacing='0' align='center' bgcolor='#fff'>
+                <tr>
+                    <td style='font-size: 9px; font-weight: normal; line-height: 12px; vertical-align: top;'>
+                        <p style='color:#bf9415; padding:25px 10px;'>
+                            Para m&aacute;s informaci&oacute;n, ingres&aacute; en ".site_url()."<br/>&copy; Lemon Club. Todos los derechos reservados.
+                        </p>
+                    </td>
+                </tr>
+            </table>";
+                          
+        $cuerpo .= "</td>
+            </tr>
+        </table>";
+
+        $CI->email->message($cuerpo); 
 
         if ( ! $CI->email->send())
         {
