@@ -92,14 +92,14 @@ if( count($pedidos) > 0):
                           <div class="col-md-12">
                               <small>- <?=$row['informacion_pedido']['forma_pago']?></small><br>
                               <small>- <?=$row['informacion_pedido']['forma_entrega']?></small><br>
-                              <small>- <?=$row['informacion_pedido']['hora_entrega']?></small><br>
+                              <small>- <?=$row['informacion_pedido']['fecha_entrega']?></small><br>
                               <small>- <?=$row['informacion_pedido']['fecha_pedido']?></small>
                               
                               <? if($row['informacion_pedido']['forma_entrega'] == 'Delivery'): ?>
                                   
                                   <div class="pull-right">
                                       <? if(isset($row['informacion_pedido']['direccion']))?>
-                                            <span><small><?="(".$row['informacion_pedido']['direccion']." ".$row['informacion_pedido']['altura'].")"?></small></span>
+                                            <span><small><?="(".$row['informacion_pedido']['direccion']." ".$row['informacion_pedido']['nota'].")"?></small></span>
 
                                   </div>
 

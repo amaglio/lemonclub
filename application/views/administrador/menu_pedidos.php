@@ -24,6 +24,10 @@
 	font-size: 85%;
 }
 
+input[type="time"]::-webkit-clear-button {
+    display: none;
+}
+
 </style>
 
 
@@ -94,7 +98,7 @@
 		<div class="form-group">
 
 			<?  (isset($opciones_busqueda["fecha_desde"])) ? $fecha_desde_busqueda = $opciones_busqueda["fecha_desde"] : $fecha_desde_busqueda = date('Y-m-d'); 
-				(isset($opciones_busqueda["fecha_hasta"])) ? $fecha_hasta_busqueda = $opciones_busqueda["fecha_hasta"] : $fecha_hasta_busqueda = date('Y-m-d', strtotime("+ 1 day") ); 
+				(isset($opciones_busqueda["fecha_hasta"])) ? $fecha_hasta_busqueda = $opciones_busqueda["fecha_hasta"] : $fecha_hasta_busqueda = date('Y-m-d' ); 
 
 			?>
 

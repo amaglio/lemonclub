@@ -133,6 +133,9 @@ public function procesa_logueo()
 public function procesa_usuario_invitado()
 {
 	chrome_log("Usuario/procesa_usuario_invitado");
+
+	$_POST['id_pedido'] =  $this->session->userdata('id_pedido');
+	$this->form_validation->set_data($_POST);
  
 	if ($this->form_validation->run('usuario_invitado') == FALSE):
 
@@ -146,7 +149,7 @@ public function procesa_usuario_invitado()
 		date_default_timezone_set('America/New_York'); 	 	
 	 	$token = sha1($this->input->post('email').rand(1,9999999).time());
 
-		$resultado = $this->Usuario_model->usuario_invitado( $this->input->post('email'), $token ); 
+		$resultado = $this->Usuario_model->usuario_invitado( $this->input->post('email'), $token  , $this->session->userdata('id_pedido')); 
 
 		if ( $resultado ):   // Si se creo el token, se envia el email
 		 
@@ -219,7 +222,7 @@ public function procesa_usuario_invitado()
 			endif; 
 			 
 		else: 
-
+			chrome_log("No Pudo procesar usuario invitado");
 			$return["resultado"] = FALSE;
  			$return["mensaje"] ='Ha ocurrido un error, por favor, intentá mas tarde.';
 
@@ -254,7 +257,7 @@ public function procesa_validar_usuario_invitado($id_usuario, $token) // Valida 
 		if ( $resultado ):   
 		 
 			chrome_log("Pudo validar el usuario invitado");
-			$this->session->set_userdata('id_usuario', $resultado ); 
+			
 			redirect(base_url()."index.php/pedido/confirmar_pedido");
 		 				 
 		else: 

@@ -54,14 +54,18 @@ $this->load->view('templates/head');
 
 				<div class="titulo"><i class="fa fa-shopping-cart fa-lg"></i> &nbsp; CONFIRMAR PEDIDO</div>
 
-				<div class="subtitulo"><?=$datos_usuario->tipo_usuario?></div>
+				
+				
 				<div class="formulario">
 					<form class="form-horizontal" id="form-confirmar" action="<?=site_url('pedido/finalizar_pedido')?>" method="POST">
+
+						<h4>Sus datos</h4>
 						<input type="hidden" name="id_pedido" value="<?php echo $this->session->userdata('id_pedido'); ?>">
 						<div class="form-group">
 						    <div class="col-sm-12">
 						    	<input type="email" class="form-control" id="mail" name="mail" placeholder="Email" value="<?=$datos_usuario->email?>" readonly="readonly">
 						    </div>
+						    <div class="subtitulo" style="float: right"><?=$datos_usuario->tipo_usuario?></div>
 						</div>
 						<?
 						if($datos_usuario->tipo_usuario == "Usuario Registrado")
@@ -103,8 +107,8 @@ $this->load->view('templates/head');
 								echo '<div class="col-sm-12">
 										<div class="radio" style="margin-left:20px;">
 										  <label>
-										    <input type="radio" name="direccion" id="direccion'.$key_dir.'" value="1" onchange="select_dir_vieja(\''.$direccion['direccion'].'\', \''.$direccion['altura'].'\')">
-										    '.$direccion['direccion'].' '.$direccion['altura'].'
+										    <input type="radio" name="direccion" id="direccion'.$key_dir.'" value="1" onchange="select_dir_vieja(\''.$direccion['direccion'].'\', \''.$direccion['nota'].'\')">
+										    '.$direccion['direccion'].' '.$direccion['nota'].'
 										  </label>
 										</div>
 									</div>';
@@ -120,10 +124,11 @@ $this->load->view('templates/head');
 							?>
 							<div id="area_dir_nueva">
 							    <div class="col-sm-6">
-							    	<input type="text" class="form-control" id="calle" name="calle" placeholder="Calle"  value="<?php echo set_value('calle'); ?>" required="required">
+							    	<input type="text" class="form-control" id="calle" name="calle" placeholder="Calle y altura"  value="<?php echo set_value('calle'); ?>" required="required">
 							    </div>
 							    <div class="col-sm-6">
-							    	<input type="text" class="form-control" id="altura" name="altura" placeholder="Altura"  value="<?php echo set_value('altura'); ?>" required="required">
+							    	<textarea  class="form-control" id="nota" name="nota" placeholder="Piso, oficina, interno"><?php echo set_value('nota'); ?></textarea>
+		 
 							    </div>
 						    </div>
 						</div>

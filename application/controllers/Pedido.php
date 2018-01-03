@@ -50,9 +50,9 @@ class Pedido extends CI_Controller {
 		$data['items'] = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
 		$data['cantidad'] = $this->pedido_model->get_cantidad_items_pedido( $this->session->userdata('id_pedido') );
 		$data['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
-
+		
 		$data['horarios'] = $this->pedido_model->get_horarios_disponibles();
-		$data['formas_pago'] = $this->pedido_model->get_forma_pago();
+		$data['formas_pago'] = $this->pedido_model->get_forma_pago(); 
 
 		$this->load->view(self::$solapa.'/confirmar_pedido', $data);
 	}
@@ -167,23 +167,30 @@ class Pedido extends CI_Controller {
 			$return["mensaje"] = validation_errors(); 
 			
 		else: 
-		
+			chrome_log("Paso validacion");
+
 			if( $this->input->post('entrega') == FORMA_ENTREGA_DELIVERY )
-    		{
-    			if($this->input->post('calle') == "" || $this->input->post('altura') == "")
+    		{	
+    			chrome_log("Delivery");
+
+    			if($this->input->post('calle') == "")
     			{
+    				chrome_log("Calle o altura vacios");
     				$return["resultado"] = FALSE;
-					$return["mensaje"] = "Debe completar la calle y la altura";
+					$return["mensaje"] = "Debe completar la dirección";
     			}
     		}
 
     		if($return["resultado"] == TRUE)
-    		{
-				chrome_log("Paso validacion");
+    		{	
+    			chrome_log("Entro");
 
 				$result = $this->pedido_model->finalizar_pedido( $this->session->userdata('id_pedido'), $this->session->userdata('id_usuario'), $this->input->post() );
+
 	        	if($result)
 	        	{	
+	        		chrome_log("result");
+
 	        		$usuario = $this->Usuario_model->traer_datos_usuario( $this->session->userdata('id_usuario') );
 
 	        		$mensaje =  '<h2>NUEVO PEDIDO</h2><hr><br>';

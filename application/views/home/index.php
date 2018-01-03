@@ -16,30 +16,34 @@ $this->load->view('templates/head');
 			<div class="col-xs-12">
 				<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
 					<div class="carousel-inner">
-						<div class="item active" >
-							<img class="d-block w-100" src="<?=base_url('assets/images/fondos/carne.jpg')?>" alt="First slide">
+
+						<div class="item active">
+							<img class="d-block w-100" src="<?=base_url('assets/images/fondos/home_wok.jpg')?>" alt="Second slide">
 							<div class="carousel-caption">
 								<h3>Reinventando el</h3>
 								<p>Fast casual</p>
 								<a href="<?=site_url('menu/index/-1')?>"><button class="btn btn-mas-padding btn-amarillo">MENU DEL DÍA</button></a>
 							</div>
 						</div>
+
 						<div class="item">
-							<img class="d-block w-100" src="<?=base_url('assets/images/fondos/ensalada.jpg')?>" alt="Second slide">
+							<img class="d-block w-100" src="<?=base_url('assets/images/fondos/home_plato.jpg')?>" alt="Third slide">
 							<div class="carousel-caption">
 								<h3>Reinventando el</h3>
 								<p>Fast casual</p>
 								<a href="<?=site_url('menu/index/-1')?>"><button class="btn btn-mas-padding btn-amarillo">MENU DEL DÍA</button></a>
 							</div>
 						</div>
-						<div class="item">
-							<img class="d-block w-100" src="<?=base_url('assets/images/fondos/pizza.jpg')?>" alt="Third slide">
+
+						<div class="item " >
+							<img class="d-block w-100" src="<?=base_url('assets/images/fondos/home_ensalada.jpg')?>" alt="First slide">
 							<div class="carousel-caption">
 								<h3>Reinventando el</h3>
 								<p>Fast casual</p>
 								<a href="<?=site_url('menu/index/-1')?>"><button class="btn btn-mas-padding btn-amarillo">MENU DEL DÍA</button></a>
 							</div>
 						</div>
+						
 					</div>
 				</div>
 			</div>

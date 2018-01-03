@@ -127,20 +127,31 @@ if(!function_exists('enviar_email'))
         $CI =& get_instance();
     
         $CI->load->library('email'); // load library 
+ 
+        $configuracion = array(
+                'protocol' => 'smtp',
+                'smtp_host' => 'ssl://smtp.googlemail.com',
+                'smtp_port' => 465,
+                'smtp_user' => 'digipayargentina@gmail.com',
+                'smtp_pass' => 'digipay2016',
+                'mailtype' => 'html',
+                'charset' => 'utf-8',
+                'newline' => "\r\n"
+            );
 
-        //$config['mailtype'] = 'html';
-        $configuracion_ucema = array(
-            'protocol' => 'smtp',
-            'smtp_host' => '10.0.0.3',
-            'smtp_port' => 25,
-            'smtp_user' => '',
-            'smtp_pass' => '',
-            'mailtype' => 'html',
-            'charset' => 'utf-8',
-            'newline' => "\r\n"
-        );
+        // $configuracion = array(
+        //     'protocol' => 'smtp',
+        //     'smtp_host' => '10.0.0.3',
+        //     'smtp_port' => 25,
+        //     'smtp_user' => '',
+        //     'smtp_pass' => '',
+        //     'mailtype' => 'html',
+        //     'charset' => 'utf-8',
+        //     'newline' => "\r\n"
+        // );
 
-        $CI->email->initialize($configuracion_ucema);
+
+        $CI->email->initialize($configuracion);
         
         $CI->email->from('info@lemonclub.com.ar', 'Lemon Club');
         $CI->email->to($email_to);

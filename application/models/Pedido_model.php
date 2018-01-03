@@ -39,6 +39,7 @@ class Pedido_model extends CI_Model {
 		                            FROM pedido_producto AS PP
 		                            WHERE PP.id_pedido='.$id);
 		$result = $query->row_array();
+		
 		if($result && $result['cantidad'])
 		{
 			return $result['cantidad'];
@@ -95,12 +96,15 @@ class Pedido_model extends CI_Model {
 	public function finalizar_pedido( $id_pedido, $id_usuario, $array )
 	{
         //if(isset($array['calle'])):
+        chrome_log("finalizar_pedido".$id_pedido.", ".$id_usuario.", ".$array['horario']  );
 
 		if($array['entrega'] == FORMA_ENTREGA_DELIVERY ):
 
+			chrome_log("FORMA_ENTREGA_DELIVERY");
+
 			$array_delivery = array(
 	            'direccion' => $array['calle'],
-	            'altura' => $array['altura'],
+	            'nota' => $array['nota'],
 	            'id_pedido' => $id_pedido
 	        );
 
@@ -108,13 +112,16 @@ class Pedido_model extends CI_Model {
 
         endif;
 
+        $fecha_entrega = date("Y-m-d")." ".$array['horario'];
+
+         chrome_log("fecha_entrega: ".$fecha_entrega );
 
     	$array_pedido = array(
 			'id_pedido_estado' => PEDIDO_ESTADO_PENDIENTE,
             'id_usuario' => $id_usuario,
             'id_forma_pago' => $array['pago'],
             'id_forma_entrega' => $array['entrega'],
-            'hora_entrega' => $array['horario'],
+            'fecha_entrega' => $fecha_entrega,
             'fecha_pedido' => date('Y-m-d H:i:s')
         );
 
@@ -306,6 +313,31 @@ class Pedido_model extends CI_Model {
     	return $resultado->result_array();
     }
 
+    public function get_informacion_pedido($id_pedido)
+    {
+   	
+    	$resultado = $this->db->query("	SELECT pe.*,
+    										   pd.direccion, pd.telefono, pd.nota,
+    										   fp.descripcion as forma_pago,
+    										   fe.descripcion as forma_entrega,
+    										   pes.descripcion as estado,
+    										   u.email,
+    										   ur.nombre
+						    			FROM pedido pe
+							    				 left join pedido_delivery pd ON pe.id_pedido = pd.id_pedido
+							    				 inner join forma_pago fp ON pe.id_forma_pago =  fp.id_forma_pago
+							    				 inner join forma_entrega fe ON pe.id_forma_entrega =  fe.id_forma_entrega
+							    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado,
+						    				 usuario u
+						    				 	left join usuario_registrado ur ON ur.id_usuario =  u.id_usuario
+						    			WHERE pe.id_pedido_estado != 1
+						    			AND pe.id_usuario =  u.id_usuario
+						    			AND pe.id_pedido = $id_pedido
+						    			ORDER BY id_pedido DESC "  ); //traer_pedidos_pendientes
+
+    	return $resultado->row_array();
+    }
+
 	public function procesa_cambiar_estado_pedido( $array )
 	{
  		$array_pedido = array(
@@ -375,19 +407,24 @@ class Pedido_model extends CI_Model {
 			$texto_filtros .= "</span> &nbsp;";
 
  		endif;
+
+ 		$fecha_desde_entrega = $array['fecha_desde']." ".$array['hora_desde'];
+ 		$fecha_hasta_entrega = $array['fecha_hasta']." ".$array['hora_hasta'];
  	 
-		$filtros .= " AND pe.fecha_pedido BETWEEN '".$array['fecha_desde']."' AND '".$array['fecha_hasta']."'";	
+		//$filtros .= " AND pe.fecha_pedido BETWEEN '".$array['fecha_desde']."' AND '".$array['fecha_hasta']."'";	
 		$texto_filtros .= "<span class='label label-primary'> Fecha desde: ".$array['fecha_desde']." - Fecha hasta: ".$array['fecha_hasta']."</span> &nbsp;";
  
-		$filtros .= " AND pe.hora_entrega BETWEEN '".$array['hora_desde']."' AND '".$array['hora_hasta']."'";
+		//$filtros .= " AND pe.fecha_entrega BETWEEN '".$array['hora_desde']."' AND '".$array['hora_hasta']."'";
 		$texto_filtros .= "<span class='label label-primary'> Hora desde: ".$array['hora_desde']." - Hora hasta: ".$array['hora_hasta']."</span> &nbsp;";
+
+		$filtros .= " AND pe.fecha_entrega BETWEEN '".$fecha_desde_entrega."' AND '".$fecha_hasta_entrega."'" ;
 
 		$texto_filtros .= "<span class='label label-info'> Ordenado por: ";
 
 		switch ($array['ordenar']) 
 		{
-			case 'hora_entrega':
-				$ordenar = 'pe.hora_entrega';
+			case 'fecha_entrega':
+				$ordenar = 'pe.fecha_entrega';
 				$texto_filtros .= "hora de entrega";
 				break;
 		
@@ -414,7 +451,7 @@ class Pedido_model extends CI_Model {
 
 	 	$sql = 		"SELECT distinct(pe.id_pedido),
 	 	                    pe.*,
-						    pd.direccion, pd.telefono, pd.nota, pd.altura,
+						    pd.direccion, pd.telefono, pd.nota, 
 						    fp.descripcion as forma_pago,
 						    fe.descripcion as forma_entrega,
 						    pes.descripcion as estado,
@@ -556,7 +593,7 @@ class Pedido_model extends CI_Model {
 		$dia = date('w');
 
  		$resultado = $this->db->query("	SELECT *
-						    			FROM horarios AS H
+						    			FROM sucursal_horario AS H
 						    			WHERE H.id_sucursal = 1
 						    			AND H.dia = ".$dia."
 						    			ORDER BY H.id_horario " );
@@ -568,7 +605,7 @@ class Pedido_model extends CI_Model {
 	{
  		$resultado = $this->db->query("	SELECT COUNT(1) as cant
 						    			FROM pedido AS P
-						    			WHERE P.hora_entrega = '".$hora."'
+						    			WHERE P.fecha_entrega = '".$hora."'
 						    			AND P.fecha_pedido >= '".$fecha." 00:00:00'
 						    			AND P.fecha_pedido <= '".$fecha." 23:59:59'" );
 
