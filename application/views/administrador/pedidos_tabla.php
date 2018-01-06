@@ -64,7 +64,7 @@
                         <thead>
                             <tr style=" background-color: rgb(0, 0, 0); color: white;">
                                 <th><i class="fa fa-calendar"></i></th>
-                                <th>Hora</th>
+                                <th>Entrega</th>
                                 <th>ID</th>
                                 <th>Email</th>
                                 <th>Productos</th>
@@ -80,8 +80,8 @@
                                 {  ?>
 
                                   <tr>
-                                    <td><?=$row['informacion_pedido']['fecha_pedido']?></td>
-                                    <td><?=$row['informacion_pedido']['hora_entrega']?></td>
+                                    <td><?=$row['informacion_pedido']['fecha_pedido']?> <br> <a target="_blank" href="<?=site_url('administrador/imprimir_comanda/'.$row['informacion_pedido']['id_pedido'].'')?>"> <i class="fa fa-print" aria-hidden="true"></i> </a> </td>
+                                    <td><?=$row['informacion_pedido']['fecha_entrega']?></td>
                                     <td><?=$row['informacion_pedido']['id_pedido']?></td>
                                     <td><?=$row['informacion_pedido']['email']?></td>
                                     <td>

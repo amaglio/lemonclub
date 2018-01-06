@@ -291,6 +291,8 @@ public function procesa_registrarse()
 		$resultado = $this->Usuario_model->registrar_usuario( $this->input->post(), $token );
 		 
 		if ( $resultado ):  
+
+			chrome_log("Enviar email");
 		 	
 		 	$id_usuario =  sha1($resultado);
 			$enlace = base_url().'index.php/usuario/procesa_validar_registro/'.$id_usuario.'/'.$token;
@@ -306,11 +308,13 @@ public function procesa_registrarse()
 
 			if( enviar_email( $this->input->post('email'), $mensaje, $asunto) ):
 
+				chrome_log("TRUE");
 				$return["resultado"] = TRUE;
 				$return["mensaje"] = "Gracias por registrarte ! Te hemos enviado un email para confirmar tu registro y finalizar tu pedido.";
 
 			else:
 
+				chrome_log("FALSE");
 				$return["resultado"] = FALSE;
 				$return["mensaje"] = "Ha ocurrido un error al enviarte el email de registro, por favor, intenta mas tarde";
 
@@ -318,6 +322,7 @@ public function procesa_registrarse()
 		 				 
 		else: 
 		 	
+		 	chrome_log("No envio email");
 			$return["resultado"] = FALSE;
 			$return["mensaje"] = "Ha ocurrido un error al registrarte, por favor, intenta mas tarde";
 
@@ -351,9 +356,8 @@ public function procesa_validar_registro($id_usuario, $token) // Valida la URL e
 		 
 			chrome_log("Pudo validar ");
 
-			$this->session->set_userdata('id_usuario', $resultado );
 			$this->session->set_flashdata('mensaje', 'Se ha registrado su usuario exitosamente. Por favor, finalice su pedido.');
-			redirect(base_url()."index.php/pedido/confirmar_pedido");
+			//redirect(base_url()."index.php/pedido/confirmar_pedido");
 		 				 
 		else:  
 		 	

@@ -42,44 +42,47 @@ public function imprimir_comanda($id_pedido)
 
 	$pdf->AddPage();
 
-	$html = '<h1>HTML Example</h1>
-Some special characters: &lt; € &euro; &#8364; &amp; è &egrave; &copy; &gt; \\slash \\\\double-slash \\\\\\triple-slash
-<h2>List</h2>
-List example:
-<ol>
-    <li><img src="images/logo_example.png" alt="test alt attribute" width="30" height="30" border="0" /> test image</li>
-    <li><b>bold text</b></li>
-    <li><i>italic text</i></li>
-    <li><u>underlined text</u></li>
-    <li><b>b<i>bi<u>biu</u>bi</i>b</b></li>
-    <li><a href="http://www.tecnick.com" dir="ltr">link to http://www.tecnick.com</a></li>
-    <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.<br />Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</li>
-    <li>SUBLIST
-        <ol>
-            <li>row one
-                <ul>
-                    <li>sublist</li>
-                </ul>
-            </li>
-            <li>row two</li>
-        </ol>
-    </li>
-    <li><b>T</b>E<i>S</i><u>T</u> <del>line through</del></li>
-    <li><font size="+3">font + 3</font></li>
-    <li><small>small text</small> normal <small>small text</small> normal <sub>subscript</sub> normal <sup>superscript</sup> normal</li>
-</ol>
-<dl>
-    <dt>Coffee</dt>
-    <dd>Black hot drink</dd>
-    <dt>Milk</dt>
-    <dd>White cold drink</dd>
-</dl>
-<div style="text-align:center">IMAGES<br />
- 
-</div>';
+	$html = '<h3>PEDIDO NRO: '.$pedidos['id_pedido'].' </h3>
+			 <h3>FECHA DE ENTREGA: '.$pedidos['fecha_entrega'].'</h3>
+	 		 <h3>EMAIL: '.$pedidos['email'].' </h3>
+	 		 <h4>FORMA DE PAGO: '.$pedidos['forma_pago'].' </h4>
+	 		 <h4>FORMA DE ENTREGA: '.$pedidos['forma_entrega'].' </h4>  ';
 
-// output the HTML content
-$pdf->writeHTML($html, true, false, true, false, '');
+	 		if( $pedidos['id_forma_entrega'] == FORMA_ENTREGA_DELIVERY):
+
+	 			$html .= '<h5>DIRECION: '.$pedidos['direccion'].' - '.$pedidos['nota'].' </h5>  ';
+
+	 		endif;
+	
+	$html .='
+
+				<table cellpadding="5">
+					<tr style="font-weight:bold; border:1px solid #000">
+						<th style="text-align:center; border:1px solid #000">Producto</th>
+						<th style="text-align:center; border:1px solid #000">Cantidad</th>
+						<th style="text-align:center; border:1px solid #000">Precio</th>
+					</tr>
+				
+			';
+
+			foreach ($productos as $row) 
+			{
+				$html .=' 	<tr style="  border:1px solid #000">
+								<td style="text-align:center; border:1px solid #000">'.$row['nombre'].'</td>
+								<td style="text-align:center; border:1px solid #000">'.$row['cantidad'].'</td>
+								<td style="text-align:center; border:1px solid #000">$'.$row['cantidad']*$row['precio'].'</td>
+							</tr>';
+			}
+
+			$html .=' 	<tr style="  border:1px solid #000">
+								<td colspan="2" style="font-weight:bold;  text-align:center; border:1px solid #000"> Total </td> 
+								<td style=" font-weight:bold; text-align:center; border:1px solid #000">$'.$total_pedido.'</td>
+							</tr>';
+
+	$html .='</table>';
+
+	// output the HTML content
+	$pdf->writeHTML($html, true, false, true, false, '');
 
 	// $pdf->Write(5, "Numero de pedido: ".$pedidos['id_pedido'].".\n"  );
 	// $pdf->Write(5, "Fecha y hora de entregra: ".$pedidos['fecha_entrega'].".\n"  );

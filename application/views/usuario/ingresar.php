@@ -84,7 +84,8 @@ $this->load->view('templates/head');
 				    		<p>Registrate para que sea más rapido y facil realizar futuros pedidos.</p>
 
 
-							<form class="form-horizontal" action="#" method="POST" id="form-registro">
+							<form class="form-horizontal" action="#" method="POST" id="form-registro"> 
+					 
 
 								<div class="form-group">
 								    <div class="col-sm-6">

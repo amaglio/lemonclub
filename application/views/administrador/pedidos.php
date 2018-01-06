@@ -68,7 +68,9 @@ if( count($pedidos) > 0):
 
                   <div class="panel-heading text-center">
 
-                      <h4>Pedido: <strong><?=$row['informacion_pedido']['id_pedido']?></strong></h4> <i class="fa fa-print" aria-hidden="true"></i>
+                      <h4>Pedido: <strong><?=$row['informacion_pedido']['id_pedido']?>
+
+                      <a target="_blank" href="<?=site_url('administrador/imprimir_comanda/'.$row['informacion_pedido']['id_pedido'].'')?>"> <i class="fa fa-print" aria-hidden="true"></i> </a> </strong></h4> 
                       <h5><strong>[ <?=$row['informacion_pedido']['email']?> ]</strong>
                       <? if(isset($row['informacion_pedido']['nombre'])) echo '<i class="fa fa-registered" aria-hidden="true"></i>';?> 
                         
@@ -82,7 +84,7 @@ if( count($pedidos) > 0):
                             foreach ($row['productos'] as $row2) 
                             { ?>
                                 <div class="col-md-12">
-                                    <strong><?=$row2['nombre']?></strong>
+                                    <strong><?=$row2['nombre']?> (x<?=$row2['cantidad']?>)</strong>
                                     <div class="pull-right"><span>$</span><span><?=$row2['precio']?></span></div>
                                 </div>
                           <?

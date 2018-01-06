@@ -155,7 +155,6 @@ public function registrar_usuario( $array, $token )
 		}
 		else // El email no existe
 		{	
-			chrome_log("Usuario_model/ El email No existe".$email);
 			$usuario['email'] = $array['email'];
 			$this->db->insert('usuario', $usuario); 
 
@@ -208,32 +207,57 @@ public function registrar_usuario( $array, $token )
 public function procesa_validar_registro( $id_usuario, $token ) 
 {
 	chrome_log("Usuario_model/procesa_validar_registro");
- 
- 	$sql = "SELECT *
- 			FROM 	usuario u, 
- 					usuario_token_registro utr
- 			WHERE
- 					u.id_usuario = utr.id_usuario
- 			AND 	SHA1(u.id_usuario) = ?
- 			AND 	utr.token = ? "; 
 
-	$query = $this->db->query($sql, array( $id_usuario , $token ));
+	$this->db->trans_start();
+	 	
+	 	// EXISTE EL USUARIO Y EL TOKEN
 
-	if($query->num_rows() > 0)
-	{
-		// Borro el token
+	 	$sql = "SELECT *
+	 			FROM 	usuario u, 
+	 					usuario_token_registro utr
+	 			WHERE
+	 					u.id_usuario = utr.id_usuario
+	 			AND 	SHA1(u.id_usuario) = ?
+	 			AND 	utr.token = ? "; 
+
+		$query = $this->db->query($sql, array( $id_usuario , $token ));
+
+		// BORRAMOS EL TOKEN
+
+		chrome_log("Usuario_model/ID USUARIO URL: ".$id_usuario);
+
 		$id_usuario = $query->row()->id_usuario;
+
+		echo "ID USUARIO: ".$id_usuario."<br>";
+
 		$array_where = array(  'id_usuario' =>  $id_usuario );
 		$array_usuario['token'] = NULL;
-  		$this->db->where($array_where);
-  		$this->db->update('usuario_token_registro', $array_usuario); 
 
-		return $id_usuario;
-	}
-	else
-	{
-		return false;
-	}
+		$this->db->where($array_where);
+		$this->db->update('usuario_token_registro', $array_usuario); 
+
+		// BUSCAMOS EL ULTIMO PEDIDO, COMO SE ESTA REGISTRANDO ES EL PRIMERO Y ULTIMO
+
+	 	$sql = "SELECT  max(p.id_pedido) as id_pedido
+	 			FROM 	pedido p
+	 			WHERE 	p.id_usuario = ? "; 
+
+		$query = $this->db->query($sql, array( $id_usuario ));
+
+		chrome_log("Usuario_model/ID PEDIDO URL: ".$query->row()->id_pedido);
+
+	$this->db->trans_complete();
+
+    if ($this->db->trans_status() !== FALSE)
+    {
+        $this->session->set_userdata('id_usuario', $id_usuario ); 
+		$this->session->set_userdata('id_pedido', $query->row()->id_pedido ); 
+        return TRUE;
+    }
+    else
+    	return FALSE;
+
+	
 }
 
 
