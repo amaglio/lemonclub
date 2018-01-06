@@ -75,51 +75,7 @@ if(!function_exists('esta_logueado'))
             
     }
 }
-
-
-/*
-if(!function_exists('enviar_email'))
-{
-    function enviar_email($email_to, $mensaje, $asunto )
-    {   
-        $CI =& get_instance();
-
-        $CI->load->library("email"); 
-
-        $configuracion_gmail = array(
-                'protocol' => 'smtp',
-                'smtp_host' => 'ssl://smtp.googlemail.com',
-                'smtp_port' => 465,
-                'smtp_user' => 'digipayargentina@gmail.com',
-                'smtp_pass' => 'digipay2016',
-                'mailtype' => 'html',
-                'charset' => 'utf-8',
-                'newline' => "\r\n"
-            );
-
-        //Cargamos la configuración 
-
-        $CI->email->initialize($configuracion_gmail);
-        $CI->email->from("lemonclub@gmail.com");
-        $CI->email->subject($asunto);     
-        $CI->email->to($email_to);  
-
-        $CI->email->message($mensaje);
-        
-        if( $CI->email->send() ):
-
-            chrome_log("ENVIO EL EMAIL"); 
-            return true;
-         
-        else:
-            
-            chrome_log("NO ENVIO EL EMAIL");
-            return false;
-        
-        endif;  
-    }
-}*/
-
+ 
 if(!function_exists('enviar_email'))
 {
     function enviar_email($email_to, $mensaje, $asunto )
@@ -128,27 +84,27 @@ if(!function_exists('enviar_email'))
     
         $CI->load->library('email'); // load library 
  
-        $configuracion = array(
-                'protocol' => 'smtp',
-                'smtp_host' => 'ssl://smtp.googlemail.com',
-                'smtp_port' => 465,
-                'smtp_user' => 'digipayargentina@gmail.com',
-                'smtp_pass' => 'digipay2016',
-                'mailtype' => 'html',
-                'charset' => 'utf-8',
-                'newline' => "\r\n"
-            );
-
         // $configuracion = array(
-        //     'protocol' => 'smtp',
-        //     'smtp_host' => '10.0.0.3',
-        //     'smtp_port' => 25,
-        //     'smtp_user' => '',
-        //     'smtp_pass' => '',
-        //     'mailtype' => 'html',
-        //     'charset' => 'utf-8',
-        //     'newline' => "\r\n"
-        // );
+        //         'protocol' => 'smtp',
+        //         'smtp_host' => 'ssl://smtp.googlemail.com',
+        //         'smtp_port' => 465,
+        //         'smtp_user' => 'digipayargentina@gmail.com',
+        //         'smtp_pass' => 'digipay2016',
+        //         'mailtype' => 'html',
+        //         'charset' => 'utf-8',
+        //         'newline' => "\r\n"
+        //     );
+
+        $configuracion = array(
+            'protocol' => 'smtp',
+            'smtp_host' => '10.0.0.3',
+            'smtp_port' => 25,
+            'smtp_user' => '',
+            'smtp_pass' => '',
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'newline' => "\r\n"
+        );
 
 
         $CI->email->initialize($configuracion);

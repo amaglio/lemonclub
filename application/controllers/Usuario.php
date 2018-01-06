@@ -234,7 +234,8 @@ public function procesa_usuario_invitado()
 	print json_encode($return);	
 }
 
-public function procesa_validar_usuario_invitado($id_usuario, $token) // Valida la URL en enviamos en procesa_usuario_invitado()
+// Valida la URL en enviamos en procesa_usuario_invitado()
+public function procesa_validar_usuario_invitado($id_usuario, $token) 
 {
 	chrome_log("Usuario/procesa_validar_usuario_invitado");
 
@@ -288,7 +289,7 @@ public function procesa_registrarse()
 		chrome_log("Si Paso validacion");
  		
  		$token = sha1($this->input->post('email').rand(1,9999999).time());
-		$resultado = $this->Usuario_model->registrar_usuario( $this->input->post(), $token );
+		$resultado = $this->Usuario_model->registrar_usuario( $this->input->post(), $token, $this->session->userdata('id_pedido') );
 		 
 		if ( $resultado ):  
 
@@ -357,7 +358,7 @@ public function procesa_validar_registro($id_usuario, $token) // Valida la URL e
 			chrome_log("Pudo validar ");
 
 			$this->session->set_flashdata('mensaje', 'Se ha registrado su usuario exitosamente. Por favor, finalice su pedido.');
-			//redirect(base_url()."index.php/pedido/confirmar_pedido");
+			redirect(base_url()."index.php/pedido/confirmar_pedido");
 		 				 
 		else:  
 		 	

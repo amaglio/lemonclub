@@ -43,9 +43,9 @@ class Pedido extends CI_Controller {
 			redirect('usuario/ingresar');
 		}
 
-		echo "id usuario: ".$this->session->userdata('id_usuario');
+		//echo "id usuario: ".$this->session->userdata('id_usuario');
 
-		echo "id pedido: ".$this->session->userdata('id_pedido');
+		//echo "id pedido: ".$this->session->userdata('id_pedido');
 
 		$data['datos_usuario'] = $this->Usuario_model->traer_datos_usuario($this->session->userdata('id_usuario'));
 		$data['direcciones'] = $this->Usuario_model->traer_direcciones($this->session->userdata('id_usuario'));

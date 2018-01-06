@@ -71,7 +71,7 @@ public function usuario_invitado( $email, $token, $id_pedido )
 
 		//--- Token en la tabla --
 
-		$borrar_token['id_pedido'] = utf8_decode($id_pedido);
+		$borrar_token['id_pedido'] = $id_pedido;
 		$this->db->delete('pedido_token',  $borrar_token );
 
 
@@ -79,6 +79,13 @@ public function usuario_invitado( $email, $token, $id_pedido )
 		$pedido_token['token'] = $token; 
 		$this->db->insert('pedido_token', $pedido_token); 
 
+		//--- ACTUALIZAR ID_USUARIO EN PEDIDO --
+
+		$array_where = array(  'id_pedido' =>  $id_pedido );
+		$array_pedido['id_usuario'] = $id_usuario;
+
+		$this->db->where($array_where);
+		$this->db->update('pedido', $array_pedido); 
 
 
 	$this->db->trans_complete();
@@ -104,9 +111,10 @@ public function procesa_validar_usuario_invitado( $id_usuario, $token )
  
 
 	$sql = "SELECT 	*
- 			FROM 	usuario u , 
+ 			FROM 	pedido p , 
  					pedido_token pt
- 			WHERE 	SHA1(u.id_usuario) = ? 
+ 			WHERE 	p.id_pedido = pt.id_pedido
+ 			AND 	SHA1(p.id_usuario) = ? 
  			AND 	pt.token = ? "; 
 
 	$query = $this->db->query($sql, array( $id_usuario, $token ));
@@ -119,7 +127,7 @@ public function procesa_validar_usuario_invitado( $id_usuario, $token )
 		
 		//--- Token en la tabla --
 
-		$borrar_token['id_pedido'] = utf8_decode($id_pedido);
+		$borrar_token['id_pedido'] = $query->row()->id_pedido;
 		$this->db->delete('pedido_token',  $borrar_token );
 
 		return true;
@@ -132,7 +140,7 @@ public function procesa_validar_usuario_invitado( $id_usuario, $token )
  
 }
 
-public function registrar_usuario( $array, $token ) 
+public function registrar_usuario( $array, $token, $id_pedido ) 
 {
 	chrome_log("Usuario_model/registrar_usuario");
 
@@ -140,7 +148,7 @@ public function registrar_usuario( $array, $token )
 
 	//--- Usuario ---
 
-		//--- Email ya existete ¿? --
+	//--- Email ya existete ¿? --
 
 		$sql = "SELECT 	*
 	 			FROM 	usuario u 
@@ -178,11 +186,29 @@ public function registrar_usuario( $array, $token )
 		$this->db->insert('usuario_registrado', $usuario_registrado); 
 
 	//--- Usuario Tokeny ---
-
+		/*
 		$usuario_token_registro['id_usuario'] = $id_usuario;
 		$usuario_token_registro['token'] = $token;
 	 
-		$this->db->insert('usuario_token_registro', $usuario_token_registro); 
+		$this->db->insert('usuario_token_registro', $usuario_token_registro); */
+
+		//--- Token en la tabla --
+
+		$borrar_token['id_pedido'] = $id_pedido;
+		$this->db->delete('pedido_token',  $borrar_token );
+
+
+		$pedido_token['id_pedido'] = $id_pedido; 
+		$pedido_token['token'] = $token; 
+		$this->db->insert('pedido_token', $pedido_token); 
+
+		//--- ACTUALIZAR ID_USUARIO EN PEDIDO --
+
+		$array_where = array(  'id_pedido' =>  $id_pedido );
+		$array_pedido['id_usuario'] = $id_usuario;
+
+		$this->db->where($array_where);
+		$this->db->update('pedido', $array_pedido); 
 
 	$this->db->trans_complete();
 
@@ -212,46 +238,38 @@ public function procesa_validar_registro( $id_usuario, $token )
 	 	
 	 	// EXISTE EL USUARIO Y EL TOKEN
 
-	 	$sql = "SELECT *
-	 			FROM 	usuario u, 
-	 					usuario_token_registro utr
-	 			WHERE
-	 					u.id_usuario = utr.id_usuario
-	 			AND 	SHA1(u.id_usuario) = ?
-	 			AND 	utr.token = ? "; 
+	 	$sql = "SELECT 	*
+	 			FROM 	pedido p , 
+	 					pedido_token pt
+	 			WHERE 	p.id_pedido = pt.id_pedido
+	 			AND 	SHA1(p.id_usuario) = ? 
+	 			AND 	pt.token = ? "; 
 
-		$query = $this->db->query($sql, array( $id_usuario , $token ));
+		$query = $this->db->query($sql, array( $id_usuario, $token ));
+		
+		$id_usuario = $query->row()->id_usuario; 
+		$id_pedido = $query->row()->id_pedido;
 
 		// BORRAMOS EL TOKEN
 
-		chrome_log("Usuario_model/ID USUARIO URL: ".$id_usuario);
+		$borrar_token['id_pedido'] = $id_pedido;
+		$this->db->delete('pedido_token',  $borrar_token );
 
-		$id_usuario = $query->row()->id_usuario;
-
-		echo "ID USUARIO: ".$id_usuario."<br>";
+		// Cambios a Registrado en la tabla usuario
 
 		$array_where = array(  'id_usuario' =>  $id_usuario );
-		$array_usuario['token'] = NULL;
+		$array_usuario['registrado'] = 1;
 
 		$this->db->where($array_where);
-		$this->db->update('usuario_token_registro', $array_usuario); 
+		$this->db->update('usuario', $array_usuario); 
 
-		// BUSCAMOS EL ULTIMO PEDIDO, COMO SE ESTA REGISTRANDO ES EL PRIMERO Y ULTIMO
-
-	 	$sql = "SELECT  max(p.id_pedido) as id_pedido
-	 			FROM 	pedido p
-	 			WHERE 	p.id_usuario = ? "; 
-
-		$query = $this->db->query($sql, array( $id_usuario ));
-
-		chrome_log("Usuario_model/ID PEDIDO URL: ".$query->row()->id_pedido);
 
 	$this->db->trans_complete();
 
     if ($this->db->trans_status() !== FALSE)
     {
         $this->session->set_userdata('id_usuario', $id_usuario ); 
-		$this->session->set_userdata('id_pedido', $query->row()->id_pedido ); 
+		$this->session->set_userdata('id_pedido', $id_pedido ); 
         return TRUE;
     }
     else
