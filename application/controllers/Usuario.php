@@ -21,18 +21,18 @@ public function ingresar()
 		redirect('pedido/confirmar_pedido');
 	}
 
-	if($this->session->userdata('id_pedido') != "")
-	{
+	//if($this->session->userdata('id_pedido') != "")
+	//{
 		$data['pedido'] = $this->pedido_model->get_pedido( $this->session->userdata('id_pedido') );
 		$data['items'] = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
 		$data['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
-	}
+	/*}
 	else
 	{
 		$data['pedido'] = FALSE;
 		$data['items'] = array();
 		$data['total'] = 0.00;
-	}
+	}*/
 
 	
 	//$this->form_validation->set_rules('ingresar', 'ingresar', 'required');
@@ -94,7 +94,10 @@ public function ingresar()
 public function procesa_logueo()
 {
 	chrome_log("Usuario/procesa_logueo");
- 
+ 	/*
+ 	$_POST['email'] = "fabianmayoral@hotmail.com";
+ 	$_POST['clave'] = "fabianmayoral@hotmail.com";
+	*/
 	if ($this->form_validation->run('loguearse_usuario') == FALSE):
 
 		chrome_log("No paso validacion");
@@ -105,13 +108,20 @@ public function procesa_logueo()
 	 
 		chrome_log("Paso validacion");
 
-		$resultado = $this->Usuario_model->loguearse( $this->input->post() );
+		$id_usuario = $this->Usuario_model->loguearse( $this->input->post() );
 
-		if ( $resultado ):  
+		if ( $id_usuario ):  
 		 	
 		 	chrome_log("Pudo loguearse ");
-			$id_usuario = $resultado;
 			$this->session->set_userdata('id_usuario', $id_usuario);
+
+			$aux = array(
+				'id_usuario' => $id_usuario
+			);
+			$id_pedido = $this->pedido_model->set_pedido( $aux );
+			$this->session->set_userdata('id_pedido', $id_pedido);
+
+			$this->pedido_model->mover_productos_carrito();
 
 			$return["resultado"] = TRUE;
 			$return["mensaje"] = 'Logueo exitoso';
@@ -137,6 +147,7 @@ public function procesa_usuario_invitado()
 	//$_POST['email'] = "fabianmayoral@hotmail.com";
 
 	//$_POST['id_pedido'] =  $this->session->userdata('id_pedido');
+
 	$this->form_validation->set_data($_POST);
  
 	if ($this->form_validation->run('usuario_invitado') == FALSE):
@@ -159,6 +170,8 @@ public function procesa_usuario_invitado()
 		);
 		$id_pedido = $this->pedido_model->set_pedido( $aux );
 		$this->session->set_userdata('id_pedido', $id_pedido);
+
+		$this->pedido_model->mover_productos_carrito();
 
 		$this->Usuario_model->token_pedido_invitado( $id_usuario, $token, $id_pedido );
 
@@ -315,6 +328,8 @@ public function procesa_registrarse()
 		);
 		$id_pedido = $this->pedido_model->set_pedido( $aux );
 		$this->session->set_userdata('id_pedido', $id_pedido);
+
+		$this->pedido_model->mover_productos_carrito();
 		 
 		if ( $id_usuario ):  
 

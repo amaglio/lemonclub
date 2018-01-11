@@ -34,26 +34,6 @@ class Pedido_model extends CI_Model {
 	{
 		if($this->session->userdata('id_usuario') == "")
 		{
-			/*
-			$item = $this->cart->get_item($id);
-			
-			$aux = array(
-	            'id_pedido_producto' => $id,
-	            'id_pedido' => NULL,
-	            'id_producto' => $item['id'],
-	            'cantidad' => $item['qty'],
-	            'precio_unitario' => $item['price'],
-
-	            'id_producto_tipo' => $producto['id_producto_tipo'],
-	            'nombre' => $producto['nombre'],
-	            'path_imagen' => $producto['path_imagen'],
-	            'descripcion' => $producto['descripcion'],
-	            'precio' => $producto['precio'],
-	            'orden_aparicion_web' => $producto['orden_aparicion_web']
-	        );
-
-			return $aux;
-			*/
 			$array = array();
 			foreach ($this->cart->contents() as $item)
 			{
@@ -255,6 +235,22 @@ class Pedido_model extends CI_Model {
 		}
 
         return $result;
+	}
+
+	public function mover_productos_carrito()
+	{
+		foreach ($this->cart->contents() as $item)
+		{
+	        $array = array(
+	            'id_pedido' => $this->session->userdata('id_pedido'),
+	            'id_producto' => $item['id'],
+	            'cantidad' => $item['qty'],
+	            'precio_unitario' => $item['price']
+	        );
+	        $result = $this->db->insert('pedido_producto', $array);
+		}
+
+        return TRUE;
 	}
 
 	public function modificar_producto_cantidad( $id_pedido_producto, $cantidad )

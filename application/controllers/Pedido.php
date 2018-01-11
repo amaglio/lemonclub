@@ -11,6 +11,7 @@ class Pedido extends CI_Controller {
 		date_default_timezone_set ( "America/Argentina/Buenos_Aires" );
 
 		$this->load->model('pedido_model');
+		$this->load->model('pago_model');
 		$this->load->model('producto_model');
 		$this->load->model('Usuario_model');
 
@@ -321,25 +322,49 @@ class Pedido extends CI_Controller {
 
 	public function success()
 	{
-		if($this->session->userdata('id_usuario') != "")
+		if(isset($_GET["id"]))
 		{
-			$data['datos_usuario'] = $this->Usuario_model->traer_datos_usuario($this->session->userdata('id_usuario'));
-			if($data['datos_usuario']->tipo_usuario == "Usuario Registrado")
+			if($this->session->userdata('id_usuario') != "")
 			{
-				session_destroy();
-			}
+				$data['datos_usuario'] = $this->Usuario_model->traer_datos_usuario($this->session->userdata('id_usuario'));
+				$this->pago_model->set_item($this->session->userdata('id_pedido'), PAGO_ONLINE_ESTADO_ACEPTADO, $_GET["id"]);
 
-			$this->load->view(self::$solapa.'/success');
+				if($data['datos_usuario']->tipo_usuario == "Usuario Invitado")
+				{
+					session_destroy();
+				}
+
+				$this->load->view(self::$solapa.'/success');
+			}
+			else
+			{
+				redirect('home');
+			}
 		}
 		else
 		{
-			redirect('home');
+			$this->load->view(self::$solapa.'/failure');
 		}
 	}
 
 	public function failure()
 	{
-		$this->load->view(self::$solapa.'/failure');
+		if($this->session->userdata('id_usuario') != "")
+		{
+			$data['datos_usuario'] = $this->Usuario_model->traer_datos_usuario($this->session->userdata('id_usuario'));
+			$this->pago_model->set_item($this->session->userdata('id_pedido'), PAGO_ONLINE_ESTADO_RECHAZADO);
+
+			if($data['datos_usuario']->tipo_usuario == "Usuario Invitado")
+			{
+				session_destroy();
+			}
+
+			$this->load->view(self::$solapa.'/failure');
+		}
+		else
+		{
+			redirect('home');
+		}
 	}
 
 	public function pending()
