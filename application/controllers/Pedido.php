@@ -270,8 +270,13 @@ class Pedido extends CI_Controller {
 					    	$aux['unit_price'] = floatval($value['precio']);
 					    	$items[] = $aux;
 					    }
+					    //https://api.mercadolibre.com/sites/MLA/payment_methods
+					    //https://api.mercadolibre.com/payment_types
 					    $pedido_data = array (
 						    "items" => $items,
+						    "payment_methods" => array(
+								"excluded_payment_methods" => array( array( "id"=>"pagofacil"), array("id"=>"rapipago")	)		
+							),
 						    "payer" => array(
 								"name" => $usuario->nombre,
 					            "surname" => $usuario->apellido,
@@ -346,9 +351,10 @@ class Pedido extends CI_Controller {
 	{
 		$return['error'] = FALSE;
 
+		//$_POST['id'] = 1;
+
 		if($this->input->post('id') != "")
 		{
- 
 			$result = $this->pedido_model->set_producto($this->input->post('id'));
 			if($result)
 			{
@@ -379,10 +385,13 @@ class Pedido extends CI_Controller {
 	{
 		$return['error'] = FALSE;
 
+		//$_POST['id_producto'] = 1;
+		//$_POST['qty'] = 1;
+
 		if($this->input->post('id_producto') != "")
 		{
  
-			$result = $this->pedido_model->modificar_producto_cantidad( $this->session->userdata('id_pedido'), $this->input->post('id_producto'), $this->input->post('qty') );
+			$result = $this->pedido_model->modificar_producto_cantidad( $this->input->post('id_producto'), $this->input->post('qty') );
 			if($result)
 			{
 				$return['error'] = FALSE;
@@ -394,7 +403,6 @@ class Pedido extends CI_Controller {
 					$this->session->set_userdata('pedido_activo', 1);
 				else
 					$this->session->unset_userdata('pedido_activo');
-
 			}
 			else
 			{
@@ -417,7 +425,7 @@ class Pedido extends CI_Controller {
 
 		if($this->input->post('id_producto') != "")
 		{
-			$result = $this->pedido_model->eliminar_producto( $this->session->userdata('id_pedido'), $this->input->post('id_producto') );
+			$result = $this->pedido_model->eliminar_producto( $this->input->post('id_producto') );
 			if($result)
 			{
 				$return['error'] = FALSE;
