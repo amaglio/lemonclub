@@ -108,14 +108,16 @@ if(!function_exists('enviar_email'))
         
         $configuracion = array(
                         'protocol' => 'smtp',
-                        'smtp_host' => 'mail.c0920276.ferozo.com',
-                        'smtp_port' => 25,
+ 
+                        'smtp_host' => 'mail.lemonclub.com.ar',
+                        'smtp_port' => 587, 
                         'smtp_user' => 'info@lemonclub.com.ar',
                         'smtp_pass' => 'Webemail2018',
                         'mailtype' => 'html',
                         'charset' => 'utf-8',
                         'newline' => "\r\n"
                     );
+ 
 
         $CI->email->initialize($configuracion);
         
@@ -175,6 +177,8 @@ if(!function_exists('enviar_email'))
             chrome_log("send true");
             return TRUE;
         }
+ 
+        return true; 
     }
 }
 

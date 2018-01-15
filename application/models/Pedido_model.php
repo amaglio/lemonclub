@@ -9,6 +9,21 @@ class Pedido_model extends CI_Model {
 
 	public function get_pedido( $id ) 
 	{
+		if($this->session->userdata('id_usuario') == "")
+		{
+			$aux = array(
+	            'id_pedido' => NULL,
+	            'id_pedido_estado' => PEDIDO_ESTADO_SIN_CONFIRMAR,
+	            'id_sucursal' => SUCURSAL,
+	            'id_usuario' => NULL,
+	            'id_forma_pago' => NULL,
+	            'id_forma_entrega' => NULL,
+	            'hora_entrega' => NULL,
+	            'fecha_pedido' => NULL
+	        );
+	        return $aux;
+		}
+
 		$query = $this->db->query('SELECT *
 		                            FROM pedido AS P
 		                            WHERE P.id_pedido='.$id);
@@ -17,6 +32,34 @@ class Pedido_model extends CI_Model {
 
 	public function get_pedido_productos( $id ) 
 	{
+		if($this->session->userdata('id_usuario') == "")
+		{
+			$array = array();
+			foreach ($this->cart->contents() as $item)
+			{
+				$query = $this->db->query('SELECT *
+				                            FROM producto AS P
+				                            WHERE P.id_producto='.$item['id']);
+				$producto = $query->row_array();
+				$aux = array(
+		            'id_pedido_producto' => $item['rowid'],
+		            'id_pedido' => NULL,
+		            'id_producto' => $item['id'],
+		            'cantidad' => $item['qty'],
+		            'precio_unitario' => $item['price'],
+
+		            'id_producto_tipo' => $producto['id_producto_tipo'],
+		            'nombre' => $producto['nombre'],
+		            'path_imagen' => $producto['path_imagen'],
+		            'descripcion' => $producto['descripcion'],
+		            'precio' => $producto['precio'],
+		            'orden_aparicion_web' => $producto['orden_aparicion_web']
+		        );
+		        $array[] = $aux;
+			}
+			return $array;
+		}
+
 		$query = $this->db->query('SELECT *
 		                            FROM pedido_producto AS PP
 		                            INNER JOIN producto AS P ON PP.id_producto = P.id_producto
@@ -26,6 +69,11 @@ class Pedido_model extends CI_Model {
 
 	public function get_total_pedido( $id ) 
 	{
+		if($this->session->userdata('id_usuario') == "")
+		{
+			return number_format($this->cart->total(),2);
+		}
+
 		$query = $this->db->query('SELECT SUM(PP.cantidad*PP.precio_unitario) as total
 		                            FROM pedido_producto AS PP
 		                            WHERE PP.id_pedido='.$id);
@@ -35,6 +83,11 @@ class Pedido_model extends CI_Model {
 
 	public function get_cantidad_items_pedido( $id ) 
 	{
+		if($this->session->userdata('id_usuario') == "")
+		{
+			return $this->cart->total_items();
+		}
+
 		$query = $this->db->query('SELECT SUM(PP.cantidad) as cantidad
 		                            FROM pedido_producto AS PP
 		                            WHERE PP.id_pedido='.$id);
@@ -53,6 +106,11 @@ class Pedido_model extends CI_Model {
 	public function set_pedido( $array = FALSE )
 	{
 		chrome_log("Pedido_model/set_pedido");
+
+		if($this->session->userdata('id_usuario') == "")
+		{
+			return NULL;
+		}
 
 		if($array)
 		{
@@ -136,6 +194,18 @@ class Pedido_model extends CI_Model {
 		                            WHERE P.id_producto='.$id_producto);
 		$producto = $query->row_array();
 
+		if($this->session->userdata('id_usuario') == "")
+		{
+			$aux = array(
+		        'id'      => $producto['id_producto'],
+		        'qty'     => 1,
+		        'price'   => $producto['precio'],
+		        'name'    => $producto['nombre']
+			);
+
+			return $this->cart->insert($aux);
+		}
+
 		$query = $this->db->query('SELECT *
 		                            FROM pedido_producto AS P
 		                            WHERE P.id_pedido ='.$this->session->userdata('id_pedido').'
@@ -167,19 +237,50 @@ class Pedido_model extends CI_Model {
         return $result;
 	}
 
-	public function modificar_producto_cantidad( $id_pedido, $id_producto, $cantidad )
+	public function mover_productos_carrito()
 	{
+		foreach ($this->cart->contents() as $item)
+		{
+	        $array = array(
+	            'id_pedido' => $this->session->userdata('id_pedido'),
+	            'id_producto' => $item['id'],
+	            'cantidad' => $item['qty'],
+	            'precio_unitario' => $item['price']
+	        );
+	        $result = $this->db->insert('pedido_producto', $array);
+		}
+
+        return TRUE;
+	}
+
+	public function modificar_producto_cantidad( $id_pedido_producto, $cantidad )
+	{
+		if($this->session->userdata('id_usuario') == "")
+		{
+			$data = array(
+		        'rowid' => $id_pedido_producto,
+		        'qty'   => $cantidad
+			);
+
+			return $this->cart->update($data);
+		}
+
 		$array = array(
             'cantidad' => $cantidad
         );
 
-        $this->db->where( array('id_pedido' => $id_pedido, 'id_producto' => $id_producto) );
+        $this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
         return $this->db->update('pedido_producto', $array);
 	}
 
-	public function eliminar_producto( $id_pedido, $id_producto )
+	public function eliminar_producto( $id_pedido_producto )
 	{
-        $this->db->where( array('id_pedido' => $id_pedido, 'id_producto' => $id_producto) );
+		if($this->session->userdata('id_usuario') == "")
+		{
+			return $this->cart->remove($id_pedido_producto);
+		}
+
+        $this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
         return $this->db->delete('pedido_producto');
 	}
 

@@ -37,7 +37,7 @@ public function loguearse( $array )
 }
 
 
-public function usuario_invitado( $email, $token, $id_pedido ) 
+public function usuario_invitado( $email ) 
 {
 	chrome_log("Usuario_model/usuario_invitado");
  
@@ -69,24 +69,24 @@ public function usuario_invitado( $email, $token, $id_pedido )
 			$id_usuario = $this->db->insert_id();
 		} 
 
+		/*
 		//--- Token en la tabla --
-
+		
 		$borrar_token['id_pedido'] = $id_pedido;
 		$this->db->delete('pedido_token',  $borrar_token );
-
-
-		$pedido_token['id_pedido'] = $id_pedido; 
-		$pedido_token['token'] = $token; 
-		$this->db->insert('pedido_token', $pedido_token); 
-
+		
+		$pedido_token['id_pedido'] = $id_pedido;
+		$pedido_token['token'] = $token;
+		$this->db->insert('pedido_token', $pedido_token);
+		
 		//--- ACTUALIZAR ID_USUARIO EN PEDIDO --
 
-		$array_where = array(  'id_pedido' =>  $id_pedido );
+		$array_where = array( 'id_pedido' =>  $id_pedido );
 		$array_pedido['id_usuario'] = $id_usuario;
-
+		
 		$this->db->where($array_where);
-		$this->db->update('pedido', $array_pedido); 
-
+		$this->db->update('pedido', $array_pedido);
+		*/
 
 	$this->db->trans_complete();
 
@@ -102,7 +102,48 @@ public function usuario_invitado( $email, $token, $id_pedido )
 	} 
 
 	return $resultado;
-	 
+}
+
+public function token_pedido_invitado( $id_usuario, $token, $id_pedido ) 
+{
+	chrome_log("Usuario_model/usuario_invitado");
+ 
+	//--- Usuario ---
+
+	$this->db->trans_start();
+
+		//--- Token en la tabla --
+		
+		$borrar_token['id_pedido'] = $id_pedido;
+		$this->db->delete('pedido_token',  $borrar_token );
+		
+		$pedido_token['id_pedido'] = $id_pedido;
+		$pedido_token['token'] = $token;
+		$this->db->insert('pedido_token', $pedido_token);
+		
+		//--- ACTUALIZAR ID_USUARIO EN PEDIDO --
+
+		$array_where = array( 'id_pedido' =>  $id_pedido );
+		$array_pedido['id_usuario'] = $id_usuario;
+		
+		$this->db->where($array_where);
+		$this->db->update('pedido', $array_pedido);
+
+
+	$this->db->trans_complete();
+
+	if ($this->db->trans_status() === FALSE)
+	{
+	    $this->db->trans_rollback();
+	    $resultado = false;
+	}
+	else
+	{
+		$this->db->trans_commit();
+		$resultado = true;
+	} 
+
+	return $resultado;
 }
 
 public function procesa_validar_usuario_invitado( $id_usuario, $token ) 
@@ -140,7 +181,7 @@ public function procesa_validar_usuario_invitado( $id_usuario, $token )
  
 }
 
-public function registrar_usuario( $array, $token, $id_pedido ) 
+public function registrar_usuario( $array ) 
 {
 	chrome_log("Usuario_model/registrar_usuario");
 
@@ -185,13 +226,7 @@ public function registrar_usuario( $array, $token, $id_pedido )
 	 
 		$this->db->insert('usuario_registrado', $usuario_registrado); 
 
-	//--- Usuario Tokeny ---
 		/*
-		$usuario_token_registro['id_usuario'] = $id_usuario;
-		$usuario_token_registro['token'] = $token;
-	 
-		$this->db->insert('usuario_token_registro', $usuario_token_registro); */
-
 		//--- Token en la tabla --
 
 		$borrar_token['id_pedido'] = $id_pedido;
@@ -209,6 +244,7 @@ public function registrar_usuario( $array, $token, $id_pedido )
 
 		$this->db->where($array_where);
 		$this->db->update('pedido', $array_pedido); 
+		*/
 
 	$this->db->trans_complete();
 
