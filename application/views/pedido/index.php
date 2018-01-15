@@ -24,7 +24,7 @@ $this->load->view('templates/head');
 
 				<div id="area-mensaje"></div>
 
-				<div class="titulo"><i class="fa fa-shopping-cart fa-lg"></i> &nbsp; CARRITO (<?php echo $cantidad; ?> ITEMS)</div>
+				<div class="titulo"><i class="fa fa-shopping-cart fa-lg"></i> &nbsp; CARRITO <span id="cant_items_carrito">(<?php echo $cantidad; ?>)</span> ITEMS</div>
 				<div class="table">
 					<div class="row hidden-xs">
 						<div class="col-xs-2 th"></div>
@@ -35,7 +35,7 @@ $this->load->view('templates/head');
 					<?php
 					foreach ($items as $key => $item)
 					{
-						echo '<div class="row item" id="item_'.$item['id_producto'].'">
+						echo '<div class="row item" id="item_'.$item['id_pedido_producto'].'">
 								<div class="col-xs-12 col-sm-2"><img src="'.base_url('assets/images/productos/'.$item['path_imagen']).'" class="img-responsive"></div>
 								<div class="col-xs-12 col-sm-6">
 									<span class="title">'.$item['nombre'].'</span><br>
@@ -43,8 +43,8 @@ $this->load->view('templates/head');
 								</div>
 								<div class="col-xs-12 col-sm-2 precio">$'.$this->cart->format_number($item['precio']).'</div>
 								<div class="col-xs-12 col-sm-2 cantidad">
-									<input type="number" min="1" step="1" name="cantidad[]" id="cant_'.$item['id_producto'].'" value="'.$item['cantidad'].'"  onchange="modificar_cantidad(\''.$item['id_producto'].'\', this.value);" class="form-control pull-left">
-									<button class="btn btn-danger" onclick="eliminar_producto('.$item['id_producto'].')"><i class="fa fa-times"></i></button>
+									<input type="number" min="1" step="1" name="cantidad[]" id="cant_'.$item['id_pedido_producto'].'" value="'.$item['cantidad'].'"  onchange="modificar_cantidad(\''.$item['id_pedido_producto'].'\', this.value);" class="form-control pull-left">
+									<button class="btn btn-danger" onclick="eliminar_producto(\''.$item['id_pedido_producto'].'\')"><i class="fa fa-times"></i></button>
 									</div>
 							</div>';
 					}
@@ -101,6 +101,7 @@ function modificar_cantidad(id, qty)
 		        {
 		        	$('#total').html("$"+data.total);
 		        	$('#cant_items_carrito_header').html("("+data.cantidad+")");
+		        	$('#cant_items_carrito').html("("+data.cantidad+")");
 		          	$('#cant_'+id).notify(data.data, { className:'success', position:"top" });
 		        }
 		        else
@@ -137,6 +138,7 @@ function eliminar_producto(id)
 	        {
 	        	$('#total').html("$"+data.total);
 	        	$('#cant_items_carrito_header').html("("+data.cantidad+")");
+	        	$('#cant_items_carrito').html("("+data.cantidad+")");
 	          	$('#item_'+id).remove();
 	        }
 	        else

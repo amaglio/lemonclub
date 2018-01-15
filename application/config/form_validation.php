@@ -88,12 +88,12 @@ $config = array(
                                             'field' => 'email',
                                             'label' => 'email',
                                             'rules' => 'required|trim|xss_clean|required'
-                                        ),
+                                        )/*,
                                      array(
                                             'field' => 'id_pedido',
                                             'label' => 'id_pedido',
                                             'rules' => 'required|trim|xss_clean|required|is_numeric'
-                                        )  
+                                        )*/
                                 ),
 
           'validar_usuario_invitado' => array(

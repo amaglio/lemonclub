@@ -21,18 +21,18 @@ public function ingresar()
 		redirect('pedido/confirmar_pedido');
 	}
 
-	if($this->session->userdata('id_pedido') != "")
-	{
+	//if($this->session->userdata('id_pedido') != "")
+	//{
 		$data['pedido'] = $this->pedido_model->get_pedido( $this->session->userdata('id_pedido') );
 		$data['items'] = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
 		$data['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
-	}
+	/*}
 	else
 	{
 		$data['pedido'] = FALSE;
 		$data['items'] = array();
 		$data['total'] = 0.00;
-	}
+	}*/
 
 	
 	//$this->form_validation->set_rules('ingresar', 'ingresar', 'required');
@@ -101,7 +101,10 @@ public function loguearse()
 public function procesa_logueo()
 {
 	chrome_log("Usuario/procesa_logueo");
- 
+ 	/*
+ 	$_POST['email'] = "fabianmayoral@hotmail.com";
+ 	$_POST['clave'] = "fabianmayoral@hotmail.com";
+	*/
 	if ($this->form_validation->run('loguearse_usuario') == FALSE):
 
 		chrome_log("No paso validacion");
@@ -112,13 +115,20 @@ public function procesa_logueo()
 	 
 		chrome_log("Paso validacion");
 
-		$resultado = $this->Usuario_model->loguearse( $this->input->post() );
+		$id_usuario = $this->Usuario_model->loguearse( $this->input->post() );
 
-		if ( $resultado ):  
+		if ( $id_usuario ):  
 		 	
 		 	chrome_log("Pudo loguearse ");
-			$id_usuario = $resultado;
 			$this->session->set_userdata('id_usuario', $id_usuario);
+
+			$aux = array(
+				'id_usuario' => $id_usuario
+			);
+			$id_pedido = $this->pedido_model->set_pedido( $aux );
+			$this->session->set_userdata('id_pedido', $id_pedido);
+
+			$this->pedido_model->mover_productos_carrito();
 
 			$return["resultado"] = TRUE;
 			$return["mensaje"] = 'Logueo exitoso';
@@ -140,8 +150,11 @@ public function procesa_logueo()
 public function procesa_usuario_invitado()
 {
 	chrome_log("Usuario/procesa_usuario_invitado");
+ 
+	//$_POST['email'] = "fabianmayoral@hotmail.com";
 
-	$_POST['id_pedido'] =  $this->session->userdata('id_pedido');
+	//$_POST['id_pedido'] =  $this->session->userdata('id_pedido'); 
+
 	$this->form_validation->set_data($_POST);
  
 	if ($this->form_validation->run('usuario_invitado') == FALSE):
@@ -156,18 +169,31 @@ public function procesa_usuario_invitado()
 		date_default_timezone_set('America/New_York'); 	 	
 	 	$token = sha1($this->input->post('email').rand(1,9999999).time());
 
-		$resultado = $this->Usuario_model->usuario_invitado( $this->input->post('email'), $token  , $this->session->userdata('id_pedido')); 
+		$id_usuario = $this->Usuario_model->usuario_invitado( $this->input->post('email') );
+		$this->session->set_userdata('id_usuario', $id_usuario);
 
-		if ( $resultado ):   // Si se creo el token, se envia el email
+		$aux = array(
+			'id_usuario' => $id_usuario
+		);
+		$id_pedido = $this->pedido_model->set_pedido( $aux );
+		$this->session->set_userdata('id_pedido', $id_pedido);
+
+		$this->pedido_model->mover_productos_carrito();
+
+		$this->Usuario_model->token_pedido_invitado( $id_usuario, $token, $id_pedido );
+
+		if ( $id_usuario && $id_pedido ):   // Si se creo el token, se envia el email
 		 
 			chrome_log("Pudo procesar usuario invitado");
 
-			$id_usuario =  sha1($resultado);
+ 
+			$id_usuario_sha1 =  sha1($id_usuario);
 
 			$return["resultado"] = TRUE;
 			$return["mensaje"] = 'Se le ha enviado un email, por favor ingresá a tu email y continua el pedido. La próxima vez podes registrarte y hacer tu pedido aún mas fácil.';
  
-			$enlace = base_url().'index.php/usuario/procesa_validar_usuario_invitado/'.$id_usuario.'/'.$token;
+			$enlace = base_url().'index.php/usuario/procesa_validar_usuario_invitado/'.$id_usuario_sha1.'/'.$token;
+ 
 
 			$mensaje =  '<h2>TERMINÁ TU PEDIDO!</h2><hr><br>';
 			$mensaje .= 'Has recibido este e-mail por que se efectuó una solicitud de usuario invitado en lemonclub.com.<br>';
@@ -219,10 +245,13 @@ public function procesa_usuario_invitado()
  			
 			if( enviar_email( $this->input->post('email') , $mensaje, $asunto )):
 
+				chrome_log("Envio email");
 				$return["resultado"] = TRUE;
 				$return["mensaje"] = 'Se le ha enviado un email, por favor ingresá a tu email y continua el pedido. La próxima vez podes registrarte y hacer tu pedido aún mas fácil.';
 
 			else:
+
+				chrome_log("NO Envio email");
 				$return["resultado"] = FALSE;
 				$return["mensaje"] ='Ha ocurrido un error, por favor, intentá mas tarde.'; 
 
@@ -284,7 +313,13 @@ public function procesa_validar_usuario_invitado($id_usuario, $token)
 public function procesa_registrarse() 
 {
 	$this->form_validation->set_message('comprobar_email_existente_validation', 'El email ya existe, elija otro email o denuncie su propiedad');
-
+	/*
+	$_POST['email'] = "fabianmayoral@hotmail.com";
+	$_POST['nombre'] = "fabian";
+	$_POST['apellido'] = "mayoral";
+	$_POST['clave'] = "123456";
+	$_POST['clave2'] = "123456";
+	*/
 	if ($this->form_validation->run('registrarse') == FALSE): 
 
 		chrome_log("No Paso validacion");
@@ -296,14 +331,24 @@ public function procesa_registrarse()
 		chrome_log("Si Paso validacion");
  		
  		$token = sha1($this->input->post('email').rand(1,9999999).time());
-		$resultado = $this->Usuario_model->registrar_usuario( $this->input->post(), $token, $this->session->userdata('id_pedido') );
+		$id_usuario = $this->Usuario_model->registrar_usuario( $this->input->post() );
+
+		$this->session->set_userdata('id_usuario', $id_usuario);
+
+		$aux = array(
+			'id_usuario' => $id_usuario
+		);
+		$id_pedido = $this->pedido_model->set_pedido( $aux );
+		$this->session->set_userdata('id_pedido', $id_pedido);
+
+		$this->pedido_model->mover_productos_carrito();
 		 
-		if ( $resultado ):  
+		if ( $id_usuario ):  
 
 			chrome_log("Enviar email");
 		 	
-		 	$id_usuario =  sha1($resultado);
-			$enlace = base_url().'index.php/usuario/procesa_validar_registro/'.$id_usuario.'/'.$token;
+		 	$id_usuario_sha1 =  sha1($id_usuario);
+			$enlace = base_url().'index.php/usuario/procesa_validar_registro/'.$id_usuario_sha1.'/'.$token;
 
 			$mensaje =  '<h2>TERMINÁ TU PEDIDO!</h2><hr><br>';
 			$mensaje .= 'Has recibido este e-mail por que se efectuó una solicitud para registrarte a lemonclub.com.<br>';

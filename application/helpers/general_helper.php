@@ -95,17 +95,29 @@ if(!function_exists('enviar_email'))
         //         'newline' => "\r\n"
         //     );
 
+        // $configuracion = array(
+        //     'protocol' => 'smtp',
+        //     'smtp_host' => '10.0.0.3',
+        //     'smtp_port' => 25,
+        //     'smtp_user' => '',
+        //     'smtp_pass' => '',
+        //     'mailtype' => 'html',
+        //     'charset' => 'utf-8',
+        //     'newline' => "\r\n"
+        // );
+        
         $configuracion = array(
-            'protocol' => 'smtp',
-            'smtp_host' => '10.0.0.3',
-            'smtp_port' => 25,
-            'smtp_user' => '',
-            'smtp_pass' => '',
-            'mailtype' => 'html',
-            'charset' => 'utf-8',
-            'newline' => "\r\n"
-        );
-
+                        'protocol' => 'smtp',
+ 
+                        'smtp_host' => 'mail.lemonclub.com.ar',
+                        'smtp_port' => 587, 
+                        'smtp_user' => 'info@lemonclub.com.ar',
+                        'smtp_pass' => 'Webemail2018',
+                        'mailtype' => 'html',
+                        'charset' => 'utf-8',
+                        'newline' => "\r\n"
+                    );
+ 
 
         $CI->email->initialize($configuracion);
         
@@ -156,9 +168,17 @@ if(!function_exists('enviar_email'))
 
         if ( ! $CI->email->send())
         {
-            return false;
+
+            chrome_log("send false");
+            return FALSE;
         }
-        return true;
+        else{
+            //echo "BIEN";
+            chrome_log("send true");
+            return TRUE;
+        }
+ 
+        return true; 
     }
 }
 
@@ -176,3 +196,5 @@ if(!function_exists('mensaje_resultado'))
         <? endif;  
     }
 }
+
+?>
