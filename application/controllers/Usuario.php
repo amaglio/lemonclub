@@ -91,6 +91,13 @@ public function ingresar()
 	$this->load->view(self::$solapa.'/ingresar', $data);
 }
 
+public function loguearse()
+{
+ 
+
+	$this->load->view(self::$solapa.'/loguearse', $data);
+}
+
 public function procesa_logueo()
 {
 	chrome_log("Usuario/procesa_logueo");
