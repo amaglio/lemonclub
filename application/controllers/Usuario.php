@@ -134,6 +134,9 @@ public function procesa_usuario_invitado()
 {
 	chrome_log("Usuario/procesa_usuario_invitado");
 
+	//$_POST['id_pedido'] =  3;
+	//$_POST['email'] =  "adrian.magliola@gmail.com";
+
 	$_POST['id_pedido'] =  $this->session->userdata('id_pedido');
 	$this->form_validation->set_data($_POST);
  
@@ -156,10 +159,7 @@ public function procesa_usuario_invitado()
 			chrome_log("Pudo procesar usuario invitado");
 
 			$id_usuario =  sha1($resultado);
-
-			$return["resultado"] = TRUE;
-			$return["mensaje"] = 'Se le ha enviado un email, por favor ingresá a tu email y continua el pedido. La próxima vez podes registrarte y hacer tu pedido aún mas fácil.';
- 
+  
 			$enlace = base_url().'index.php/usuario/procesa_validar_usuario_invitado/'.$id_usuario.'/'.$token;
 
 			$mensaje =  '<h2>TERMINÁ TU PEDIDO!</h2><hr><br>';
@@ -212,10 +212,13 @@ public function procesa_usuario_invitado()
  			
 			if( enviar_email( $this->input->post('email') , $mensaje, $asunto )):
 
+				chrome_log("Envio email");
 				$return["resultado"] = TRUE;
 				$return["mensaje"] = 'Se le ha enviado un email, por favor ingresá a tu email y continua el pedido. La próxima vez podes registrarte y hacer tu pedido aún mas fácil.';
 
 			else:
+
+				chrome_log("NO Envio email");
 				$return["resultado"] = FALSE;
 				$return["mensaje"] ='Ha ocurrido un error, por favor, intentá mas tarde.'; 
 
