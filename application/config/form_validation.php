@@ -179,6 +179,21 @@ $config = array(
                                         ) 
                                 ),
 
+            'agregar_producto_ajax' => array(
+
+                                    array(
+                                            'field' => 'id_pedido',
+                                            'label' => 'id_pedido',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'id',
+                                            'label' => 'id',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ) 
+                                ),
+
+
 // --------------------------------- CONTACTO ------------------------------ 
 
 

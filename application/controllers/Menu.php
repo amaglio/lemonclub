@@ -12,6 +12,12 @@ class Menu extends CI_Controller {
                 $this->load->model('producto_tipo_model');
                 $this->load->model('producto_model');
                 $this->load->model('pedido_model');
+
+                if($this->session->userdata('id_pedido') == "")
+                {
+                        $id_pedido = $this->pedido_model->set_pedido();
+                        $this->session->set_userdata('id_pedido', $id_pedido); 
+                }
 	}
 
 	public function index($id = FALSE)

@@ -18,7 +18,7 @@ class Pedido extends CI_Controller {
 		if($this->session->userdata('id_pedido') == "")
 		{
 			$id_pedido = $this->pedido_model->set_pedido();
-			$this->session->set_userdata('id_pedido', $id_pedido);
+			$this->session->set_userdata('id_pedido', $id_pedido); 
 		}
 
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>', '</div>');
@@ -39,14 +39,9 @@ class Pedido extends CI_Controller {
 		$data['error'] = FALSE;
 		$data['success'] = FALSE;
 
-		if($this->session->userdata('id_usuario') == "")
-		{
-			redirect('usuario/ingresar');
-		}
+		if(!$this->session->userdata('id_usuario'))
+			redirect('usuario/ingresar'); 
 
-		//echo "id usuario: ".$this->session->userdata('id_usuario');
-
-		//echo "id pedido: ".$this->session->userdata('id_pedido');
 
 		$data['datos_usuario'] = $this->Usuario_model->traer_datos_usuario($this->session->userdata('id_usuario'));
 		$data['direcciones'] = $this->Usuario_model->traer_direcciones($this->session->userdata('id_usuario'));
@@ -62,6 +57,71 @@ class Pedido extends CI_Controller {
 		$this->load->view(self::$solapa.'/confirmar_pedido', $data);
 	}
 
+	public function agregar_producto_ajax()
+	{
+		$_POST['id_pedido'] = $this->session->userdata('id_pedido');
+		$this->form_validation->set_data($_POST);
+
+		if ( $this->form_validation->run('agregar_producto_ajax') == FALSE):
+
+			$return['error'] = TRUE;
+			$return['data'] = validation_errors();;
+
+		else:
+
+			$result = $this->pedido_model->set_producto($this->input->post('id'));
+			if($result)
+			{
+				$return['error'] = FALSE;
+				$return['data'] = "El producto fue agregado.";
+				$return['cantidad'] = $this->pedido_model->get_cantidad_items_pedido($this->session->userdata('id_pedido'));
+				$this->session->set_userdata('pedido_activo', 1);
+			}
+			else
+			{
+				$return['error'] = TRUE;
+				$return['data'] = "Ocurrio un error al cargar el producto al pedido.";
+			}
+
+			if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) > 0)
+				$this->session->set_userdata('pedido_activo', 1);
+
+		endif;
+
+		echo json_encode($return);
+
+		/*$return['error'] = FALSE; 
+
+		if($this->input->post('id') != "")
+		{
+			$result = $this->pedido_model->set_producto($this->input->post('id'));
+			if($result)
+			{
+				$return['error'] = FALSE;
+				$return['data'] = "El producto fue agregado.";
+				$return['cantidad'] = $this->pedido_model->get_cantidad_items_pedido($this->session->userdata('id_pedido'));
+				$this->session->set_userdata('pedido_activo', 1);
+			}
+			else
+			{
+				$return['error'] = TRUE;
+				$return['data'] = "Ocurrio un error al cargar el producto al pedido.";
+			}
+
+			if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) > 0)
+				$this->session->set_userdata('pedido_activo', 1);
+		}
+		else
+		{
+			$return['error'] = TRUE;
+			$return['data'] = "Debe seleccionar un producto.";
+		}
+
+		echo json_encode($return);*/
+	}
+
+
+	/*
 	public function finalizar_pedido()
 	{
 		chrome_log("usuario/finalizar_pedido");
@@ -153,18 +213,18 @@ class Pedido extends CI_Controller {
 		chrome_log("usuario/finalizar_pedido");
  		
  		$return["resultado"] = TRUE;
- 		/*
+ 		 
  		//$this->session->set_userdata('id_pedido',12);
- 		$_POST['id_pedido'] = $this->session->userdata('id_pedido');
- 		$_POST['mail'] = "fabianmayoral@hotmail.com";
- 		$_POST['nombre'] = "fabian";
- 		$_POST['apellido'] = "mayoral";
- 		$_POST['calle'] = "cerrito";
- 		$_POST['altura'] = 620;
- 		$_POST['pago'] = FORMA_PAGO_ONLINE;
- 		$_POST['entrega'] = FORMA_ENTREGA_TAKEAWAY;
- 		$_POST['horario'] = "12:00:00";
-		*/
+ 		// $_POST['id_pedido'] = $this->session->userdata('id_pedido');
+ 		// $_POST['mail'] = "fabianmayoral@hotmail.com";
+ 		// $_POST['nombre'] = "fabian";
+ 		// $_POST['apellido'] = "mayoral";
+ 		// $_POST['calle'] = "cerrito";
+ 		// $_POST['altura'] = 620;
+ 		// $_POST['pago'] = FORMA_PAGO_ONLINE;
+ 		// $_POST['entrega'] = FORMA_ENTREGA_TAKEAWAY;
+ 		// $_POST['horario'] = "12:00:00";
+	 
 		if ($this->form_validation->run('finalizar_pedido') == FALSE):
 
 			chrome_log("No paso validacion");
@@ -372,39 +432,7 @@ class Pedido extends CI_Controller {
 		$this->load->view(self::$solapa.'/pending');
 	}
 
-	public function agregar_producto_ajax()
-	{
-		$return['error'] = FALSE;
-
-		//$_POST['id'] = 1;
-
-		if($this->input->post('id') != "")
-		{
-			$result = $this->pedido_model->set_producto($this->input->post('id'));
-			if($result)
-			{
-				$return['error'] = FALSE;
-				$return['data'] = "El producto fue agregado.";
-				$return['cantidad'] = $this->pedido_model->get_cantidad_items_pedido($this->session->userdata('id_pedido'));
-				$this->session->set_userdata('pedido_activo', 1);
-			}
-			else
-			{
-				$return['error'] = TRUE;
-				$return['data'] = "Ocurrio un error al cargar el producto al pedido.";
-			}
-
-			if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) > 0)
-				$this->session->set_userdata('pedido_activo', 1);
-		}
-		else
-		{
-			$return['error'] = TRUE;
-			$return['data'] = "Debe seleccionar un producto.";
-		}
-
-		echo json_encode($return);
-	}
+	
 
 	public function modificar_cantidad_ajax()
 	{
@@ -514,7 +542,7 @@ class Pedido extends CI_Controller {
 	}
 
 
-
+	*/
  
 
 }

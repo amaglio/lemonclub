@@ -60,7 +60,7 @@ $this->load->view('templates/head');
 						<?php
 							if($items && count($items))
 							{
-								echo '<a href="'.site_url('pedido/confirmar_pedido').'" class="btn btn-amarillo btn-block">FINALIZAR COMPRA</a>';
+								echo '<a href="'.site_url('pedido/confirmar_pedido').'" class="btn btn-amarillo btn-block">CONFIRMAR PEDIDO</a>';
 							}
 							else
 							{

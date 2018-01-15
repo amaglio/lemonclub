@@ -11,6 +11,62 @@ public function __construct()
 	$this->load->model('pedido_model');
 }
 
+public function loguearse()
+{
+	$data['error'] = FALSE;
+	$data['success'] = FALSE;
+	$this->load->view(self::$solapa.'/loguearse', $data);
+}
+
+
+public function logout()
+{
+	$this->session->unset_userdata('usuario_lemon');
+	$this->db->close();
+	session_destroy();
+	redirect('home/index/','refresh');
+}
+
+public function loguearse_solo()
+{
+	chrome_log("Usuario/procesa_logueo");
+  
+	if ($this->form_validation->run('loguearse_usuario') == FALSE):
+
+		chrome_log("No paso validacion");
+		$this->session->set_flashdata('mensaje', 'No paso validacion para loguearse.');
+
+	else: 
+	 
+		chrome_log("Paso validacion");
+
+		$id_usuario = $this->Usuario_model->loguearse( $this->input->post() );
+
+		if ( $id_usuario ):  
+		 	
+		 	chrome_log("Pudo loguearse ");
+		 	$return["resultado"] = TRUE;
+			$return["mensaje"] = 'Logueo exitoso';
+			$this->session->set_userdata('id_usuario', $id_usuario);
+			
+		 				 
+		else:  
+
+		 	chrome_log("No Pudo loguearse ");
+		 	$this->session->set_flashdata('mensaje', 'Usuario o password incorrectos.');
+		 	$return["resultado"] = FALSE;
+ 			$return["mensaje"] ='Usuario o password incorrecto.';
+
+		endif; 
+
+ 
+	endif;	
+
+	print json_encode($return);	
+}
+
+/*
+
 public function ingresar()
 {
 	$data['error'] = FALSE;
@@ -20,23 +76,11 @@ public function ingresar()
 	{
 		redirect('pedido/confirmar_pedido');
 	}
-
-	//if($this->session->userdata('id_pedido') != "")
-	//{
+ 
 		$data['pedido'] = $this->pedido_model->get_pedido( $this->session->userdata('id_pedido') );
 		$data['items'] = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
 		$data['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
-	/*}
-	else
-	{
-		$data['pedido'] = FALSE;
-		$data['items'] = array();
-		$data['total'] = 0.00;
-	}*/
-
-	
-	//$this->form_validation->set_rules('ingresar', 'ingresar', 'required');
-
+ 
 	if($this->input->post('ingresar') == 1)
 	{
 		$this->form_validation->set_rules('email', 'email', 'required');
@@ -90,21 +134,16 @@ public function ingresar()
 
 	$this->load->view(self::$solapa.'/ingresar', $data);
 }
-
-public function loguearse()
-{
  
 
-	$this->load->view(self::$solapa.'/loguearse', $data);
-}
+ 
+
+
 
 public function procesa_logueo()
 {
 	chrome_log("Usuario/procesa_logueo");
- 	/*
- 	$_POST['email'] = "fabianmayoral@hotmail.com";
- 	$_POST['clave'] = "fabianmayoral@hotmail.com";
-	*/
+ 
 	if ($this->form_validation->run('loguearse_usuario') == FALSE):
 
 		chrome_log("No paso validacion");
@@ -151,9 +190,7 @@ public function procesa_usuario_invitado()
 {
 	chrome_log("Usuario/procesa_usuario_invitado");
  
-	//$_POST['email'] = "fabianmayoral@hotmail.com";
-
-	//$_POST['id_pedido'] =  $this->session->userdata('id_pedido'); 
+ 
 
 	$this->form_validation->set_data($_POST);
  
@@ -313,13 +350,7 @@ public function procesa_validar_usuario_invitado($id_usuario, $token)
 public function procesa_registrarse() 
 {
 	$this->form_validation->set_message('comprobar_email_existente_validation', 'El email ya existe, elija otro email o denuncie su propiedad');
-	/*
-	$_POST['email'] = "fabianmayoral@hotmail.com";
-	$_POST['nombre'] = "fabian";
-	$_POST['apellido'] = "mayoral";
-	$_POST['clave'] = "123456";
-	$_POST['clave2'] = "123456";
-	*/
+ 
 	if ($this->form_validation->run('registrarse') == FALSE): 
 
 		chrome_log("No Paso validacion");
@@ -424,14 +455,6 @@ public function procesa_validar_registro($id_usuario, $token) // Valida la URL e
 }
 
 
-public function logout()
-{
-	$this->session->unset_userdata('usuario_lemon');
-
-	$this->db->close();
-	session_destroy();
-	redirect('home/index/','refresh');
-}
 
 public function comprobar_email_existente_validation($email=null)  
 {
@@ -440,8 +463,7 @@ public function comprobar_email_existente_validation($email=null)
 	else 
 		return true; // Duplicado 	
 }
-
-
+*/
 
 
 }
