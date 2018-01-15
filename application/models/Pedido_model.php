@@ -192,6 +192,7 @@ class Pedido_model extends CI_Model {
 		$query = $this->db->query('SELECT *
 		                            FROM producto AS P
 		                            WHERE P.id_producto='.$id_producto);
+		
 		$producto = $query->row_array();
 
 		if($this->session->userdata('id_usuario') == "")
@@ -210,6 +211,7 @@ class Pedido_model extends CI_Model {
 		                            FROM pedido_producto AS P
 		                            WHERE P.id_pedido ='.$this->session->userdata('id_pedido').'
 		                            AND P.id_producto='.$id_producto);
+		
 		$pedido_producto = $query->row_array();
 
 		if($pedido_producto)

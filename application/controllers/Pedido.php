@@ -3,7 +3,7 @@
 class Pedido extends CI_Controller {
 
 	private static $solapa = "pedido";
-
+	
 	public function __construct()
 	{
 		parent::__construct();
