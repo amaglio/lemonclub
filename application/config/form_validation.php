@@ -109,7 +109,20 @@ $config = array(
                                          )  
                                 ),
 
-            'procesa_validar_registro' => array(
+            'procesa_validar_registro_ingresar' => array(
+                                     array(
+                                            'field' => 'id_pedido',
+                                            'label' => 'id_pedido',
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
+                                         ),
+                                        array(
+                                            'field' => 'token',
+                                            'label' => 'token',
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
+                                         )  
+                                ),
+
+            'procesa_validar_registro_usuario' => array(
                                      array(
                                             'field' => 'id_usuario',
                                             'label' => 'id_usuario',
@@ -121,6 +134,7 @@ $config = array(
                                             'rules' => 'strip_tags|required|trim|xss_clean'
                                          )  
                                 ),
+
 // --------------------------------- ADMINISTRADOR ------------------------------
 
 
@@ -181,16 +195,50 @@ $config = array(
 
             'agregar_producto_ajax' => array(
 
-                                    array(
-                                            'field' => 'id_pedido',
-                                            'label' => 'id_pedido',
-                                            'rules' => 'required|trim|xss_clean'
-                                        ),
+                                  
                                     array(
                                             'field' => 'id',
                                             'label' => 'id',
                                             'rules' => 'required|trim|xss_clean'
                                         ) 
+                                ),
+
+            'confirmar_pedido' => array(
+
+                                  
+                                    array(
+                                            'field' => 'id_usuario',
+                                            'label' => 'id_usuario',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ) 
+                                ),
+
+            'modificar_cantidad_ajax' => array(
+
+                                  
+                                    array(
+                                            'field' => 'id_producto',
+                                            'label' => 'id_producto',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'qty',
+                                            'label' => 'qty',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+
+
+                                ),
+            
+            'eliminar_producto_ajax' => array(
+
+                                  
+                                    array(
+                                            'field' => 'id_producto',
+                                            'label' => 'id_producto',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ) 
+
                                 ),
 
 

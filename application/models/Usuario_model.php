@@ -7,7 +7,6 @@ public function __construct()
 	parent::__construct();
 }
 
-
 public function loguearse( $array ) 
 {
 	chrome_log("Usuario_model/loguearse");
@@ -27,7 +26,6 @@ public function loguearse( $array )
 
 	if($query->num_rows() > 0)
 	{
-		//$this->session->set_userdata('id_usuario', );
 		return $query->row()->id_usuario;
 	}
 	else
@@ -36,8 +34,90 @@ public function loguearse( $array )
 	}
 }
 
+public function registrar_usuario( $array ) 
+{
+	chrome_log("Usuario_model/registrar_usuario");
 
-public function usuario_invitado( $email ) 
+	$this->db->trans_start();
+
+	//--- Usuario ---
+
+	//--- Email ya existete ¿? --
+
+		$sql = "SELECT 	*
+	 			FROM 	usuario u 
+	 			WHERE 	u.email = ?   "; 
+
+		$query = $this->db->query($sql, array( $array['email'] ));
+
+		if($query->num_rows() > 0) // El email ya existe
+		{
+			chrome_log("Usuario_model/ El email ya existe");
+			$id_usuario = $query->row()->id_usuario;
+
+			$array_where = array(  'id_usuario' =>  $id_usuario );
+
+			$array_usuario['nombre'] = $array['nombre'];
+			$array_usuario['apellido'] = $array['apellido'];
+			$array_usuario['password'] = md5($array['clave']); 
+
+			if(isset($array['direccion']) && !empty($array['direccion']))
+		        $array_usuario['direccion'] =  $array['direccion'];
+
+	 
+		    if(isset($array['telefono']) && !empty($array['telefono']))
+		         $array_usuario['telefono'] =  $array['telefono'];
+
+			$this->db->where($array_where);
+			$this->db->update('usuario_registrado', $array_usuario);
+
+		}
+		else // El email no existe
+		{	
+			$usuario['email'] = $array['email'];
+			$this->db->insert('usuario', $usuario); 
+
+			$id_usuario = $this->db->insert_id();
+
+			$usuario_registrado['id_usuario'] = $id_usuario;
+			$usuario_registrado['nombre'] = $array['nombre'];
+			$usuario_registrado['apellido'] = $array['apellido'];
+			$usuario_registrado['password'] = md5($array['clave']);
+	   
+			if(isset($array['direccion']) && !empty($array['direccion']))
+		        $usuario_registrado['direccion'] =  $array['direccion'];
+
+	 
+		    if(isset($array['telefono']) && !empty($array['telefono']))
+		         $usuario_registrado['telefono'] =  $array['telefono'];
+		 
+			$this->db->insert('usuario_registrado', $usuario_registrado);
+
+		} 		
+
+	//--- Usuario Registrado ---
+
+
+	$this->db->trans_complete();
+
+	if ($this->db->trans_status() === FALSE)
+	{
+	    chrome_log("Error Transaccion");
+	    $this->db->trans_rollback();
+	    $resultado = false;
+	      
+	}
+	else
+	{	
+		chrome_log("Transaccion Correcta ");
+		$this->db->trans_commit();
+		$resultado = $id_usuario;
+	} 
+
+	return $resultado;
+}
+
+public function procesa_invitado_ingresar( $email ) 
 {
 	chrome_log("Usuario_model/usuario_invitado");
  
@@ -68,26 +148,7 @@ public function usuario_invitado( $email )
 
 			$id_usuario = $this->db->insert_id();
 		} 
-
-		/*
-		//--- Token en la tabla --
-		
-		$borrar_token['id_pedido'] = $id_pedido;
-		$this->db->delete('pedido_token',  $borrar_token );
-		
-		$pedido_token['id_pedido'] = $id_pedido;
-		$pedido_token['token'] = $token;
-		$this->db->insert('pedido_token', $pedido_token);
-		
-		//--- ACTUALIZAR ID_USUARIO EN PEDIDO --
-
-		$array_where = array( 'id_pedido' =>  $id_pedido );
-		$array_pedido['id_usuario'] = $id_usuario;
-		
-		$this->db->where($array_where);
-		$this->db->update('pedido', $array_pedido);
-		*/
-
+ 
 	$this->db->trans_complete();
 
 	if ($this->db->trans_status() === FALSE)
@@ -102,6 +163,78 @@ public function usuario_invitado( $email )
 	} 
 
 	return $resultado;
+}
+
+public function procesa_validar_invitado_ingresar( $id_usuario, $token ) 
+{
+	chrome_log("Usuario_model/procesa_validar_invitado_ingresar");
+ 
+
+	$sql = "SELECT 	*
+ 			FROM 	pedido p , 
+ 					pedido_token pt
+ 			WHERE 	p.id_pedido = pt.id_pedido
+ 			AND 	SHA1(p.id_usuario) = ? 
+ 			AND 	pt.token = ? "; 
+
+	$query = $this->db->query($sql, array( $id_usuario, $token ));
+ 
+    if($this->db->affected_rows() > 0)
+    {
+
+		$this->session->set_userdata('id_usuario', $query->row()->id_usuario ); 
+		$this->session->set_userdata('id_pedido', $query->row()->id_pedido ); 
+		
+		//--- Token en la tabla --
+
+		$borrar_token['id_pedido'] = $query->row()->id_pedido;
+		$this->db->delete('pedido_token',  $borrar_token );
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
+public function traer_datos_usuario( $id_usuario ) 
+{
+	chrome_log("Usuario_model/traer_datos_usuario");
+
+ 	$sql = "SELECT  *,
+					IF(ur.id_usuario IS NULL, 'Usuario Invitado', 'Usuario Registrado') as tipo_usuario
+ 			FROM 	usuario u
+ 					LEFT JOIN usuario_registrado ur ON u.id_usuario = ur.id_usuario 
+ 			WHERE  
+ 					u.id_usuario = ? "; 
+
+	$query = $this->db->query($sql, array( $id_usuario ));
+
+	if($query->num_rows() > 0)
+	{
+		return $query->row();
+	}
+	else
+	{
+		return false;
+	}
+}
+
+public function traer_direcciones( $id_usuario ) 
+{
+	chrome_log("Usuario_model/traer_direcciones");
+
+ 	$sql = "SELECT  DISTINCT(pd.direccion), pd.nota
+ 			FROM 	pedido p
+ 					INNER JOIN pedido_delivery pd ON p.id_pedido = pd.id_pedido 
+ 			WHERE  
+ 					p.id_usuario = ? "; 
+
+	$query = $this->db->query($sql, array( $id_usuario ));
+
+	return $query->result_array();
 }
 
 public function token_pedido_invitado( $id_usuario, $token, $id_pedido ) 
@@ -146,127 +279,87 @@ public function token_pedido_invitado( $id_usuario, $token, $id_pedido )
 	return $resultado;
 }
 
-public function procesa_validar_usuario_invitado( $id_usuario, $token ) 
+public function crear_token_registrar_ingresar( $token, $id_pedido, $id_usuario ) 
 {
-	chrome_log("Usuario_model/procesa_validar_usuario_invitado");
- 
+	//--- Token en la tabla --
 
-	$sql = "SELECT 	*
- 			FROM 	pedido p , 
- 					pedido_token pt
- 			WHERE 	p.id_pedido = pt.id_pedido
- 			AND 	SHA1(p.id_usuario) = ? 
- 			AND 	pt.token = ? "; 
+	$borrar_token['id_pedido'] = $id_pedido;
+	$this->db->delete('pedido_token',  $borrar_token );
 
-	$query = $this->db->query($sql, array( $id_usuario, $token ));
- 
-    if($this->db->affected_rows() > 0)
-    {
 
-		$this->session->set_userdata('id_usuario', $query->row()->id_usuario ); 
-		$this->session->set_userdata('id_pedido', $query->row()->id_pedido ); 
-		
-		//--- Token en la tabla --
+	$pedido_token['id_pedido'] = $id_pedido; 
+	$pedido_token['token'] = $token; 
+	$this->db->insert('pedido_token', $pedido_token); 
 
-		$borrar_token['id_pedido'] = $query->row()->id_pedido;
-		$this->db->delete('pedido_token',  $borrar_token );
+	//--- ACTUALIZAR ID_USUARIO EN PEDIDO --
 
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	$array_where = array(  'id_pedido' =>  $id_pedido );
+	$array_pedido['id_usuario'] = $id_usuario;
 
- 
+	$this->db->where($array_where);
+	$this->db->update('pedido', $array_pedido);
 }
 
-public function registrar_usuario( $array ) 
+public function crear_token_registrar_usuario( $token, $id_usuario ) 
 {
-	chrome_log("Usuario_model/registrar_usuario");
+	//--- Borro el token --
+
+	$borrar_token['id_usuario'] = $id_usuario;
+	$this->db->delete('usuario_token_registro',  $borrar_token );
+
+	//--- Creo  el token --
+	$usuario_token['id_usuario'] = $id_usuario; 
+	$usuario_token['token'] = $token; 
+	$this->db->insert('usuario_token_registro', $usuario_token); 
+}
+
+
+public function procesa_validar_registro_usuario( $id_usuario, $token ) 
+{
+	chrome_log("Usuario_model/procesa_validar_registro_usuario");
 
 	$this->db->trans_start();
+	 	
+	 	// EXISTE EL USUARIO Y EL TOKEN
 
-	//--- Usuario ---
+	 	$sql = "SELECT 	*
+	 			FROM 	usuario u , 
+	 					usuario_token_registro ut
+	 			WHERE 	u.id_usuario = ut.id_usuario
+	 			AND 	SHA1(u.id_usuario) = ? 
+	 			AND 	ut.token = ? "; 
 
-	//--- Email ya existete ¿? --
+		$query = $this->db->query($sql, array( $id_usuario, $token ));
+		
+		$id_usuario = $query->row()->id_usuario;  
 
-		$sql = "SELECT 	*
-	 			FROM 	usuario u 
-	 			WHERE 	u.email = ? "; 
+		// BORRAMOS EL TOKEN
 
-		$query = $this->db->query($sql, array( $array['email'] ));
+		$borrar_token['id_usuario'] = $id_pedido;
+		$this->db->delete('usuario_token_registro',  $borrar_token );
 
-		if($query->num_rows() > 0) // El email ya existe
-		{
-			chrome_log("Usuario_model/ El email ya existe");
-			$id_usuario = $query->row()->id_usuario;
-		}
-		else // El email no existe
-		{	
-			$usuario['email'] = $array['email'];
-			$this->db->insert('usuario', $usuario); 
+		// Cambios a Registrado en la tabla usuario
 
-			$id_usuario = $this->db->insert_id();
-		} 		
-
-	//--- Usuario Registrado ---
-
-		$usuario_registrado['id_usuario'] = $id_usuario;
-		$usuario_registrado['nombre'] = $array['nombre'];
-		$usuario_registrado['apellido'] = $array['apellido'];
-		$usuario_registrado['password'] = md5($array['clave']);
-   
-		if(isset($array['direccion']) && !empty($array['direccion']))
-	        $usuario_registrado['direccion'] =  $array['direccion'];
-
- 
-	    if(isset($array['telefono']) && !empty($array['telefono']))
-	         $usuario_registrado['telefono'] =  $array['telefono'];
-	 
-		$this->db->insert('usuario_registrado', $usuario_registrado); 
-
-		/*
-		//--- Token en la tabla --
-
-		$borrar_token['id_pedido'] = $id_pedido;
-		$this->db->delete('pedido_token',  $borrar_token );
-
-
-		$pedido_token['id_pedido'] = $id_pedido; 
-		$pedido_token['token'] = $token; 
-		$this->db->insert('pedido_token', $pedido_token); 
-
-		//--- ACTUALIZAR ID_USUARIO EN PEDIDO --
-
-		$array_where = array(  'id_pedido' =>  $id_pedido );
-		$array_pedido['id_usuario'] = $id_usuario;
+		$array_where = array(  'id_usuario' =>  $id_usuario );
+		$array_usuario['registrado'] = 1;
 
 		$this->db->where($array_where);
-		$this->db->update('pedido', $array_pedido); 
-		*/
+		$this->db->update('usuario', $array_usuario); 
+
 
 	$this->db->trans_complete();
 
-	if ($this->db->trans_status() === FALSE)
-	{
-	    chrome_log("Error Transaccion");
-	    $this->db->trans_rollback();
-	    $resultado = false;
-	      
-	}
-	else
-	{	
-		chrome_log("Transaccion Correcta ");
-		$this->db->trans_commit();
-		$resultado = $id_usuario;
-	} 
-
-	return $resultado;
+    if ($this->db->trans_status() !== FALSE)
+    {
+        $this->session->set_userdata('id_usuario', $id_usuario );  
+        return TRUE;
+    }
+    else
+    	return FALSE;	
 }
 
 
-public function procesa_validar_registro( $id_usuario, $token ) 
+public function procesa_validar_registro_ingresar( $id_pedido, $token ) 
 {
 	chrome_log("Usuario_model/procesa_validar_registro");
 
@@ -278,10 +371,10 @@ public function procesa_validar_registro( $id_usuario, $token )
 	 			FROM 	pedido p , 
 	 					pedido_token pt
 	 			WHERE 	p.id_pedido = pt.id_pedido
-	 			AND 	SHA1(p.id_usuario) = ? 
+	 			AND 	SHA1(p.id_pedido) = ? 
 	 			AND 	pt.token = ? "; 
 
-		$query = $this->db->query($sql, array( $id_usuario, $token ));
+		$query = $this->db->query($sql, array( $id_pedido, $token ));
 		
 		$id_usuario = $query->row()->id_usuario; 
 		$id_pedido = $query->row()->id_pedido;
@@ -309,9 +402,7 @@ public function procesa_validar_registro( $id_usuario, $token )
         return TRUE;
     }
     else
-    	return FALSE;
-
-	
+    	return FALSE;	
 }
 
 
@@ -325,7 +416,8 @@ public function existe_email_registrado($email)
  					usuario_registrado ur
  			WHERE
  					u.id_usuario = ur.id_usuario
- 			AND 	u.email = ?  "; 
+ 			AND 	u.email = ?  
+ 			AND 	u.registrado = 1"; 
  
 	$query = $this->db->query($sql, array($email)); 
 
@@ -334,46 +426,7 @@ public function existe_email_registrado($email)
 	else
 		return false;
 }
-
-public function traer_datos_usuario( $id_usuario ) 
-{
-	chrome_log("Usuario_model/traer_datos_usuario");
-
- 	$sql = "SELECT  *,
-					IF(ur.id_usuario IS NULL, 'Usuario Invitado', 'Usuario Registrado') as tipo_usuario
- 			FROM 	usuario u
- 					LEFT JOIN usuario_registrado ur ON u.id_usuario = ur.id_usuario 
- 			WHERE  
- 					u.id_usuario = ? "; 
-
-	$query = $this->db->query($sql, array( $id_usuario ));
-
-	if($query->num_rows() > 0)
-	{
-		return $query->row();
-	}
-	else
-	{
-		return false;
-	}
-}
-
-
-public function traer_direcciones( $id_usuario ) 
-{
-	chrome_log("Usuario_model/traer_direcciones");
-
- 	$sql = "SELECT  DISTINCT(pd.direccion), pd.nota
- 			FROM 	pedido p
- 					INNER JOIN pedido_delivery pd ON p.id_pedido = pd.id_pedido 
- 			WHERE  
- 					p.id_usuario = ? "; 
-
-	$query = $this->db->query($sql, array( $id_usuario ));
-
-	return $query->result_array();
-}
-
+ 
 
 }
 

@@ -43,7 +43,7 @@ class Administrador_model extends CI_Model {
 
 	function agregar_ingrediente_producto($array)
     {
-   		chrome_log("Usuario_model/registrar_usuario");
+   		chrome_log("Administrador_model/agregar_ingrediente_producto");
  
 		//--- Producto ingrediente ---
 

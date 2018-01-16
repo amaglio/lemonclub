@@ -3,7 +3,7 @@
 class Pedido extends CI_Controller {
 
 	private static $solapa = "pedido";
-	
+			
 	public function __construct()
 	{
 		parent::__construct();
@@ -15,7 +15,7 @@ class Pedido extends CI_Controller {
 		$this->load->model('producto_model');
 		$this->load->model('Usuario_model');
 
-		if($this->session->userdata('id_pedido') == "")
+		if(!$this->session->userdata('id_pedido'))
 		{
 			$id_pedido = $this->pedido_model->set_pedido();
 			$this->session->set_userdata('id_pedido', $id_pedido); 
@@ -34,33 +34,8 @@ class Pedido extends CI_Controller {
 		$this->load->view(self::$solapa.'/index', $data);
 	}
 
-	public function confirmar_pedido()
-	{
-		$data['error'] = FALSE;
-		$data['success'] = FALSE;
-
-		if(!$this->session->userdata('id_usuario'))
-			redirect('usuario/ingresar'); 
-
-
-		$data['datos_usuario'] = $this->Usuario_model->traer_datos_usuario($this->session->userdata('id_usuario'));
-		$data['direcciones'] = $this->Usuario_model->traer_direcciones($this->session->userdata('id_usuario'));
- 		
-		$data['pedido'] = $this->pedido_model->get_pedido( $this->session->userdata('id_pedido') );
-		$data['items'] = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
-		$data['cantidad'] = $this->pedido_model->get_cantidad_items_pedido( $this->session->userdata('id_pedido') );
-		$data['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
-		
-		$data['horarios'] = $this->pedido_model->get_horarios_disponibles();
-		$data['formas_pago'] = $this->pedido_model->get_forma_pago(); 
-
-		$this->load->view(self::$solapa.'/confirmar_pedido', $data);
-	}
-
 	public function agregar_producto_ajax()
 	{
-		$_POST['id_pedido'] = $this->session->userdata('id_pedido');
-		$this->form_validation->set_data($_POST);
 
 		if ( $this->form_validation->run('agregar_producto_ajax') == FALSE):
 
@@ -89,128 +64,109 @@ class Pedido extends CI_Controller {
 		endif;
 
 		echo json_encode($return);
+	}
 
-		/*$return['error'] = FALSE; 
+	public function confirmar_pedido()
+	{
 
-		if($this->input->post('id') != "")
-		{
-			$result = $this->pedido_model->set_producto($this->input->post('id'));
+		$_POST['id_usuario'] = $this->session->userdata('id_usuario');
+   		$this->form_validation->set_data($_POST);
+
+		if ( $this->form_validation->run('confirmar_pedido') == FALSE):
+
+			redirect('usuario/ingresar'); 
+
+		else:
+
+			$data['error'] = FALSE;
+			$data['success'] = FALSE;
+
+			$data['datos_usuario'] = $this->Usuario_model->traer_datos_usuario($this->session->userdata('id_usuario'));
+			$data['direcciones'] = $this->Usuario_model->traer_direcciones($this->session->userdata('id_usuario'));
+	 		
+			$data['pedido'] = $this->pedido_model->get_pedido( $this->session->userdata('id_pedido') );
+			$data['items'] = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
+			$data['cantidad'] = $this->pedido_model->get_cantidad_items_pedido( $this->session->userdata('id_pedido') );
+			$data['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
+			
+			$data['horarios'] = $this->pedido_model->get_horarios_disponibles();
+			$data['formas_pago'] = $this->pedido_model->get_forma_pago(); 
+
+			$this->load->view(self::$solapa.'/confirmar_pedido', $data);
+
+
+		endif;	
+	}
+
+	public function modificar_cantidad_ajax()
+	{
+
+		if ( $this->form_validation->run('modificar_cantidad_ajax') == FALSE):
+
+			$return['error'] = TRUE;
+			$return['data'] = "Debe seleccionar un producto.";
+
+		else:
+
+			$result = $this->pedido_model->modificar_producto_cantidad( $this->input->post('id_producto'), $this->input->post('qty') );
 			if($result)
 			{
 				$return['error'] = FALSE;
-				$return['data'] = "El producto fue agregado.";
+				$return['data'] = "La cantidad fue modificada.";
+				$return['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
 				$return['cantidad'] = $this->pedido_model->get_cantidad_items_pedido($this->session->userdata('id_pedido'));
-				$this->session->set_userdata('pedido_activo', 1);
+
+				if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) > 0)
+					$this->session->set_userdata('pedido_activo', 1);
+				else
+					$this->session->unset_userdata('pedido_activo');
 			}
 			else
 			{
 				$return['error'] = TRUE;
-				$return['data'] = "Ocurrio un error al cargar el producto al pedido.";
+				$return['data'] = "Ocurrio un error al modificar la cantidad.";
 			}
 
-			if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) > 0)
-				$this->session->set_userdata('pedido_activo', 1);
-		}
-		else
-		{
-			$return['error'] = TRUE;
-			$return['data'] = "Debe seleccionar un producto.";
-		}
+		endif;
 
-		echo json_encode($return);*/
+		echo json_encode($return); 
 	}
 
-
-	/*
-	public function finalizar_pedido()
+	public function eliminar_producto_ajax()
 	{
-		chrome_log("usuario/finalizar_pedido");
+		if ( $this->form_validation->run('eliminar_producto_ajax') == FALSE):
 
-		$data['error'] = FALSE;
-		$data['success'] = FALSE;
+			$return['error'] = TRUE;
+			$return['data'] = "Debe seleccionar un producto.";
 
-		$_POST['id_pedido'] = $this->session->userdata('id_pedido');
- 
-		if ($this->form_validation->run('finalizar_pedido') == FALSE):
+		else:
 
-			chrome_log("No paso validacion");
-			$data['error'] = "Ocurrio un error al cargar el pedido.";
-			
-		else: 
-		 
-			chrome_log("Paso validacion");
+			$result = $this->pedido_model->eliminar_producto( $this->input->post('id_producto') );
+			if($result)
+			{
+				$return['error'] = FALSE;
+				$return['data'] = "La cantidad fue modificada.";
+				$return['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
+				$return['cantidad'] = $this->pedido_model->get_cantidad_items_pedido($this->session->userdata('id_pedido'));
 
-			$result = $this->pedido_model->finalizar_pedido( $this->session->userdata('id_pedido'), $this->session->userdata('id_usuario'), $this->input->post() );
-        	if($result)
-        	{	
-        		$usuario = $this->Usuario_model->traer_datos_usuario( $this->session->userdata('id_usuario') );
+				if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) == 0)
+					$this->session->unset_userdata('pedido_activo');
 
-        		$mensaje =  '<h2>NUEVO PEDIDO</h2><hr><br>';
-        		$mensaje .= 'Has recibido un nuevo pedido en lemonclub.com.<br>';
-        		$mensaje .= 'Email: '.$usuario->email.'<br>';
-        		
-        		if($usuario->nombre)
-        			$mensaje .= 'Nombre: '.$usuario->nombre.'<br>';
+			}
+			else
+			{
+				$return['error'] = TRUE;
+				$return['data'] = "Ocurrio un error al modificar la cantidad.";
+			}
 
-        		if($usuario->apellido)
-        			$mensaje .= 'Apellido: '.$usuario->apellido.'<br>';
- 
-        		$descripcion_forma_pago =  $this->pedido_model->traer_descripcion_forma_pago($this->input->post('pago'));
-        		$descripcion_forma_entrega =  $this->pedido_model->traer_descripcion_forma_entrega($this->input->post('entrega'));	 
+		endif;	
 
-        		if( $this->input->post('entrega') == FORMA_ENTREGA_DELIVERY )
-        		{
-  					$mensaje .= 'Forma entrega:  DELIVERY <br>';
-
-        			if($this->input->post('calle'))
-        				$mensaje .= 'Calle: '.$this->input->post('calle').'<br>';
-
-	        		if($this->input->post('altura'))
-	        			$mensaje .= 'Altura: '.$this->input->post('altura').'<br>';
-
-        		}
-        		else
-        		{
-        			$mensaje .= 'Forma entrega:  TAKE AWAY <br>';
-        		}
-
-       
-        		$pedido = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
-
-        		$mensaje .= '<h3>Productos</h3> ';
-
-        		foreach ($pedido as $key => $value) 
-        		{
-        			$mensaje .= '-----------------------------------------------------<br>';
-        			$mensaje .= 'Nombre: '.$value['nombre'].'<br>';
-        			$mensaje .= 'Descripcion: '.$value['descripcion'].'<br>';
-        			$mensaje .= 'Cantidad: '.$value['cantidad'].'<br>';
-        			$mensaje .= 'Precio: $'.$value['precio'].'<br>';
-        		}
-
-        		$mensaje .= '-----------------------------------------------------<br>';
-        		$mensaje .= '<b>TOTAL:</b> $'.$this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') ).'<br>';
-
-        		$asunto = "Lemonclub: Nuevo pedido";
-
-        		enviar_email("info@lemonclub.com.ar", $mensaje, $asunto );
-
-        		$this->session->unset_userdata('id_pedido');
-        		$this->session->unset_userdata('pedido_activo');
-
-	          	redirect(self::$solapa.'/success');
-        	}
-        	else
-        	{
-        		$data['error'] = "Ocurrio un error al cargar el pedido.";
-        	}
-		 
-		endif; 
+		echo json_encode($return);
 	}
 
 	public function finalizar_pedido_ajax()
 	{
-		chrome_log("usuario/finalizar_pedido");
+		chrome_log("usuario/finalizar_pedido_ajax");
  		
  		$return["resultado"] = TRUE;
  		 
@@ -432,79 +388,6 @@ class Pedido extends CI_Controller {
 		$this->load->view(self::$solapa.'/pending');
 	}
 
-	
-
-	public function modificar_cantidad_ajax()
-	{
-		$return['error'] = FALSE;
-
-		//$_POST['id_producto'] = 1;
-		//$_POST['qty'] = 1;
-
-		if($this->input->post('id_producto') != "")
-		{
- 
-			$result = $this->pedido_model->modificar_producto_cantidad( $this->input->post('id_producto'), $this->input->post('qty') );
-			if($result)
-			{
-				$return['error'] = FALSE;
-				$return['data'] = "La cantidad fue modificada.";
-				$return['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
-				$return['cantidad'] = $this->pedido_model->get_cantidad_items_pedido($this->session->userdata('id_pedido'));
-
-				if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) > 0)
-					$this->session->set_userdata('pedido_activo', 1);
-				else
-					$this->session->unset_userdata('pedido_activo');
-			}
-			else
-			{
-				$return['error'] = TRUE;
-				$return['data'] = "Ocurrio un error al modificar la cantidad.";
-			}
-		}
-		else
-		{
-			$return['error'] = TRUE;
-			$return['data'] = "Debe seleccionar un producto.";
-		}
-
-		echo json_encode($return);
-	}
-
-	public function eliminar_producto_ajax()
-	{
-		$return['error'] = FALSE;
-
-		if($this->input->post('id_producto') != "")
-		{
-			$result = $this->pedido_model->eliminar_producto( $this->input->post('id_producto') );
-			if($result)
-			{
-				$return['error'] = FALSE;
-				$return['data'] = "La cantidad fue modificada.";
-				$return['total'] = $this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') );
-				$return['cantidad'] = $this->pedido_model->get_cantidad_items_pedido($this->session->userdata('id_pedido'));
-
-				if(count($this->pedido_model->get_pedido_productos($this->session->userdata('id_pedido'))) == 0)
-					$this->session->unset_userdata('pedido_activo');
-
-			}
-			else
-			{
-				$return['error'] = TRUE;
-				$return['data'] = "Ocurrio un error al modificar la cantidad.";
-			}
-		}
-		else
-		{
-			$return['error'] = TRUE;
-			$return['data'] = "Debe seleccionar un producto.";
-		}
-
-		echo json_encode($return);
-	}
-
 	public function procesa_cambiar_estado_pedido()
 	{
 		chrome_log("Pedido/procesa_cambiar_estado_pedido");
@@ -541,7 +424,95 @@ class Pedido extends CI_Controller {
 		redirect($url);
 	}
 
+	/*
+ 
+	// SE USA ?
+	public function finalizar_pedido()
+	{
+		chrome_log("usuario/finalizar_pedido");
 
+		$data['error'] = FALSE;
+		$data['success'] = FALSE;
+
+		$_POST['id_pedido'] = $this->session->userdata('id_pedido');
+ 
+		if ($this->form_validation->run('finalizar_pedido') == FALSE):
+
+			chrome_log("No paso validacion");
+			$data['error'] = "Ocurrio un error al cargar el pedido.";
+			
+		else: 
+		 
+			chrome_log("Paso validacion");
+
+			$result = $this->pedido_model->finalizar_pedido( $this->session->userdata('id_pedido'), $this->session->userdata('id_usuario'), $this->input->post() );
+        	if($result)
+        	{	
+        		$usuario = $this->Usuario_model->traer_datos_usuario( $this->session->userdata('id_usuario') );
+
+        		$mensaje =  '<h2>NUEVO PEDIDO</h2><hr><br>';
+        		$mensaje .= 'Has recibido un nuevo pedido en lemonclub.com.<br>';
+        		$mensaje .= 'Email: '.$usuario->email.'<br>';
+        		
+        		if($usuario->nombre)
+        			$mensaje .= 'Nombre: '.$usuario->nombre.'<br>';
+
+        		if($usuario->apellido)
+        			$mensaje .= 'Apellido: '.$usuario->apellido.'<br>';
+ 
+        		$descripcion_forma_pago =  $this->pedido_model->traer_descripcion_forma_pago($this->input->post('pago'));
+        		$descripcion_forma_entrega =  $this->pedido_model->traer_descripcion_forma_entrega($this->input->post('entrega'));	 
+
+        		if( $this->input->post('entrega') == FORMA_ENTREGA_DELIVERY )
+        		{
+  					$mensaje .= 'Forma entrega:  DELIVERY <br>';
+
+        			if($this->input->post('calle'))
+        				$mensaje .= 'Calle: '.$this->input->post('calle').'<br>';
+
+	        		if($this->input->post('altura'))
+	        			$mensaje .= 'Altura: '.$this->input->post('altura').'<br>';
+
+        		}
+        		else
+        		{
+        			$mensaje .= 'Forma entrega:  TAKE AWAY <br>';
+        		}
+
+       
+        		$pedido = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
+
+        		$mensaje .= '<h3>Productos</h3> ';
+
+        		foreach ($pedido as $key => $value) 
+        		{
+        			$mensaje .= '-----------------------------------------------------<br>';
+        			$mensaje .= 'Nombre: '.$value['nombre'].'<br>';
+        			$mensaje .= 'Descripcion: '.$value['descripcion'].'<br>';
+        			$mensaje .= 'Cantidad: '.$value['cantidad'].'<br>';
+        			$mensaje .= 'Precio: $'.$value['precio'].'<br>';
+        		}
+
+        		$mensaje .= '-----------------------------------------------------<br>';
+        		$mensaje .= '<b>TOTAL:</b> $'.$this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') ).'<br>';
+
+        		$asunto = "Lemonclub: Nuevo pedido";
+
+        		enviar_email("info@lemonclub.com.ar", $mensaje, $asunto );
+
+        		$this->session->unset_userdata('id_pedido');
+        		$this->session->unset_userdata('pedido_activo');
+
+	          	redirect(self::$solapa.'/success');
+        	}
+        	else
+        	{
+        		$data['error'] = "Ocurrio un error al cargar el pedido.";
+        	}
+		 
+		endif; 
+	}
+ 
 	*/
  
 
