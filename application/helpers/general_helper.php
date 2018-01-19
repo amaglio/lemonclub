@@ -106,26 +106,34 @@ if(!function_exists('enviar_email'))
         //     'newline' => "\r\n"
         // );
         
+      
         $configuracion = array(
                         'protocol' => 'smtp',
- 
                         'smtp_host' => 'mail.lemonclub.com.ar',
                         'smtp_port' => 587, 
                         'smtp_user' => 'info@lemonclub.com.ar',
                         'smtp_pass' => 'Webemail2018',
                         'mailtype' => 'html',
                         'charset' => 'utf-8',
-                        'newline' => "\r\n"
-                    );
+                        'newline' => "\r\n",
+                        'smtp_timeout' => 30,
+                    ); 
  
 
         $CI->email->initialize($configuracion);
+
+        // NO FUNCIONA ---
+            // $config['protocol'] = 'sendmail';
+            // $config['mailpath'] = '/usr/sbin/sendmail';
+            // $config['charset'] = 'utf-8';
+            // $config['wordwrap'] = TRUE;
+
+            // $CI->email->initialize($config);
+        //------------------------------
+
         
-        $CI->email->from('info@lemonclub.com.ar', 'Lemon Club');
-        $CI->email->to($email_to);
-        //$CI->email->cc("contacto@3ddos.com.ar");
-        //$CI->email->cc('another@another-example.com');
-        //$CI->email->bcc('them@their-example.com');
+        $CI->email->from('no-reply@lemonclub.com.ar');
+        $CI->email->to($email_to); 
 
         $CI->email->subject($asunto);
 
@@ -169,12 +177,12 @@ if(!function_exists('enviar_email'))
         if ( ! $CI->email->send())
         {
 
-            chrome_log("send false");
+            chrome_log("send false3");
             return FALSE;
         }
         else{
             //echo "BIEN";
-            chrome_log("send true");
+            chrome_log("send true3s");
             return TRUE;
         }
  

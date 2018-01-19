@@ -1,4 +1,4 @@
-    <? var_dump($_SESSION); ?>
+    <? //var_dump($_SESSION); ?>
     <div class="container-fluid barra-menu hidden-xs">
     	<div class="container">
     		<div class="row">

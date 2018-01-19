@@ -335,7 +335,7 @@ public function procesa_validar_registro_usuario( $id_usuario, $token )
 
 		// BORRAMOS EL TOKEN
 
-		$borrar_token['id_usuario'] = $id_pedido;
+		$borrar_token['id_usuario'] = $id_usuario;
 		$this->db->delete('usuario_token_registro',  $borrar_token );
 
 		// Cambios a Registrado en la tabla usuario
