@@ -165,6 +165,39 @@ public function procesa_invitado_ingresar( $email )
 	return $resultado;
 }
 
+public function recuperar_clave( $email ) 
+{
+	chrome_log("Usuario_model/recuperar_clave"); 
+
+	$sql = "SELECT 	*
+ 			FROM 	usuario u 
+ 			WHERE 	u.email = ? "; 
+
+	$query = $this->db->query($sql, array( $email ));
+
+	if($query->num_rows() > 0)  
+		return $query->row()->id_usuario;
+	else
+		return false;
+ 
+}
+
+public function cambiar_password( $array ) 
+{
+	chrome_log("Usuario_model/cambiar_password");
+
+	$array_where = array(  'id_usuario' =>  $array['id_usuario'] );
+	$array_usuario['password'] = md5($array['clave']); 
+
+	$this->db->where($array_where);
+ 
+	if ($this->db->update('usuario_registrado', $array_usuario))
+	    return TRUE; 
+	else
+	 	return FALSE;
+}
+
+
 public function procesa_validar_invitado_ingresar( $id_usuario, $token ) 
 {
 	chrome_log("Usuario_model/procesa_validar_invitado_ingresar");
@@ -279,39 +312,6 @@ public function token_pedido_invitado( $id_usuario, $token, $id_pedido )
 	return $resultado;
 }
 
-public function crear_token_registrar_ingresar( $token, $id_pedido, $id_usuario ) 
-{
-	//--- Token en la tabla --
-
-	$borrar_token['id_pedido'] = $id_pedido;
-	$this->db->delete('pedido_token',  $borrar_token );
-
-
-	$pedido_token['id_pedido'] = $id_pedido; 
-	$pedido_token['token'] = $token; 
-	$this->db->insert('pedido_token', $pedido_token); 
-
-	//--- ACTUALIZAR ID_USUARIO EN PEDIDO --
-
-	$array_where = array(  'id_pedido' =>  $id_pedido );
-	$array_pedido['id_usuario'] = $id_usuario;
-
-	$this->db->where($array_where);
-	$this->db->update('pedido', $array_pedido);
-}
-
-public function crear_token_registrar_usuario( $token, $id_usuario ) 
-{
-	//--- Borro el token --
-
-	$borrar_token['id_usuario'] = $id_usuario;
-	$this->db->delete('usuario_token_registro',  $borrar_token );
-
-	//--- Creo  el token --
-	$usuario_token['id_usuario'] = $id_usuario; 
-	$usuario_token['token'] = $token; 
-	$this->db->insert('usuario_token_registro', $usuario_token); 
-}
 
 
 public function procesa_validar_registro_usuario( $id_usuario, $token ) 
@@ -354,6 +354,43 @@ public function procesa_validar_registro_usuario( $id_usuario, $token )
         $this->session->set_userdata('id_usuario', $id_usuario );  
         return TRUE;
     }
+    else
+    	return FALSE;	
+}
+
+public function procesa_validar_recuperar_password( $id_usuario, $token ) 
+{
+	chrome_log("Usuario_model/procesa_validar_recuperar_password");
+
+	//echo $id_usuario."<br>";
+	//echo $token."<br>";
+
+	$this->db->trans_start();
+	 	
+	 	// EXISTE EL USUARIO Y EL TOKEN
+
+	 	$sql = "SELECT 	u.id_usuario
+	 			FROM 	usuario u , 
+	 					usuario_token_password ut
+	 			WHERE 	u.id_usuario = ut.id_usuario
+	 			AND 	SHA1(u.id_usuario) = ? 
+	 			AND 	ut.token = ? "; 
+ 
+		$query = $this->db->query($sql, array( $id_usuario, $token ));
+		
+		$id_usuario = $query->row()->id_usuario;  
+
+		// echo $id_usuario."<br>";
+
+		// BORRAMOS EL TOKEN
+
+		$borrar_token['id_usuario'] = $id_usuario;
+		$this->db->delete('usuario_token_password',  $borrar_token );
+
+	$this->db->trans_complete();
+
+    if ($this->db->trans_status() !== FALSE)
+        return $id_usuario;
     else
     	return FALSE;	
 }
@@ -405,6 +442,54 @@ public function procesa_validar_registro_ingresar( $id_pedido, $token )
     	return FALSE;	
 }
 
+// Crear token
+
+public function crear_token_registrar_ingresar( $token, $id_pedido, $id_usuario ) 
+{
+	//--- Token en la tabla --
+
+	$borrar_token['id_pedido'] = $id_pedido;
+	$this->db->delete('pedido_token',  $borrar_token );
+
+
+	$pedido_token['id_pedido'] = $id_pedido; 
+	$pedido_token['token'] = $token; 
+	$this->db->insert('pedido_token', $pedido_token); 
+
+	//--- ACTUALIZAR ID_USUARIO EN PEDIDO --
+
+	$array_where = array(  'id_pedido' =>  $id_pedido );
+	$array_pedido['id_usuario'] = $id_usuario;
+
+	$this->db->where($array_where);
+	$this->db->update('pedido', $array_pedido);
+}
+
+public function crear_token_registrar_usuario( $token, $id_usuario ) 
+{
+	//--- Borro el token --
+
+	$borrar_token['id_usuario'] = $id_usuario;
+	$this->db->delete('usuario_token_registro',  $borrar_token );
+
+	//--- Creo  el token --
+	$usuario_token['id_usuario'] = $id_usuario; 
+	$usuario_token['token'] = $token; 
+	$this->db->insert('usuario_token_registro', $usuario_token); 
+}
+
+public function crear_token_recuperar_clave( $token, $id_usuario ) 
+{
+	//--- Borro el token --
+
+	$borrar_token['id_usuario'] = $id_usuario;
+	$this->db->delete('usuario_token_password',  $borrar_token );
+
+	//--- Creo  el token --
+	$usuario_token['id_usuario'] = $id_usuario; 
+	$usuario_token['token'] = $token; 
+	$this->db->insert('usuario_token_password', $usuario_token); 
+}
 
 
 public function existe_email_registrado($email)

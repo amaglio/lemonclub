@@ -36,6 +36,14 @@ public function logout()
 	redirect('home/index/','refresh');
 }
 
+public function recuperar_clave()
+{
+	$data['error'] = FALSE;
+	$data['success'] = FALSE;
+	$this->load->view(self::$solapa.'/recuperar_clave', $data);
+}
+ 
+
 public function ingresar()
 {
 	$data['error'] = FALSE;
@@ -541,16 +549,187 @@ public function procesa_validar_registro_usuario($id_usuario, $token)
 	show_404(); 
 }
 
+// Recuperar clave
 
+public function procesa_recuperar_clave() 
+{
+	$this->form_validation->set_message('comprobar_email_registrado_validation', 'El email no esta registrado');
+
+	$this->form_validation->set_data($_POST);
+
+	if ($this->form_validation->run('recuperar_clave') == FALSE): 
+
+		chrome_log("No Paso validacion");
+		$return["resultado"] = FALSE;
+		$return["mensaje"] = validation_errors(); 
+		 
+	else:
+		chrome_log("Si Paso validacion");
+ 
+ 		$token = sha1($this->input->post('email').rand(1,9999999).time());
+		$id_usuario = $this->Usuario_model->recuperar_clave(  $this->input->post('email')  );
+
+		$this->session->set_userdata('id_usuario', $id_usuario);
+
+		$aux = array( 'id_usuario' => $id_usuario );
+		$id_pedido = $this->pedido_model->set_pedido( $aux );
+		$this->session->set_userdata('id_pedido', $id_pedido);
+		$this->pedido_model->mover_productos_carrito();
+
+		$this->Usuario_model->crear_token_recuperar_clave( $token, $id_usuario );
+		 
+		if ( $id_usuario ):  
+
+			chrome_log("Enviar email");
+
+			$id_usuario_sha1 =  sha1($id_usuario);
+			$enlace = base_url().'index.php/usuario/procesa_validar_recuperar_password/'.$id_usuario_sha1.'/'.$token;
+
+			$mensaje =  '<h2>RECUPERA TU CONTRASEÑA!</h2><hr><br>';
+			$mensaje .= 'Has recibido este e-mail por que se efectuó una solicitud para recuperar tu contraseña de lemonclub.com.<br>';
+			$mensaje .= 'En caso de querer continuar con el proceso de recuperar contraseña, haga click en el siguiente link  <a href="'.$enlace.'"> Validar Email </a>.<br>';
+			$mensaje .= '<h4>Gracias por elegirnos! </h4> ';
+			$mensaje .= 'Si usted no realizo el pedido, puede ignorar este mensaje.<br>';
+			$mensaje  = html_entity_decode( $mensaje , ENT_QUOTES, "UTF-8");
+
+			$asunto = "LemonClub - Recuperar contraseña";
+
+			if( enviar_email( $this->input->post('email'), $mensaje, $asunto) ):
+
+				chrome_log("TRUE");
+				$return["resultado"] = TRUE;
+				$return["mensaje"] = "Gracias por recuperar con contraseña ! Te hemos enviado un email para continuar el proceso.";
+
+				$this->session->unset_userdata('id_usuario'); 
+
+			else:
+
+				chrome_log("FALSE");
+				$return["resultado"] = FALSE;
+				$return["mensaje"] = "Ha ocurrido un error al enviarte el email de registro, por favor, intenta mas tarde";
+
+			endif;
+		 				 
+		else: 
+		 	
+		 	chrome_log("No envio email");
+			$return["resultado"] = FALSE;
+			$return["mensaje"] = "Ha ocurrido un error al registrarte, por favor, intenta mas tarde";
+
+		endif; 
+
+	endif; 	
+ 
+	print json_encode($return);
+}
+
+public function procesa_validar_recuperar_password($id_usuario, $token)
+{
+	chrome_log("Usuario/procesa_validar_recuperar_password");
+
+	$_POST['id_usuario'] = $id_usuario;
+	$_POST['token'] = $token;
+
+	$this->form_validation->set_data($_POST);
+
+ 	if ( $this->form_validation->run('procesa_validar_recuperar_password') == FALSE): 
+
+		chrome_log("No Paso validacion");
+		 
+	else:
+
+		chrome_log("Si Paso validacion");
+ 		
+ 	 	$resultado = $this->Usuario_model->procesa_validar_recuperar_password( $id_usuario, $token );
+
+ 	 	if ( $resultado ):  
+		 
+			chrome_log("Pudo validar ");
+			$data['error'] = FALSE;
+			$data['success'] = FALSE;
+ 			$data['id_usuario'] = $resultado;
+
+			$this->load->view(self::$solapa.'/cambiar_password', $data);
+			
+		 				 
+		else:  
+		 	
+		 	chrome_log("No Pudo validar"); 
+
+		endif; 
+			 
+
+	endif; 	
+
+	//show_404(); 
+}
+
+public function procesa_cambiar_password()
+{
+	chrome_log("Usuario/procesa_cambiar_password/");
+ 	
+ 	//$_POST['id_usuario'] = $this->session->userdata('id_usuario');
+ 	//$this->form_validation->set_data($_POST);
+
+	if ($this->form_validation->run('cambiar_password') == FALSE):
+
+		chrome_log("No paso validacion");
+		$return["resultado"] = FALSE;
+		$return["mensaje"] =  validation_errors();
+
+	else: 
+	 
+		chrome_log("Paso validacion");
+
+		$resultado = $this->Usuario_model->cambiar_password( $this->input->post() );
+
+		if ( $resultado ):  
+		 	
+		 	$id_usuario = $this->input->post('id_usuario');
+			$this->session->set_userdata('id_usuario', $id_usuario);
+
+			$aux = array( 'id_usuario' => $id_usuario );
+
+			$id_pedido = $this->pedido_model->set_pedido( $aux );
+			$this->session->set_userdata('id_pedido', $id_pedido);
+
+			$this->pedido_model->mover_productos_carrito();
+
+			$return["resultado"] = TRUE;
+			$return["mensaje"] = 'Cambio exitoso';
+		 				 
+		else:  
+
+		 	chrome_log("No Pudo loguearse ");
+
+			$return["resultado"] = FALSE;
+ 			$return["mensaje"] ='No se pudo modificar el password, intente mas tarde';
+
+		endif; 
+
+ 
+	endif;	
+
+	print json_encode($return);	
+}
+
+// Comprobaciones form validation
 
 public function comprobar_email_existente_validation($email=null)  
 {
 	if( $this->Usuario_model->existe_email_registrado($email) )
 		return false; 
 	else 
-		return true; // Duplicado 	
+		return true; 
 }
 
+public function comprobar_email_registrado_validation($email=null)  
+{
+	if( $this->Usuario_model->existe_email_registrado($email) )
+		return true; 
+	else 
+		return false;  
+}
  
 
 

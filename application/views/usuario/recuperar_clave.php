@@ -14,8 +14,7 @@ $this->load->view('templates/head');
 	<div class="container-fluid area-banner">
 		<div class="row">
 			<div class="col-xs-12">
-				<p>Loguearse</p>
-				<h3>al sistema</h3>
+				<p>Recuperar contraseña</p> 
 			</div>
 		</div>
 	</div>
@@ -28,22 +27,15 @@ $this->load->view('templates/head');
 			   
           <div role="tabpanel" class="tab-pane active" id="ingresar">
               <div class="formulario">
-                <p>Si ya estas registrado ingresa con tu email y contraseña.</p>
-              <form class="form-horizontal" action="#" method="POST" id="form-ingresar">
+                <p>Ingresa tu email y te enviaremos un email para recuperar tu contraseña.</p>
+              <form class="form-horizontal" action="#" method="POST" id="form-recuperar">
                 <div class="form-group">
                     <div class="col-sm-12">
                       <input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo set_value('email'); ?>">
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-sm-12">
-                      <input type="password" class="form-control" name="clave" placeholder="Contraseña" value="<?php echo set_value('clave'); ?>">
-                    </div>
-                </div>
-                <button type="submit" id="btn-ingresar" value="1" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;" data-loading-text="Cargando...">INGRESAR</button>
-              </form>
-              <a type="btn" href="<?=site_url('usuario/recuperar_clave')?>"  name="ingresar" > ¿ Olvidaste tu contraseña ?</a>
-              <a href="<?=site_url('usuario/registrarse')?>"  name="ingresar" class="btn btn-block btn-amarillo" style=" margin-top: 20px; background: #d4a100; color: white;">Registrarse</a>
+                <button type="submit" id="btn-ingresar" value="1" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;" data-loading-text="Cargando...">RECUPERAR</button>
+              </form> 
             </div>
             </div>
 				 
@@ -59,7 +51,7 @@ $this->load->view('templates/footer');
 ?>
 
 <script type="text/javascript">
-$('#form-ingresar').submit(function( event ) {
+$('#form-recuperar').submit(function( event ) {
 	$('#area-mensaje').html(' ');
 	event.preventDefault();
 	$('#btn-ingresar').button('loading');
@@ -71,7 +63,7 @@ $('#form-ingresar').submit(function( event ) {
         dataType: 'json',
         processData: false, // Don't process the files
         //contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-       url: SITE_URL+"/usuario/procesa_logueo",
+       url: SITE_URL+"/usuario/procesa_recuperar_clave",
        success: function(data){
           if(data.resultado == true)
           {
@@ -79,7 +71,7 @@ $('#form-ingresar').submit(function( event ) {
             htmlData += data.mensaje;
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
-            window.location.href = SITE_URL+"/menu"; 
+            //window.location.href = SITE_URL+"/menu"; 
           }
           else
           {
