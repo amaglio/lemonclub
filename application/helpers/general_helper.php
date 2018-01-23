@@ -132,7 +132,7 @@ if(!function_exists('enviar_email'))
         //------------------------------
 
         
-        $CI->email->from('info@lemonclub.com.ar');
+        $CI->email->from('info@lemonclub.com.ar', 'Lemon Club');
         $CI->email->to($email_to); 
 
         $CI->email->subject($asunto);
