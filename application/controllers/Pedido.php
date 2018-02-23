@@ -292,8 +292,8 @@ class Pedido extends CI_Controller {
 						);
 
 						$preference = $this->mercadopago->create_preference($pedido_data);
-						//$return["link"] = $preference['response']['init_point']; //PRODUCCION
-						$return["link"] = $preference['response']['sandbox_init_point']; //SANDBOX
+						$return["link"] = $preference['response']['init_point']; //PRODUCCION
+						//$return["link"] = $preference['response']['sandbox_init_point']; //SANDBOX
 	        		}
 	        		else
 	        		{
