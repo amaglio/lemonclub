@@ -14,11 +14,11 @@ $config['access_token'] = '';
 $config['use_access_token'] = FALSE; // TRUE or FALSE
 
 // Basic Checkout
-$config['client_id'] = '2406294579973082';
-$config['client_secret'] = 'nXAR4P4s0mYsB3C9kpjJJOKONlf7CECk';
+$config['client_id'] = '7895394445545517';
+$config['client_secret'] = 'TXUKLU0fxoNnLf5roCksVgGbWXJ7kOhX';
 
 // Sandbox
-$config['sandbox_mode'] = TRUE; // TRUE or FALSE
+$config['sandbox_mode'] = FALSE; // TRUE or FALSE
 
 
 /* End of file mercadopago.php */
