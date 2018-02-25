@@ -157,7 +157,7 @@ $('#form-ingresar').submit(function( event ) {
         dataType: 'json',
         processData: false, // Don't process the files
         //contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-       url: SITE_URL+"/usuario/procesa_logueo",
+       url: SITE_URL+"/usuario/procesa_logueo_ingresar",
        success: function(data){
           if(data.resultado == true)
           {
@@ -198,7 +198,7 @@ $('#form-invitado').submit(function( event ) {
         dataType: 'json',
         processData: false, // Don't process the files
         //contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-       url: SITE_URL+"/usuario/procesa_usuario_invitado",
+       url: SITE_URL+"/usuario/procesa_invitado_ingresar",
        success: function(data){
           if(data.resultado == true)
           {
@@ -237,7 +237,7 @@ $('#form-registro').submit(function( event ) {
         dataType: 'json',
         processData: false, // Don't process the files
         //contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-       url: SITE_URL+"/usuario/procesa_registrarse",
+       url: SITE_URL+"/usuario/procesa_registrarse_ingresar",
        success: function(data){
           if(data.resultado == true)
           {

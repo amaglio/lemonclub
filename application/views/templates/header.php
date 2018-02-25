@@ -1,5 +1,5 @@
     <?php //var_dump($_SESSION); ?>
-
+ 
     <div class="container-fluid barra-menu hidden-xs">
     	<div class="container">
     		<div class="row">
@@ -32,7 +32,7 @@
                     }
                     else
                     {
-                        echo '<a href="'.site_url('usuario/ingresar').'" class="btn btn-amarillo"><i class="fa fa-user fa-lg"></i> INGRESAR</a> ';
+                        echo '<a href="'.site_url('usuario/loguearse').'" class="btn btn-amarillo"><i class="fa fa-user fa-lg"></i> INGRESAR</a>  ';
                     }
                     ?>
     			</div>

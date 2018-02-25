@@ -21,13 +21,13 @@ class Pago_model extends CI_Model {
 
         if($id_mercadopago)
         {
-	        $data = array(
+	        $data2 = array(
 	    		'id_pago_online' => $id_pago_online,
 	            'id_mercadopago' => $id_mercadopago
 	    	);
-    	}
 
-    	$this->db->insert('pago_mercadopago', $data);
+	    	$this->db->insert('pago_mercadopago', $data2);
+    	}
 
         return $id_pago_online;
 	}

@@ -6,7 +6,7 @@ class Pedido_model extends CI_Model {
 	{
 		parent::__construct();
 	}
-
+	
 	public function get_pedido( $id ) 
 	{
 		if($this->session->userdata('id_usuario') == "")
@@ -66,7 +66,7 @@ class Pedido_model extends CI_Model {
 		                            WHERE PP.id_pedido='.$id);
 		return $query->result_array();
 	}
-
+	
 	public function get_total_pedido( $id ) 
 	{
 		if($this->session->userdata('id_usuario') == "")

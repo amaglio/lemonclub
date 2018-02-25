@@ -11,7 +11,7 @@ class Menu extends CI_Controller {
 
                 $this->load->model('producto_tipo_model');
                 $this->load->model('producto_model');
-                $this->load->model('pedido_model');
+                $this->load->model('pedido_model'); 
 	}
 
 	public function index($id = FALSE)
