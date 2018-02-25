@@ -313,7 +313,7 @@ class Pedido extends CI_Controller {
 	        		}
 	        		else
 	        		{
-	        			$return["link"] = site_url('pedido/success');
+	        			$return["link"] = site_url('pedido/success_efectivo');
 	        		}
 	        		//////////////////////
 	        		// FIN MERCADO PAGO //
@@ -334,6 +334,17 @@ class Pedido extends CI_Controller {
 		endif;
 
 		print json_encode($return);
+	}
+
+	public function success_efectivo()
+	{
+		$data['datos_usuario'] = $this->Usuario_model->traer_datos_usuario($this->session->userdata('id_usuario'));
+		if($data['datos_usuario']->tipo_usuario == "Usuario Invitado")
+		{
+			session_destroy();
+		}
+
+		$this->load->view(self::$solapa.'/success');
 	}
 
 	public function success()

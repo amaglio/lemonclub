@@ -55,22 +55,46 @@ public function registrar_usuario( $array )
 			chrome_log("Usuario_model/ El email ya existe");
 			$id_usuario = $query->row()->id_usuario;
 
-			$array_where = array(  'id_usuario' =>  $id_usuario );
+			$sql2 = "SELECT 	*
+		 			FROM 	usuario_registrado u
+		 			WHERE 	u.id_usuario = ?   "; 
 
-			$array_usuario['nombre'] = $array['nombre'];
-			$array_usuario['apellido'] = $array['apellido'];
-			$array_usuario['password'] = md5($array['clave']); 
+			$query2 = $this->db->query($sql, array( $id_usuario ));
 
-			if(isset($array['direccion']) && !empty($array['direccion']))
-		        $array_usuario['direccion'] =  $array['direccion'];
+			if($query2->num_rows() > 0) // El usuario ya esta registrado
+			{
+				$array_where = array(  'id_usuario' =>  $id_usuario );
 
-	 
-		    if(isset($array['telefono']) && !empty($array['telefono']))
-		         $array_usuario['telefono'] =  $array['telefono'];
+				$array_usuario['nombre'] = $array['nombre'];
+				$array_usuario['apellido'] = $array['apellido'];
+				$array_usuario['password'] = md5($array['clave']); 
 
-			$this->db->where($array_where);
-			$this->db->update('usuario_registrado', $array_usuario);
+				if(isset($array['direccion']) && !empty($array['direccion']))
+			        $array_usuario['direccion'] =  $array['direccion'];
 
+		 
+			    if(isset($array['telefono']) && !empty($array['telefono']))
+			         $array_usuario['telefono'] =  $array['telefono'];
+
+				$this->db->where($array_where);
+				$this->db->update('usuario_registrado', $array_usuario);
+			}
+			else // el usuario no esta registrado
+			{
+				$usuario_registrado['id_usuario'] = $id_usuario;
+				$usuario_registrado['nombre'] = $array['nombre'];
+				$usuario_registrado['apellido'] = $array['apellido'];
+				$usuario_registrado['password'] = md5($array['clave']);
+		   
+				if(isset($array['direccion']) && !empty($array['direccion']))
+			        $usuario_registrado['direccion'] =  $array['direccion'];
+
+		 
+			    if(isset($array['telefono']) && !empty($array['telefono']))
+			         $usuario_registrado['telefono'] =  $array['telefono'];
+			 
+				$this->db->insert('usuario_registrado', $usuario_registrado);
+			}
 		}
 		else // El email no existe
 		{	
