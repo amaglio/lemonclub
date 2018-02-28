@@ -124,7 +124,7 @@ class Pedido_model extends CI_Model {
 			}
 			if(!array_key_exists('id_usuario', $array))
 			{
-				$array['id_usuario'] = NULL;
+				$array['id_usuario'] = $this->session->userdata('id_usuario');
 			}
 			if(!array_key_exists('id_forma_pago', $array))
 			{
@@ -141,7 +141,7 @@ class Pedido_model extends CI_Model {
 	            'id_pedido' => NULL,
 	            'id_pedido_estado' => PEDIDO_ESTADO_SIN_CONFIRMAR,
 	            'id_sucursal' => SUCURSAL,
-	            'id_usuario' => NULL,
+	            'id_usuario' => $this->session->userdata('id_usuario'),
 	            'id_forma_pago' => NULL,
 	            'id_forma_entrega' => NULL
 	        );
