@@ -84,16 +84,16 @@ if(!function_exists('enviar_email'))
     
         $CI->load->library('email'); // load library 
  
-        // $configuracion = array(
-        //         'protocol' => 'smtp',
-        //         'smtp_host' => 'ssl://smtp.googlemail.com',
-        //         'smtp_port' => 465,
-        //         'smtp_user' => 'digipayargentina@gmail.com',
-        //         'smtp_pass' => 'digipay2016',
-        //         'mailtype' => 'html',
-        //         'charset' => 'utf-8',
-        //         'newline' => "\r\n"
-        //     );
+        $configuracion = array(
+                'protocol' => 'smtp',
+                'smtp_host' => 'ssl://smtp.googlemail.com',
+                'smtp_port' => 465,
+                'smtp_user' => 'digipayargentina@gmail.com',
+                'smtp_pass' => 'digipay2016',
+                'mailtype' => 'html',
+                'charset' => 'utf-8',
+                'newline' => "\r\n"
+            );
 
         // $configuracion = array(
         //     'protocol' => 'smtp',
@@ -107,17 +107,17 @@ if(!function_exists('enviar_email'))
         // );
         
       
-        $configuracion = array(
-                        'protocol' => 'smtp',
-                        'smtp_host' => 'mail.lemonclub.com.ar',
-                        'smtp_port' => 587, 
-                        'smtp_user' => 'info@lemonclub.com.ar',
-                        'smtp_pass' => 'Webemail2018',
-                        'mailtype' => 'html',
-                        'charset' => 'utf-8',
-                        'newline' => "\r\n",
-                        'smtp_timeout' => 30,
-                    ); 
+        // $configuracion = array(
+        //                 'protocol' => 'smtp',
+        //                 'smtp_host' => 'mail.lemonclub.com.ar',
+        //                 'smtp_port' => 587, 
+        //                 'smtp_user' => 'info@lemonclub.com.ar',
+        //                 'smtp_pass' => 'Webemail2018',
+        //                 'mailtype' => 'html',
+        //                 'charset' => 'utf-8',
+        //                 'newline' => "\r\n",
+        //                 'smtp_timeout' => 30,
+        //             ); 
  
 
         $CI->email->initialize($configuracion);

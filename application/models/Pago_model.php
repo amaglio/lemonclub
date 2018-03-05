@@ -19,15 +19,18 @@ class Pago_model extends CI_Model {
     	$this->db->insert('pago_online', $data);
         $id_pago_online = $this->db->insert_id();
 
+
         if($id_mercadopago)
         {
 	        $data = array(
 	    		'id_pago_online' => $id_pago_online,
 	            'id_mercadopago' => $id_mercadopago
 	    	);
+
+	    	$this->db->insert('pago_mercadopago', $data);
     	}
 
-    	$this->db->insert('pago_mercadopago', $data);
+    	
 
         return $id_pago_online;
 	}

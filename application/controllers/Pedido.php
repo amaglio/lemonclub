@@ -166,26 +166,30 @@ class Pedido extends CI_Controller {
 
 	public function finalizar_pedido_ajax()
 	{
-		chrome_log("usuario/finalizar_pedido_ajax");
+		chrome_log("pedido/finalizar_pedido_ajax");
  		
  		$return["resultado"] = TRUE;
  		 
- 		//$this->session->set_userdata('id_pedido',12);
- 		// $_POST['id_pedido'] = $this->session->userdata('id_pedido');
- 		// $_POST['mail'] = "fabianmayoral@hotmail.com";
- 		// $_POST['nombre'] = "fabian";
- 		// $_POST['apellido'] = "mayoral";
- 		// $_POST['calle'] = "cerrito";
- 		// $_POST['altura'] = 620;
- 		// $_POST['pago'] = FORMA_PAGO_ONLINE;
- 		// $_POST['entrega'] = FORMA_ENTREGA_TAKEAWAY;
- 		// $_POST['horario'] = "12:00:00";
+ 		$this->session->set_userdata('id_pedido',12);
+
+ 		$_POST['id_pedido'] = $this->session->userdata('id_pedido');
+ 		$_POST['mail'] = "fabianmayoral@hotmail.com";
+ 		$_POST['nombre'] = "fabian";
+ 		$_POST['apellido'] = "mayoral";
+ 		$_POST['calle'] = "cerrito";
+ 		$_POST['altura'] = 620;
+ 		$_POST['pago'] = FORMA_PAGO_ONLINE;
+ 		$_POST['entrega'] = FORMA_ENTREGA_TAKEAWAY;
+ 		$_POST['horario'] = "12:00:00";
+
+ 			$this->form_validation->set_data($_POST);
 	 
 		if ($this->form_validation->run('finalizar_pedido') == FALSE):
 
 			chrome_log("No paso validacion");
 			$return["resultado"] = FALSE;
 			$return["mensaje"] = validation_errors(); 
+			echo validation_errors();
 			
 		else: 
 			chrome_log("Paso validacion");
@@ -210,7 +214,7 @@ class Pedido extends CI_Controller {
 
 	        	if($result)
 	        	{	
-	        		chrome_log("result");
+	        		chrome_log("True finalizar_pedido");
 
 	        		$usuario = $this->Usuario_model->traer_datos_usuario( $this->session->userdata('id_usuario') );
 
@@ -228,7 +232,8 @@ class Pedido extends CI_Controller {
 	        		$descripcion_forma_entrega =  $this->pedido_model->traer_descripcion_forma_entrega($this->input->post('entrega'));	 
 
 	        		if( $this->input->post('entrega') == FORMA_ENTREGA_DELIVERY )
-	        		{
+	        		{	
+	        			chrome_log("FORMA_ENTREGA_DELIVERY");
 	  					$mensaje .= 'Forma entrega:  DELIVERY <br>';
 
 	        			if($this->input->post('calle'))
@@ -239,6 +244,7 @@ class Pedido extends CI_Controller {
 	        		}
 	        		else
 	        		{
+	        			chrome_log("TAKE AWAY");
 	        			$mensaje .= 'Forma entrega:  TAKE AWAY <br>';
 	        		}
 
@@ -251,7 +257,8 @@ class Pedido extends CI_Controller {
 	        		$mensaje .= '<h3>Productos</h3> ';
 
 	        		foreach ($pedido as $key => $value) 
-	        		{
+	        		{	
+	        			chrome_log("pedido");
 	        			$mensaje .= '-----------------------------------------------------<br>';
 	        			$mensaje .= 'Nombre: '.$value['nombre'].'<br>';
 	        			$mensaje .= 'Descripcion: '.$value['descripcion'].'<br>';
@@ -270,9 +277,12 @@ class Pedido extends CI_Controller {
 	        		// MERCADO PAGO //
 	        		//////////////////
 	        		if( $this->input->post('pago') == FORMA_PAGO_ONLINE )
-	        		{
+	        		{	
+	        			chrome_log("FORMA_PAGO_ONLINE");
 	  					//$CI = &get_instance();
 					    $this->config->load("mercadopago", TRUE);
+
+
 					    $config = $this->config->item('mercadopago');
 					    $this->load->library('Mercadopago', $config);
 					    //$this->mercadopago->sandbox_mode(TRUE);
@@ -280,6 +290,7 @@ class Pedido extends CI_Controller {
 					    $items = array();
 					    foreach ($pedido as $key => $value) 
 					    {
+					    	chrome_log("FORMA_PAGO_ONLINE pedido ");
 					    	$aux = array();
 					    	$aux['title'] = $value['nombre'];
 					    	$aux['quantity'] = intval($value['cantidad']);
@@ -308,6 +319,8 @@ class Pedido extends CI_Controller {
 						);
 
 						$preference = $this->mercadopago->create_preference($pedido_data);
+
+
 						//$return["link"] = $preference['response']['init_point']; //PRODUCCION
 						$return["link"] = $preference['response']['sandbox_init_point']; //SANDBOX
 	        		}
@@ -327,6 +340,7 @@ class Pedido extends CI_Controller {
 	        	}
 	        	else
 	        	{
+	        		chrome_log("False ");
 	        		$return["resultado"] = FALSE;
 	        		$return['mensaje'] = "Ocurrio un error al cargar el pedido.";
 	        	}
