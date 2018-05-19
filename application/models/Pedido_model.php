@@ -29,7 +29,7 @@ class Pedido_model extends CI_Model {
 		                            WHERE P.id_pedido='.$id);
 		return $query->row_array();
 	}
-
+	
 	public function get_pedido_productos( $id ) 
 	{
 		if($this->session->userdata('id_usuario') == "")
@@ -124,7 +124,7 @@ class Pedido_model extends CI_Model {
 			}
 			if(!array_key_exists('id_usuario', $array))
 			{
-				$array['id_usuario'] = $this->session->userdata('id_usuario');
+				$array['id_usuario'] = NULL;
 			}
 			if(!array_key_exists('id_forma_pago', $array))
 			{
@@ -141,7 +141,7 @@ class Pedido_model extends CI_Model {
 	            'id_pedido' => NULL,
 	            'id_pedido_estado' => PEDIDO_ESTADO_SIN_CONFIRMAR,
 	            'id_sucursal' => SUCURSAL,
-	            'id_usuario' => $this->session->userdata('id_usuario'),
+	            'id_usuario' => NULL,
 	            'id_forma_pago' => NULL,
 	            'id_forma_entrega' => NULL
 	        );
