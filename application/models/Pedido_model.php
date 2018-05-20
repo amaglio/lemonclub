@@ -29,7 +29,7 @@ class Pedido_model extends CI_Model {
 		                            WHERE P.id_pedido='.$id);
 		return $query->row_array();
 	}
-
+	
 	public function get_pedido_productos( $id ) 
 	{
 		if($this->session->userdata('id_usuario') == "")
