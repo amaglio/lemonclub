@@ -12,6 +12,7 @@ public function __construct()
 	$this->load->model('Administrador_model');
 	$this->load->model('Pedido_model');
 	$this->load->model('Producto_model');
+	$this->load->model('Grupo_model');
 	$this->load->model('Estadisticas_model');
 	$this->load->library('grocery_CRUD'); 
 }
@@ -143,7 +144,7 @@ public function productos()
 		 ->display_as('descripcion','Descripcion del tipo de plato')
 		 ->display_as('id_producto_tipo','Tipo de producto');
 
-	$crud->add_action('Agregar Ingredientes',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/ingredientes.png', 'Administrador/agregar_ingrediente');
+	$crud->add_action('Grupo de ingredientes',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/grupo_ingredientes.png', 'Administrador/ver_grupos_producto');
 
 	
 	$state_info = $crud->getStateInfo();
@@ -230,6 +231,23 @@ public function ingredientes()
 	$this->_example_output($output);
 }
 
+public function grupo_ingregientes()
+{
+	$crud = new grocery_CRUD();
+
+	$crud->set_table('grupo');
+	$crud->columns('id_grupo','nombre','cantidad_default','cantidad_minima'	,'cantidad_maxima','precio_adicional' );
+	$crud->display_as('id_grupo','Id');
+	$crud->unset_delete();
+	$crud->set_language("spanish"); 
+	$crud->required_fields('nombre');
+
+	$crud->add_action('Ingredientes del grupo',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/ingredientes.png', 'Administrador/ver_agregar_ingrediente_grupo');
+
+	$output = $crud->render();
+
+	$this->_example_output($output);
+}
 
 public function tipos_ingredientes()
 {
@@ -401,7 +419,7 @@ public function f_agregar_textarea()
     return '<textarea name="address" rows="15"></textarea>';
 }
 
-public function agregar_ingrediente()
+public function ver_grupos_producto()
 {
  	$datos['mensaje'] = $this->session->flashdata('mensaje');
 	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
@@ -412,9 +430,37 @@ public function agregar_ingrediente()
 	$id_producto = $this->uri->segment(3);
 
 	$datos['producto_info'] = $this->Administrador_model->traer_informacion_producto($id_producto);
-	$datos['ingredientes_producto'] = $this->Administrador_model->traer_ingredientes_producto($id_producto);
+	
+	$datos['grupos_producto'] = $this->Producto_model->get_grupos_producto($id_producto);
 
-	$this->load->view('administrador/agregar_ingredientes_producto.php',$datos); 
+	$array_grupos = array();
+
+	foreach ($array_grupos as $row) 
+	{
+		$grupo['informacion_grupo']	= $row;
+
+		$grupo['ingredientes_grupo'] = $this->Producto_model->get_ingredientes_grupo_producto($id_producto,$row['id_grupo']);
+
+	}
+
+	$this->load->view('administrador/ver_grupos_producto.php',$datos); 
+ 
+}
+
+public function ver_agregar_ingrediente_grupo()
+{
+ 	$datos['mensaje'] = $this->session->flashdata('mensaje');
+	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+	$output->titulo = traer_titulo($this->uri->segment(2));
+
+	$this->load->view('administrador/index.php',(array)$output);
+
+	$id_gripo = $this->uri->segment(3);
+
+	$datos['grupo_informacion'] = $this->Grupo_model->get_informacion_grupo($id_gripo);
+	$datos['grupo_ingredientes'] = $this->Grupo_model->get_ingredientes_grupo($id_gripo);
+
+	$this->load->view('administrador/ver_agregar_ingredientes_grupo.php',$datos); 
 
 	/*
 
@@ -422,6 +468,104 @@ public function agregar_ingrediente()
 	$output->titulo = "Disponible en la <b>  etapa 2 <b>";
 	$this->load->view('administrador/index.php',(array)$output);*/
 }
+
+public function agregar_ingrediente_grupo()
+{
+	chrome_log("Administrador/agregar_ingrediente_grupo");
+ 
+	if ($this->form_validation->run('agregar_ingrediente_grupo') == FALSE):
+
+		chrome_log("No paso validacion");
+		$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.'); 
+
+	else: 
+	 
+		chrome_log("Paso validacion");
+
+		//	print_r($this->input->post());
+ 
+		$query = $this->Grupo_model->set_ingrediente_grupo( $this->input->post() );
+
+		if ( $query ):   // Si se creo el token, se envia el email
+		 
+			chrome_log("Pudo agrego el ingrediente al producto");
+ 			 
+			$this->session->set_flashdata('mensaje', 'Se le ha agregado el ingrediente exitosamente ');
+		 				 
+		else: 
+
+ 			$this->session->set_flashdata('mensaje', 'Ha ocurrido un error, por favor, intentá mas tarde.');
+
+		endif;  
+ 
+	endif; 
+
+	redirect('Administrador/ver_agregar_ingrediente_grupo/'.$this->input->post('id_grupo'),'refresh');
+}
+
+public function eliminar_ingrediente_grupo()
+{	
+	if ($this->form_validation->run('eliminar_ingrediente_grupo') == FALSE):
+
+		$this->session->set_flashdata('mensaje', 'Error, no paso validacion ');
+		chrome_log("No paso validacion");
+		$return["error"] = FALSE;
+
+	else:
+
+		chrome_log("Paso validacion");
+
+		if( $this->Grupo_model->eliminar_ingrediente_grupo( $this->input->post()) ):
+
+ 			$this->session->set_flashdata('mensaje', 'Se le ha eliminado el ingrediente exitosamente ');
+			$return["error"] = FALSE;
+
+		else:
+
+			$this->session->set_flashdata('mensaje', 'Error, no se le ha eliminado el ingrediente.');
+			$return["error"] = TRUE;
+
+		endif;
+		 
+
+	endif;		
+
+	print json_encode($return);	 
+}
+
+public function agregar_grupo_producto()
+{
+	chrome_log("Administrador/agregar_grupo_producto");
+ 
+	if ($this->form_validation->run('agregar_grupo_producto') == FALSE):
+
+		chrome_log("No paso validacion");
+		$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.'); 
+
+	else: 
+	 
+		chrome_log("Paso validacion"); 
+ 
+		$query = $this->Producto_model->set_grupo_producto( $this->input->post() );
+
+		if ( $query ):  
+		 
+			chrome_log("Pudo agrego el ingrediente al producto");
+ 			 
+			$this->session->set_flashdata('mensaje', 'Se ha agregado el grupo exitosamente ');
+		 				 
+		else: 
+
+ 			$this->session->set_flashdata('mensaje', 'Ha ocurrido un error, por favor, intentá mas tarde.');
+
+		endif;  
+ 
+	endif; 
+
+	redirect('Administrador/ver_grupos_producto/'.$this->input->post('id_producto'),'refresh');
+}
+
+
 
 
 public function agregar_ingrediente_producto()
@@ -511,5 +655,39 @@ public function producto_dia()
 	$this->_example_output($output);
 }
  
+public function ajax_grupo()
+{
+	chrome_log("ajax_grupos: " );
+
+	$buscar = $this->input->get('term');
+
+	if( isset($buscar) && strlen($buscar) > 1 )
+	{
+		$query=$this->db->query("   SELECT *
+									FROM	grupo g
+									WHERE 	g.nombre like '%$buscar%'
+									ORDER BY g.nombre"
+								);
+
+		
+		if($query->num_rows() > 0)
+		{
+			foreach ($query->result() as $row)
+			{	
+ 
+
+				$result[]= array( 	"id_grupo" => $row->id_grupo, 
+									"value" => $row->nombre 
+								);
+
+			 
+			}
+		} 
+		
+		echo json_encode($result);
+	}
+}
+ 
+
 
 }

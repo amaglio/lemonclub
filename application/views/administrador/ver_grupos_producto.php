@@ -5,7 +5,7 @@
 		color:red;
 	}
  
-	#div_ingrediente_seleccionado{
+	#div_grupo_seleccionado{
       display: none;
       background-color: rgba(60, 141, 188, 0.55);
       padding: 20px 20px 0px 20px;
@@ -47,16 +47,41 @@
 <div class="col-md-5">
   <? mensaje_resultado($mensaje); ?>
 	<div class="panel panel-default">
-	  	<div class="panel-heading"><strong>Ingredientes del producto</strong></div>
+	  	<div class="panel-heading"><strong>Grupos del producto</strong></div>
   		<div class="panel-body">
 
-  			<?php if($ingredientes_producto->num_rows() > 0): ?>
-						
+  			<?php if(count($grupos_producto) > 0): ?>
+				    
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Nombre</th> 
+                  <th></th> 
+                </tr>
+              </thead>
+              <tbody>
 
-			   <?php else: ?>
+              <?php foreach ($grupos_producto as $row): ?>
+          
+                <tr>
+                  <td><?=$row['nombre']?></td> 
+                  <td>
+                    <a class="btn btn-danger btn-xs" onclick="eliminar_ingrediente_grupo(<?=$row['id_producto']?>,<?=$row['id_grupo']?>)">
+                      Eliminar
+                    </a>
+                  </td> 
+                </tr>
+
+              <?php endforeach ?>
+
+              </tbody>
+
+            </table>		
+
+        <?php else: ?>
 
 					<div class="alert alert-danger alert-dismissable"> 
-					   Aún no hay ingredientes en el producto
+					   Aún no hay grupos en el producto
 					</div>
 
   			<?php endif; ?>
@@ -69,36 +94,33 @@
 <div class="col-md-4">
 
 	<div class="panel panel-default">
-	  	<div class="panel-heading"><strong>Agregar ingrediente</strong></div>
+	  	<div class="panel-heading"><strong>Agregar grupo</strong></div>
   		<div class="panel-body">
 
-  			<form  name="form_agregar_ingrediente" id="form_agregar_ingrediente"  method="POST"  action="<?=base_url()?>index.php/administrador/agregar_ingrediente_producto/" >
+  			<form  name="form_agregar_grupo" id="form_agregar_grupo"  method="POST"  action="<?=base_url()?>index.php/administrador/agregar_grupo_producto/" >
 
-        <input type="text" class="form-control" name="id_producto" id="id_producto" value="<?=$producto_info->id_producto?>" readonly="readonly">
-				
-				<div class="form-group">
-				    <label for="email">Ingrediente</label>
-				    <input type="text" class="form-control" id="ingrediente"  name="ingrediente" >
-				</div>
+          <input type="hidden" class="form-control" name="id_producto" id="id_producto" value="<?=$producto_info->id_producto?>" readonly="readonly">
+  				
+  				<div class="form-group">
+  				    <label for="email">Grupo</label>
+  				    <input type="text" class="form-control" id="grupo"  name="grupo" >
+  				</div>
 
-        <div class="form-group" id="div_ingrediente_seleccionado">
-            <a onclick="ocultar_ingrediente()"> <i class="fa fa-times" aria-hidden="true"> Eliminar </i></a> <input readonly="readonly" type="text" class="form-control" id="ingrediente_seleccionado"  name="ingrediente_seleccionado" >
-            
-            <input readonly="readonly" type="hidden" class="form-control" id="id_ingrediente" name="id_ingrediente" > <br>
-				</div>
+          <div class="form-group" id="div_grupo_seleccionado">
+              <a class="btn btn-danger btn-xs" onclick="ocultar_grupo()"> 
+                  <i class="fa fa-times" aria-hidden="true"> </i> Eliminar
+              </a> 
 
-				<div class="form-group">
-				    <label for="pwd">Ingrediente default:</label>
-				    <input type="checkbox" name="ingrediente_default" name="ingrediente_default" value="1" >
-				</div>
-		 		<div class="form-group">
-				    <label for="pwd">Ingrediente fijo:</label>
-				    <input type="checkbox" name="ingrediente_fijo" name="ingrediente_fijo" value="1" >
-				</div>
-				<div class="form-group">
-				    <input class="btn btn-primary" type="submit" value="Agregar Ingrediente" >
-				</div>
-			</form>
+              <input readonly="readonly" type="text" class="form-control" id="grupo_seleccionado"  name="grupo_seleccionado" >
+              
+              <input readonly="readonly" type="hidden" class="form-control" id="id_grupo" name="id_grupo" > <br>
+  				
+   
+      				<div class="form-group">
+      				    <input class="btn btn-primary" type="submit" value="Agregar grupo" >
+      				</div>
+          </div>
+  			</form>
 
 
   		</div>
@@ -120,10 +142,10 @@
 
 <script type="text/javascript">
 	
-	jq_va.validator.addMethod("seleccionar_ingrediente", 
+	jq_va.validator.addMethod("seleccionar_grupo", 
       function(value, element) 
         {   
-            var empresa_manual = jq_va( "#id_ingrediente" ).val().length; 
+            var empresa_manual = jq_va( "#id_grupo" ).val().length; 
  
 
             if( empresa_manual<= 0 )
@@ -139,30 +161,30 @@
             } 
            
         }, 
-       "Debe seleccionar el ingrediente del listado o cargarlo desde el menu->ingrediente "
+       "Debe seleccionar el grupo del listado o cargarlo desde el menu->grupo "
     );
 
 
 	jq_va(function(){
 
-            jq_va('#form_agregar_ingrediente').validate({
+            jq_va('#form_agregar_grupo').validate({
 
                 rules :{
 
-                        ingrediente: {
-                            seleccionar_ingrediente : true
+                        grupo: {
+                            seleccionar_grupo : true
                         }
 
                 },
                 messages : {
 
-                        ingrediente: {
-                            seleccionar_ingrediente : "Debe seleccionar el ingrediente del listado o cargarlo desde el menu->ingrediente "
+                        grupo: {
+                            seleccionar_grupo : "Debe seleccionar el grupo del listado o cargarlo desde el menu->grupo "
                         } 
                 },
                 invalidHandler: function(form, validator) {
 
-                    jq_va('#form_agregar_ingrediente').find(":submit").removeAttr('disabled');
+                    jq_va('#form_agregar_grupo').find(":submit").removeAttr('disabled');
                 },
 			    submitHandler: function(form) {
 			    
@@ -185,12 +207,12 @@
 
 <script type="text/javascript">
 
-    jq_ui('#ingrediente').autocomplete({
-          source:'<?php echo site_url('administrador/ajax_ingrediente'); ?>',
+    jq_ui('#grupo').autocomplete({
+          source:'<?php echo site_url('administrador/ajax_grupo'); ?>',
           select: function(event, ui) 
           {   
               $(ui.item.mensaje).appendTo("#programas_elegidos");
-              $("#ingrediente").val("");
+              $("#grupo").val("");
           } 
 
     });
@@ -198,21 +220,21 @@
  
     //-- EDUCACION 
 
-    jq_ui('#ingrediente').autocomplete({
+    jq_ui('#grupo').autocomplete({
           
           minLength: 3,
           change: function( event, ui ) {
              //jq_ui('#div_educacion_manual').hide();
           },
-          source:'<?php echo site_url('administrador/ajax_ingrediente'); ?>',
+          source:'<?php echo site_url('administrador/ajax_grupo'); ?>',
           select: function(event, ui) 
           {   
-              jq_ui("#div_ingrediente_seleccionado").show();
-              jq_ui("#id_ingrediente").val(ui.item.id_ingrediente);
-              jq_ui("#ingrediente_seleccionado").val(ui.item.value);
-              jq_ui('#ingrediente').attr('readonly', true);
-              jq_ui('#ingrediente').val("");
-              jq_ui( "#ingrediente_seleccionado" ).focus();
+              jq_ui("#div_grupo_seleccionado").show();
+              jq_ui("#id_grupo").val(ui.item.id_grupo);
+              jq_ui("#grupo_seleccionado").val(ui.item.value);
+              jq_ui('#grupo').attr('readonly', true);
+              jq_ui('#grupo').val("");
+              jq_ui( "#grupo_seleccionado" ).focus();
 
               jq_ui(this).val("");
               return false; // Importante, si esto no borra el input
@@ -237,13 +259,13 @@
 
     });
 
-	function ocultar_ingrediente()
+	function ocultar_grupo()
     {
-        jq_ui('#div_ingrediente_seleccionado').hide();
-        jq_ui('#id_ingrediente').val("");
-        jq_ui('#ingrediente_seleccionado').val("");
-        jq_ui('#ingrediente').val("");
-        jq_ui('#ingrediente').attr('readonly', false);
+        jq_ui('#div_grupo_seleccionado').hide();
+        jq_ui('#id_grupo').val("");
+        jq_ui('#grupo_seleccionado').val("");
+        jq_ui('#grupo').val("");
+        jq_ui('#grupo').attr('readonly', false);
     }
 
 

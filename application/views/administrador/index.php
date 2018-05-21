@@ -11,6 +11,10 @@
 	
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
+	<script type="text/javascript">
+        CI_ROOT = "<?=base_url()?>";
+	</script>
+
 	<style type="text/css">
 		.navbar-brand{
 			padding: 10px 15px;
@@ -83,7 +87,7 @@ foreach($css_files as $file): ?>
 
 	      	<li <? echo ($this->uri->segment(2) == 'ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/ingredientes')?>'><i class="fa fa-flask" aria-hidden="true"></i> Ingredientes</a></li>
 
-	      	<li <? echo ($this->uri->segment(2) == 'tipos_ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/tipos_ingredientes')?>'><i class="fa fa-tag" aria-hidden="true"></i> Tipo de Ingredientes</a></li>
+	      	<li <? echo ($this->uri->segment(2) == 'grupo_ingregientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/grupo_ingregientes')?>'><i class="fa fa-tag" aria-hidden="true"></i> Grupos</a></li>
 
 			<li <? echo ($this->uri->segment(2) == 'usuarios_registrados' || $this->uri->segment(2) == 'usuarios_invitados' )? 'class="dropdown active"' :  'class="dropdown"' ;  ?>>
 	        	<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users" aria-hidden="true"></i> Usuarios<span class="caret"></span></a>

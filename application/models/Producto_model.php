@@ -47,6 +47,38 @@ class Producto_model extends CI_Model {
         return $query->result_array();
     }
 
+    function get_grupos_producto($id_producto)
+    {
+        $sql =  '   SELECT *
+                    FROM    producto_grupo pg,
+                            grupo g
+                    WHERE   pg.id_producto = ?
+                    AND     pg.id_grupo = g.id_grupo' ; 
+
+        $query = $this->db->query($sql, array( $id_producto) ); 
+
+        return $query->result_array();
+    }
+
+    function set_grupo_producto($array)
+    {
+        $array = array(
+                'id_producto' => $array['id_producto'],
+                'id_grupo' => $array['id_grupo']
+            );
+
+        return $this->db->insert('producto_grupo', $array);
+    }
+
+    function get_ingredientes_grupo_producto($id_producto)
+    {
+        $sql =  '   ' ; 
+
+        $query = $this->db->query($sql, array( $id_producto) ); 
+
+        return $query->result_array();
+    }
+
 }
 
 /* End of file  */

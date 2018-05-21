@@ -192,6 +192,46 @@ $config = array(
                                         ) 
                                 ),
 
+             'agregar_ingrediente_grupo' => array(
+                                    array(
+                                            'field' => 'id_grupo',
+                                            'label' => 'id_grupo',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'id_ingrediente',
+                                            'label' => 'id_ingrediente',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ) 
+                                ),
+            
+            'eliminar_ingrediente_grupo' => array(
+                                    array(
+                                            'field' => 'id_grupo',
+                                            'label' => 'id_grupo',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'id_ingrediente',
+                                            'label' => 'id_ingrediente',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ) 
+                                ),
+
+            'agregar_grupo_producto' => array(
+                                    array(
+                                            'field' => 'id_producto',
+                                            'label' => 'id_producto',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'id_grupo',
+                                            'label' => 'id_grupo',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ) 
+                                ),
+
+
 
 // --------------------------------- PEDIDO ------------------------------ 
 
