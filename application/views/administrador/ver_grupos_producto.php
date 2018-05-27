@@ -50,29 +50,58 @@
 	  	<div class="panel-heading"><strong>Grupos del producto</strong></div>
   		<div class="panel-body">
 
-  			<?php if(count($grupos_producto) > 0): ?>
+  			<?php if(count($grupos_ingredientes) > 0): ?>
 				    
             <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Nombre</th> 
-                  <th></th> 
-                </tr>
-              </thead>
+               
               <tbody>
 
-              <?php foreach ($grupos_producto as $row): ?>
+              <?php for ($i=0; $i < count($grupos_ingredientes) ; $i++): ?>
+
+                <?php $grupo = $grupos_ingredientes[$i]['informacion_grupo'];  ?>
+
+                      <tr style="background-color: #80808059">
+                        <th><?=$grupo['nombre']?></th> 
+                        <td>
+                          <a class="btn btn-danger btn-xs" onclick="eliminar_grupo_producto(<?=$grupo['id_producto']?>,<?=$grupo['id_grupo']?>)">
+                            Eliminar
+                          </a>
+                        </td> 
+                      </tr>
+                      <tr>
+                        <td colspan="2">
+                          <table class="table table-striped">
+                            <tr style="font-size: 12px">
+                              <th>Ingrediente</th> 
+                              <th>Fijo</th> 
+                              <th>Default</th>
+                            </tr>
+                          <?php foreach ( $grupos_ingredientes[$i]['ingredientes_grupo'] as $ingrediente): ?>
+                            <tr>
+                              <td><?=$ingrediente['nombre']?></td> 
+                              <td><input type="checkbox" name="fijo" value="1" ></td> 
+                              <td><input type="checkbox" name="fijo" value="1" ></td>
+                            </tr>
+
+
+                          <?php endforeach; ?>
+                          </table>
+                        </td>
+                      </tr>
+              <?php endfor; ?>
+
+              <?php /* foreach ($grupos_producto as $row): ?>
           
                 <tr>
                   <td><?=$row['nombre']?></td> 
                   <td>
-                    <a class="btn btn-danger btn-xs" onclick="eliminar_ingrediente_grupo(<?=$row['id_producto']?>,<?=$row['id_grupo']?>)">
+                    <a class="btn btn-danger btn-xs" onclick="eliminar_grupo_producto(<?=$row['id_producto']?>,<?=$row['id_grupo']?>)">
                       Eliminar
                     </a>
                   </td> 
                 </tr>
 
-              <?php endforeach ?>
+              <?php endforeach */?>
 
               </tbody>
 
@@ -270,5 +299,41 @@
 
 
 </script>
+
+<script type="text/javascript">
+
+  function eliminar_grupo_producto(id_producto, id_grupo)
+  {
+    
+    if (confirm('Seguro queres eliminar el grupo del producto ?')) 
+    { 
+      $.ajax({
+                  url: CI_ROOT+'index.php/administrador/eliminar_grupo_producto',
+                  data: { id_producto: id_producto, id_grupo: id_grupo },
+                  async: true,
+                  type: 'POST',
+                  dataType: 'JSON',
+                  success: function(data)
+                  {
+                    if(data.error == false)
+                    {
+                      alert("Se ha eliminado el grupo del producto");
+                      location.reload();
+                    }
+                    else
+                    {
+                      alert("No se ha eliminado el grupo");
+                      location.reload();
+                    }
+                  },
+                  error: function(x, status, error){
+                    alert("error");
+                  }
+            });
+    }
+  }
+
+</script>
+
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

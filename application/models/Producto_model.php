@@ -61,20 +61,97 @@ class Producto_model extends CI_Model {
     }
 
     function set_grupo_producto($array)
-    {
-        $array = array(
+    {   
+        $this->db->trans_start();
+
+        $array_grupo = array(
                 'id_producto' => $array['id_producto'],
                 'id_grupo' => $array['id_grupo']
             );
 
-        return $this->db->insert('producto_grupo', $array);
+        $this->db->insert('producto_grupo', $array_grupo);
+
+        // Traigo los ingredientes del grupo y los agrego al producto-grupo
+
+        $this->load->model('Grupo_model');
+
+        $ingredientes = $this->Grupo_model->get_ingredientes_grupo($array['id_grupo']);
+
+        foreach ($ingredientes as $row) 
+        {
+            $array_ingrediente = array(
+                'id_producto' => $array['id_producto'],
+                'id_grupo' => $array['id_grupo'],
+                'id_ingrediente' => $row['id_ingrediente'],
+            );
+
+            $this->db->insert('producto_grupo_ingrediente', $array_ingrediente);
+        }
+
+        $this->db->trans_complete();
+
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            $flag = false;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            $flag = true;
+        } 
+
+        return $flag; 
     }
 
-    function get_ingredientes_grupo_producto($id_producto)
-    {
-        $sql =  '   ' ; 
+    function delete_grupo_producto($array)
+    {   
+        $this->db->trans_start();
 
-        $query = $this->db->query($sql, array( $id_producto) ); 
+        // Eliminos los ingredientes grupos productos
+
+        $array_grupo_producto_ing['id_producto'] = utf8_decode($array['id_producto']);
+        $array_grupo_producto_ing['id_grupo'] = utf8_decode($array['id_grupo']); 
+
+        $this->db->delete('producto_grupo_ingrediente',  $array_grupo_producto_ing );
+
+        // Elimino el grupo
+
+        $array_grupo_producto['id_producto'] = utf8_decode($array['id_producto']);
+        $array_grupo_producto['id_grupo'] = utf8_decode($array['id_grupo']); 
+
+        $this->db->delete('producto_grupo',  $array_grupo_producto );
+
+        $this->db->trans_complete();
+
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            $flag = false;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            $flag = true;
+        } 
+
+        return $flag; 
+        
+    }
+
+
+    function get_ingredientes_grupo_producto($id_producto, $id_grupo)
+    {
+        $sql =  '   SELECT *
+                    FROM    producto_grupo_ingrediente pgi,
+                            ingrediente i
+                    WHERE   pgi.id_producto = ?
+                    AND     pgi.id_grupo = ?  
+                    AND     pgi.id_ingrediente = i.id_ingrediente ' ; 
+
+        $query = $this->db->query($sql, array( $id_producto, $id_grupo) ); 
 
         return $query->result_array();
     }

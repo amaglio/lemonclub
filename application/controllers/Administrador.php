@@ -430,18 +430,21 @@ public function ver_grupos_producto()
 	$id_producto = $this->uri->segment(3);
 
 	$datos['producto_info'] = $this->Administrador_model->traer_informacion_producto($id_producto);
-	
-	$datos['grupos_producto'] = $this->Producto_model->get_grupos_producto($id_producto);
+	//$datos['grupos_producto'] = $this->Producto_model->get_grupos_producto($id_producto);
+
+	$grupos_producto = $this->Producto_model->get_grupos_producto($id_producto);
 
 	$array_grupos = array();
 
-	foreach ($array_grupos as $row) 
+	foreach ($grupos_producto as $row) 
 	{
 		$grupo['informacion_grupo']	= $row;
-
 		$grupo['ingredientes_grupo'] = $this->Producto_model->get_ingredientes_grupo_producto($id_producto,$row['id_grupo']);
 
+		array_push($array_grupos, $grupo);
 	}
+
+	$datos['grupos_ingredientes'] = $array_grupos;
 
 	$this->load->view('administrador/ver_grupos_producto.php',$datos); 
  
@@ -469,6 +472,7 @@ public function ver_agregar_ingrediente_grupo()
 	$this->load->view('administrador/index.php',(array)$output);*/
 }
 
+// GRUPOS 
 public function agregar_ingrediente_grupo()
 {
 	chrome_log("Administrador/agregar_ingrediente_grupo");
@@ -509,7 +513,7 @@ public function eliminar_ingrediente_grupo()
 
 		$this->session->set_flashdata('mensaje', 'Error, no paso validacion ');
 		chrome_log("No paso validacion");
-		$return["error"] = FALSE;
+		$return["error"] = TRUE;
 
 	else:
 
@@ -532,6 +536,8 @@ public function eliminar_ingrediente_grupo()
 
 	print json_encode($return);	 
 }
+
+// PRODUCTO - GRUPOS 
 
 public function agregar_grupo_producto()
 {
@@ -563,6 +569,40 @@ public function agregar_grupo_producto()
 	endif; 
 
 	redirect('Administrador/ver_grupos_producto/'.$this->input->post('id_producto'),'refresh');
+}
+
+public function eliminar_grupo_producto()
+{
+	chrome_log("Administrador/eliminar_grupo_producto");
+ 
+	if ($this->form_validation->run('eliminar_grupo_producto') == FALSE):
+
+		chrome_log("No paso validacion");
+		$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.'); 
+		$return["error"] = TRUE;
+
+	else: 
+	 
+		chrome_log("Paso validacion"); 
+ 
+		$query = $this->Producto_model->delete_grupo_producto( $this->input->post() );
+
+		if ( $query ):  
+		 
+			chrome_log("Pudo elimino el grupo del producto");
+			$this->session->set_flashdata('mensaje', 'Se ha eliminado el grupo exitosamente ');
+			$return["error"] = FALSE;
+		 				 
+		else: 
+
+ 			$this->session->set_flashdata('mensaje', 'Ha ocurrido un error, por favor, intentá mas tarde.');
+ 			$return["error"] = TRUE;
+
+		endif;  
+ 
+	endif; 
+
+	print json_encode($return);	
 }
 
 
