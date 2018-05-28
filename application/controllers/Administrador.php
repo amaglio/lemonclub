@@ -213,10 +213,11 @@ public function ingredientes()
 	$crud = new grocery_CRUD();
 
 	$crud->set_table('ingrediente');
-	$crud->columns('id_ingrediente','nombre','precio','calorias', 'path_imagen', 'id_ingrediente_tipo');
+	$crud->columns('id_ingrediente','nombre','precio','calorias', 'path_imagen'	);
 	$crud->display_as('id_ingrediente','Id')
 		 ->display_as('id_ingrediente_tipo','Tipo de Ingrediente')
-		 ->display_as('descripcion','Descripcion del tipo');
+		 ->display_as('descripcion','Descripcion del tipo')
+		 ->display_as('path_imagen','Imagen');
 	$crud->unset_delete();
 	$crud->set_language("spanish"); 
 	$crud->required_fields('descripcion');
