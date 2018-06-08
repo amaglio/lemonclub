@@ -234,10 +234,53 @@ class Pedido_model extends CI_Model {
 	            'precio_unitario' => $producto['precio']
 	        );
 	        $result = $this->db->insert('pedido_producto', $array);
+
+	        //-----------------------------------------
+	        //-------------- [NUEVO] -------------------
+	        //-----------------------------------------
+
+		        $array_grupo_ingredientes = $this->get_ingredientes_default_producto($id_producto);
+
+		        // Recorro los ingredientes
+		        foreach ($array_grupo_ingredientes as $row) 
+		        {
+
+					$array_ingredientes = array(
+			            'id_pedido_producto' => $this->session->userdata('id_pedido'),
+			            'id_grupo' => $row['id_grupo'],
+			            'id_ingrediente' => $row['id_ingrediente']
+		        	);
+
+		        	$result = $this->db->insert('pedido_producto_ingrediente', $array_ingredientes);
+	 
+		        }
+
+	        //-----------------------------------------
+	        //-------------- [FIN NUEVO] -------------------
+	        //-----------------------------------------
 		}
 
         return $result;
 	}
+
+	public function get_ingredientes_default_producto($id_producto)
+    {
+        chrome_log("Producto_model/get_ingredientes_producto");
+
+        // Traigo los ingredientes default del producto 
+
+        $sql = "SELECT pg.id_grupo
+                FROM producto_grupo pg,
+                     producto_grupo_ingrediente pgi 
+                WHERE pg.id_producto = ? 
+                AND pg.id_producto = pgi.id_producto
+                AND pg.id_grupo = pgi.id_grupo 
+                AND pgi.es_default = 1"; 
+
+        $query = $this->db->query($sql, array($id_producto) );
+     
+        return $query->result_array();
+    }
 
 	public function mover_productos_carrito()
 	{

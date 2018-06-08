@@ -36,7 +36,7 @@ class Pedido extends CI_Controller {
 
 	public function agregar_producto_ajax()
 	{
-
+		//$_POST['id'] = 1;
 		if ( $this->form_validation->run('agregar_producto_ajax') == FALSE):
 
 			$return['error'] = TRUE;
