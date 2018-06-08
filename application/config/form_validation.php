@@ -1,4 +1,4 @@
-<?
+<?php
 $config = array(
             
 // --------------------------------- LOGUEO ADMIN ------------------------------
@@ -367,6 +367,26 @@ $config = array(
                                         ) 
                                 ),
 
+
+// --------------------------------- ESTADISTICAS ------------------------------ 
+
+
+            'ver_editar_ingredientes_producto' => array(
+
+                                        array(
+                                                'field' => 'id_pedido_producto',
+                                                'label' => 'id_pedido_producto',
+                                                'rules' => 'strip_tags|required|trim|xss_clean'
+                                            )
+                                    ),
+
+            
+            'editar_ingredientes_producto' => array(
+
+                                        array(
+                                               
+                                            ) 
+                                    )
 
  
                                 

@@ -23,7 +23,7 @@ $this->load->view('templates/head');
 		<div class="row">
 			<div class="col-xs-12 col-sm-7 col-md-7 col-md-offset-1">
 
-          <? echo '<div id="area-mensaje"></div>'; ?>
+          <?php echo '<div id="area-mensaje"></div>'; ?>
 			   
           <div role="tabpanel" class="tab-pane active" id="ingresar">
               <div class="formulario">

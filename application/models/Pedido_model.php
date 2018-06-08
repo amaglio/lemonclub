@@ -66,6 +66,44 @@ class Pedido_model extends CI_Model {
 		                            WHERE PP.id_pedido='.$id);
 		return $query->result_array();
 	}
+
+	public function get_informacion_pedido_producto($id_pedido_producto)
+	{
+		chrome_log("Pedido_model/get_informacion_pedido_producto");
+
+	 	$sql = "SELECT 
+				           pp.*
+				FROM
+				           pedido_producto pp 
+				WHERE
+				         pp.id_pedido = ? "; 
+
+		$query = $this->db->query($sql, array($id_pedido_producto) );
+	 
+	    return $query->row_array();
+	}
+
+	public function get_ingredientes_pedido_producto($id_pedido_producto)
+	{
+		chrome_log("Pedido_model/get_ingredientes_pedido_producto");
+
+		$sql = "SELECT 	ppi.*, 
+			           	i.nombre,
+			           	i.path_imagen,
+			           	i.precio,
+			           	i.calorias
+				FROM
+				        pedido_producto_ingrediente ppi,
+				      	ingrediente i 
+
+				WHERE
+				        ppi.id_pedido_producto = ?
+				AND    	i.id_ingrediente = i.id_ingrediente  "; 
+
+		$query = $this->db->query($sql, array($id_pedido_producto) );
+	 
+	    return $query->result_array();
+	}
 	
 	public function get_total_pedido( $id ) 
 	{

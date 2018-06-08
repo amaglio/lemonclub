@@ -46,9 +46,9 @@
 
 </style>
 
-<? echo $menu_pedidos; ?>
+<?php echo $menu_pedidos; ?>
 
-<? echo "<div class='col-md-12'>".mensaje_resultado($mensaje)."</div>"; ?>
+<?php echo "<div class='col-md-12'>".mensaje_resultado($mensaje)."</div>"; ?>
  
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -74,7 +74,7 @@
                             </tr>
                         </thead>
 
-                          <?  if( count($pedidos) > 0):
+                          <?php  if( count($pedidos) > 0):
 
                                 foreach ($pedidos as $row) 
                                 {  ?>
@@ -85,14 +85,14 @@
                                     <td><?=$row['informacion_pedido']['id_pedido']?></td>
                                     <td><?=$row['informacion_pedido']['email']?></td>
                                     <td>
-                                        <?
+                                        <?php
                                           foreach ($row['productos'] as $row2) 
                                           { ?>
                                               <div class="col-md-12">
                                                   <strong><?=$row2['nombre']?></strong>
                                                   <div class="pull-right"><span>$</span><span><?=$row2['precio']?></span></div>
                                               </div>
-                                        <?
+                                        <?php
                                           }
                                         ?>
 
@@ -105,9 +105,9 @@
 
                                           <input type="hidden" name="id_pedido" id="id_pedido" value="<?=$row['informacion_pedido']['id_pedido']?>" >
 
-                                          <?  $estados = array(); ?>
+                                          <?php  $estados = array(); ?>
                                             
-                                          <?  foreach ($estados_pedidos as $row3):  
+                                          <?php  foreach ($estados_pedidos as $row3):  
 
                                                 
                                                   $estados[$row3['id_pedido_estado']] = strtoupper($row3['descripcion']);
@@ -123,7 +123,7 @@
 
                                     </td>
                                   </tr>
-                            <?  }
+                            <?php  }
 
                               endif;
 

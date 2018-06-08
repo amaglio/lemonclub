@@ -24,30 +24,60 @@ $this->load->view('templates/head');
 
 				<div id="area-mensaje"></div>
 
-				<div class="titulo"><i class="fa fa-shopping-cart fa-lg"></i> &nbsp; CARRITO <span id="cant_items_carrito">(<?php echo $cantidad; ?>)</span> ITEMS</div>
+				<div class="titulo">
+					<i class="fa fa-shopping-cart fa-lg"></i> &nbsp; INGREDIENTES <span id="cant_items_carrito">(<?php echo $informacion_pedido_producto['cantidad']; ?>)</span>
+				</div>
 				<div class="table">
-					<div class="row hidden-xs">
-						<div class="col-xs-2 th"></div>
-						<div class="col-xs-6 th">PRODUCTO</div>
-						<div class="col-xs-2 th">PRECIO</div>
-						<div class="col-xs-2 th">CANTIDAD</div>
-					</div>
 					<?php
-					foreach ($items as $key => $item)
+					foreach ($informacion_producto as $key => $item)
 					{
-						echo '<div class="row item" id="item_'.$item['id_pedido_producto'].'">
+						echo '<div class="row item" style="background:#ccc; margin:0px;">
 								<div class="col-xs-12 col-sm-2"><img src="'.base_url('assets/images/productos/'.$item['path_imagen']).'" class="img-responsive"></div>
 								<div class="col-xs-12 col-sm-6">
 									<span class="title">'.$item['nombre'].'</span><br>
 									<span class="descripcion">'.$item['descripcion'].'</span>
-									<a class="btn btn-warning" href="'.site_url('pedido/ver_editar_ingredientes_producto/'.$item['id_pedido_producto']).'"><i class="fa fa-pencil"></i></a>
 								</div>
 								<div class="col-xs-12 col-sm-2 precio">$'.$this->cart->format_number($item['precio']).'</div>
 								<div class="col-xs-12 col-sm-2 cantidad">
-									<input type="number" min="1" step="1" name="cantidad[]" id="cant_'.$item['id_pedido_producto'].'" value="'.$item['cantidad'].'"  onchange="modificar_cantidad(\''.$item['id_pedido_producto'].'\', this.value);" class="form-control pull-left">
-									<button class="btn btn-danger" onclick="eliminar_producto(\''.$item['id_pedido_producto'].'\')"><i class="fa fa-times"></i></button>
+									<input type="number" min="1" step="1" name="cantidad[]" value="'.$informacion_pedido_producto['cantidad'].'" class="form-control pull-left" disabled>
 									</div>
 							</div>';
+					}
+					
+					echo '<div class="row hidden-xs">
+							<div class="col-xs-2 th"></div>
+							<div class="col-xs-6 th">INGREDIENTE</div>
+							<div class="col-xs-2 th">PRECIO</div>
+							<div class="col-xs-2 th">SELECCIONADO</div>
+						</div>';
+					for ( $i=0; $i < count( $grupos_producto); $i++ )
+					{
+						// Aca tenes toda la informacion para controlar el grupo
+						$informacion_grupo = $grupos_producto[$i]['datos_grupo'];
+
+						// Listamos los ingredientes y hacemos checkbox.
+						foreach ($grupos_producto[$i]['ingredientes_grupo'] as $row)
+						{
+							// Hay que controlar si le ingrediente ya esta en el pedido para chequearlo.
+							// hay que usar el array:  $informacion_ingredientes_pedido_producto.
+							$dato['id_grupo'] = $row['id_grupo'];
+							$dato['id_ingrediente'] = $row['id_ingrediente'];
+							$json_dato = json_encode($dato);
+							echo '<div class="row item" id="item_'.$row['id_ingrediente'].'">';
+								echo '<div class="col-xs-12 col-sm-2">';
+									echo '<img src="'.base_url('assets/images/productos/'.$row['path_imagen']).'" class="img-responsive">';
+								echo '</div>';
+								echo '<div class="col-xs-12 col-sm-6">';
+									echo $row['nombre'];
+								echo '</div>';
+								echo '<div class="col-xs-12 col-sm-2">';
+									echo $grupos_producto[$i]['datos_grupo']['precio_adicional'];
+								echo '</div>';
+								echo '<div class="col-xs-12 col-sm-2">';
+									echo '<input type="checkbox" name="ingrediente[]" value="'.$json_dato.'" >';
+								echo '</div>';
+							echo '</div>';
+						}
 					}
 					?>
 				</div>
@@ -59,18 +89,11 @@ $this->load->view('templates/head');
 				<div class="row">
 					<div class="col-xs-12 col-sm-3 col-sm-push-9" style="text-align:right">
 						<?php
-							if($items && count($items))
-							{
-								echo '<a href="'.site_url('pedido/confirmar_pedido').'" class="btn btn-amarillo btn-block">CONFIRMAR PEDIDO</a>';
-							}
-							else
-							{
-								echo '<a href="javascript: mensaje_no_items();" class="btn btn-amarillo btn-block">FINALIZAR COMPRA</a>';
-							}
+							echo '<a href="'.site_url('pedido/confirmar_pedido').'" class="btn btn-amarillo btn-block">GUARDAR</a>';
 						?>
 					</div>
 					<div class="col-xs-12 col-sm-3 col-sm-pull-3" style="text-align:left">
-						<a href="<?=site_url('menu')?>" class="btn btn-default btn-block">SEGUIR COMPRANDO</a>
+						<a href="<?=site_url('pedido')?>" class="btn btn-default btn-block">CANCELAR</a>
 					</div>
 				</div>
 				

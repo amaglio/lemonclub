@@ -88,7 +88,7 @@
 
 </style>
 
-<? echo "<div class='col-md-12'>".mensaje_resultado($mensaje)."</div>" ?>
+<?php echo "<div class='col-md-12'>".mensaje_resultado($mensaje)."</div>" ?>
  
  
  
@@ -99,7 +99,7 @@
           <?php echo $texto_filtros; ?>
         </div>
 
-      <? endif; ?>        
+      <?php endif; ?>        
 
 
       <div class="row" style="background-color: rgb(252, 224, 40); margin: 0px 20px 20px 20px; border-radius:4px; border:1px solid #d8c02b; padding:10px">
@@ -144,7 +144,7 @@
                             </tr>
                         </thead>
 
-                          <?  if( count($estadisticas_productos) > 0):
+                          <?php  if( count($estadisticas_productos) > 0):
 
 
                                 foreach ($estadisticas_productos as $row) 
@@ -155,7 +155,7 @@
                                     <td><?=$row['cantidad']?></td>
                                     </td>
                                   </tr>
-                            <?  }
+                            <?php  }
 
                               endif;
 
@@ -184,7 +184,7 @@
                             </tr>
                         </thead>
 
-                          <?  if( count($estadisticas_email) > 0):
+                          <?php  if( count($estadisticas_email) > 0):
 
 
                                 foreach ($estadisticas_email as $row) 
@@ -195,7 +195,7 @@
                                     <td><?=$row['cantidad']?></td>
                                     </td>
                                   </tr>
-                            <?  }
+                            <?php  }
 
                               endif;
 
@@ -225,7 +225,7 @@
                             </tr>
                         </thead>
 
-                          <?  if( count($estadisticas_forma_entrega) > 0):
+                          <?php  if( count($estadisticas_forma_entrega) > 0):
 
 
                                 foreach ($estadisticas_forma_entrega as $row) 
@@ -236,7 +236,7 @@
                                     <td><?=$row['cantidad']?></td>
                                     </td>
                                   </tr>
-                            <?  }
+                            <?php  }
 
                               endif;
 
@@ -262,7 +262,7 @@
                             </tr>
                         </thead>
 
-                          <?  if( count($estadisticas_forma_pago) > 0):
+                          <?php  if( count($estadisticas_forma_pago) > 0):
 
 
                                 foreach ($estadisticas_forma_pago as $row) 
@@ -273,7 +273,7 @@
                                     <td><?=$row['cantidad']?></td>
                                     </td>
                                   </tr>
-                            <?  }
+                            <?php  }
 
                               endif;
 
@@ -299,7 +299,7 @@
                             </tr>
                         </thead>
 
-                          <?  if( count($estadisticas_estados) > 0):
+                          <?php  if( count($estadisticas_estados) > 0):
 
 
                                 foreach ($estadisticas_estados as $row) 
@@ -310,7 +310,7 @@
                                     <td><?=$row['cantidad']?></td>
                                     </td>
                                   </tr>
-                            <?  }
+                            <?php  }
 
                               endif;
 

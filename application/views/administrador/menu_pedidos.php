@@ -38,7 +38,7 @@ input[type="time"]::-webkit-clear-button {
   <?php echo $texto_filtros; ?>
 </div>
 
-<? endif; ?>
+<?php endif; ?>
 
 <div class="row" style="background-color: rgb(252, 224, 40); margin: 0px 20px 20px 20px; border-radius:4px; border:1px solid #d8c02b; padding:10px">
 	
@@ -52,14 +52,14 @@ input[type="time"]::-webkit-clear-button {
 
 		  	<label for="id_forma_entrega">Tipo entrega</label>
 
-		  	<?  (isset($opciones_busqueda["id_forma_entrega"])) ? $val = $opciones_busqueda["id_forma_entrega"] :$val = -1; ?>
+		  	<?php  (isset($opciones_busqueda["id_forma_entrega"])) ? $val = $opciones_busqueda["id_forma_entrega"] :$val = -1; ?>
 
-		  	 <? 
+		  	 <?php
 		  		$tipos_engrega = array(); 
 
 		  		$tipos_engrega[-1] =  'Todos'; ?>
                                         
-            <? 	foreach ($forma_entrega as $row):  
+            <?php 	foreach ($forma_entrega as $row):  
                   
                     $tipos_engrega[$row['id_forma_entrega']] = $row['descripcion'];
 
@@ -72,14 +72,14 @@ input[type="time"]::-webkit-clear-button {
 
 		   	<label style="margin-top:10px" >Estado</label>
 
-		   	<?  (isset($opciones_busqueda["id_pedido_estado"])) ? $val = $opciones_busqueda["id_pedido_estado"] :$val = -1; ?>
+		   	<?php  (isset($opciones_busqueda["id_pedido_estado"])) ? $val = $opciones_busqueda["id_pedido_estado"] :$val = -1; ?>
 
-		  	<? 
+		  	<?php 
 		  		$pedido_estado = array(); 
 
 		  		$pedido_estado[-1] =  'Todos'; ?>
                                         
-            <? 	foreach ($estados as $row):  
+            <?php 	foreach ($estados as $row):  
                   
                     $pedido_estado[$row['id_pedido_estado']] = $row['descripcion'];
 
@@ -97,7 +97,7 @@ input[type="time"]::-webkit-clear-button {
 	<div class="col-md-2">
 		<div class="form-group">
 
-			<?  (isset($opciones_busqueda["fecha_desde"])) ? $fecha_desde_busqueda = $opciones_busqueda["fecha_desde"] : $fecha_desde_busqueda = date('Y-m-d'); 
+			<?php  (isset($opciones_busqueda["fecha_desde"])) ? $fecha_desde_busqueda = $opciones_busqueda["fecha_desde"] : $fecha_desde_busqueda = date('Y-m-d'); 
 				(isset($opciones_busqueda["fecha_hasta"])) ? $fecha_hasta_busqueda = $opciones_busqueda["fecha_hasta"] : $fecha_hasta_busqueda = date('Y-m-d' ); 
 
 			?>
@@ -116,7 +116,7 @@ input[type="time"]::-webkit-clear-button {
 	<div class="col-md-2">
 		<div class="form-group">
 
-			<?  (isset($opciones_busqueda["hora_desde"])) ? $hora_desde_busqueda = $opciones_busqueda["hora_desde"] : $hora_desde_busqueda = "07:00:00"; 
+			<?php  (isset($opciones_busqueda["hora_desde"])) ? $hora_desde_busqueda = $opciones_busqueda["hora_desde"] : $hora_desde_busqueda = "07:00:00"; 
 				
 				(isset($opciones_busqueda["hora_hasta"])) ? $hora_hasta_busqueda = $opciones_busqueda["hora_hasta"] : $hora_hasta_busqueda = "20:00:00"; 
 
@@ -138,7 +138,7 @@ input[type="time"]::-webkit-clear-button {
 	<div class="col-md-3">
 		<div class="form-group">
 
-			<?  (isset($opciones_busqueda["email"])) ? $email = $opciones_busqueda["email"] : $email = ''; ?>
+			<?php  (isset($opciones_busqueda["email"])) ? $email = $opciones_busqueda["email"] : $email = ''; ?>
 
 		    <label for="id_productos" >Producto</label><br>
  
@@ -146,10 +146,10 @@ input[type="time"]::-webkit-clear-button {
  
 		    <select class="selectpicker" data-live-search="true" multiple name="id_productos[]">
  
-			  <? foreach ($productos as $row): ?>
+			  <?php foreach ($productos as $row): ?>
 
 
-			  		<?	
+			  		<?php	
 			  			$select_producto = '';
 			  			
 			  			if(isset($opciones_busqueda["id_productos"])):
@@ -164,12 +164,12 @@ input[type="time"]::-webkit-clear-button {
 
 		    		<option value="<?=$row['id_producto']?>" <?=$select_producto?> ><?=$row['nombre']?></option>
 
-	 		  <? endforeach; ?>
+	 		  <?php endforeach; ?>
 
 			</select>
 			 
 			<br>
-			<?  (isset($opciones_busqueda["email"])) ? $email = $opciones_busqueda["email"] : $email = ''; ?>
+			<?php  (isset($opciones_busqueda["email"])) ? $email = $opciones_busqueda["email"] : $email = ''; ?>
 			<label style="margin-top:10px" >Email</label>
 		  	<input type="text" name="email" class="form-control" value="<?=$email?>">
 
@@ -182,7 +182,7 @@ input[type="time"]::-webkit-clear-button {
 
 		    <label  >Ordenar</label><br>
 
-		    <?	
+		    <?php	
 
 		     	(isset($opciones_busqueda["ordenar"]) &&  $opciones_busqueda["ordenar"] == 'hora_entrega') ? $hora_check = TRUE : $hora_check = FALSE; 
 

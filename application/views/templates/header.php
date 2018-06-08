@@ -1,5 +1,5 @@
  
-    <?  var_dump($_SESSION); ?>
+    <?php  var_dump($_SESSION); ?>
  
  
     <div class="container-fluid barra-menu hidden-xs">
@@ -61,7 +61,7 @@
             <li><a href="<?=site_url('contacto')?>">CONTACTO</a></li>
             <li><a href="<?=site_url('pedido')?>">CARRITO</a></li>
             <li><a href="<?=site_url('servicio_corporativo')?>">SERVICIO CORPORATIVO</a></li>
-            <?
+            <?php
             if($this->session->userdata('id_usuario') != "")
             {
                 echo '<li><a href="'.site_url('usuario/logout').'">CERRAR SESIÓN</a></li>';

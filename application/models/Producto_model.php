@@ -47,19 +47,6 @@ class Producto_model extends CI_Model {
         return $query->result_array();
     }
 
-    function get_grupos_producto($id_producto)
-    {
-        $sql =  '   SELECT *
-                    FROM    producto_grupo pg,
-                            grupo g
-                    WHERE   pg.id_producto = ?
-                    AND     pg.id_grupo = g.id_grupo' ; 
-
-        $query = $this->db->query($sql, array( $id_producto) ); 
-
-        return $query->result_array();
-    }
-
     function set_grupo_producto($array)
     {
         $array = array(
@@ -75,6 +62,56 @@ class Producto_model extends CI_Model {
         $sql =  '   ' ; 
 
         $query = $this->db->query($sql, array( $id_producto) ); 
+
+        return $query->result_array();
+    }
+
+    function get_informacion_producto($id_producto)
+    {
+        $sql =  '   SELECT 
+                          p.id_producto,
+                          p.id_producto_tipo,
+                          p.nombre,
+                          p.path_imagen,
+                          p.descripcion,
+                          p.precio,
+                          pt.descripcion as descripcion_tipo_producto
+
+                    FROM
+                          producto p,
+                          producto_tipo pt
+
+                    WHERE
+                          p.id_producto = ?
+                    AND   p.id_producto_tipo = pt.id_producto_tipo'; 
+
+        $query = $this->db->query($sql, array( $id_producto) ); 
+
+        return $query->result_array();
+    }
+
+    function get_grupos_producto($id_producto)
+    {
+        $sql =  '   SELECT *
+                    FROM    producto_grupo pg,
+                            grupo g
+                    WHERE   pg.id_producto = ?
+                    AND     pg.id_grupo = g.id_grupo' ; 
+
+        $query = $this->db->query($sql, array( $id_producto) ); 
+
+        return $query->result_array();
+    }
+
+    function get_ingredientes_grupo($id_grupo)
+    {
+        $sql =  '   SELECT  *
+                    FROM    grupo_ingrediente gi,
+                            ingrediente i
+                    WHERE   gi.id_grupo = ?     
+                    AND     gi.id_ingrediente = i.id_ingrediente ' ; 
+
+        $query = $this->db->query($sql, array( $id_grupo) ); 
 
         return $query->result_array();
     }

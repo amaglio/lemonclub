@@ -45,7 +45,7 @@
 
 </div>
 <div class="col-md-5">
-  <? mensaje_resultado($mensaje); ?>
+  <?php mensaje_resultado($mensaje); ?>
 	<div class="panel panel-default">
 	  	<div class="panel-heading"><strong>Grupos del producto</strong></div>
   		<div class="panel-body">

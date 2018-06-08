@@ -40,9 +40,9 @@
  
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-<? echo $menu_pedidos; ?>
+<?php echo $menu_pedidos; ?>
 
-<? echo "<div class='col-md-12'>".mensaje_resultado($mensaje)."</div>";
+<?php echo "<div class='col-md-12'>".mensaje_resultado($mensaje)."</div>";
 
   $i=0;
 
@@ -72,7 +72,7 @@ if( count($pedidos) > 0):
 
                       <a target="_blank" href="<?=site_url('administrador/imprimir_comanda/'.$row['informacion_pedido']['id_pedido'].'')?>"> <i class="fa fa-print" aria-hidden="true"></i> </a> </strong></h4> 
                       <h5><strong>[ <?=$row['informacion_pedido']['email']?> ]</strong>
-                      <? if(isset($row['informacion_pedido']['nombre'])) echo '<i class="fa fa-registered" aria-hidden="true"></i>';?> 
+                      <?php if(isset($row['informacion_pedido']['nombre'])) echo '<i class="fa fa-registered" aria-hidden="true"></i>';?> 
                         
                       </h5>
                   </div>
@@ -80,14 +80,14 @@ if( count($pedidos) > 0):
 
 
 
-                          <?
+                          <?php
                             foreach ($row['productos'] as $row2) 
                             { ?>
                                 <div class="col-md-12">
                                     <strong><?=$row2['nombre']?> (x<?=$row2['cantidad']?>)</strong>
                                     <div class="pull-right"><span>$</span><span><?=$row2['precio']?></span></div>
                                 </div>
-                          <?
+                          <?php
                             }
                           ?>
 
@@ -97,15 +97,15 @@ if( count($pedidos) > 0):
                               <small>- <?=$row['informacion_pedido']['fecha_entrega']?></small><br>
                               <small>- <?=$row['informacion_pedido']['fecha_pedido']?></small>
                               
-                              <? if($row['informacion_pedido']['forma_entrega'] == 'Delivery'): ?>
+                              <?php if($row['informacion_pedido']['forma_entrega'] == 'Delivery'): ?>
                                   
                                   <div class="pull-right">
-                                      <? if(isset($row['informacion_pedido']['direccion']))?>
+                                      <?php if(isset($row['informacion_pedido']['direccion']))?>
                                             <span><small><?="(".$row['informacion_pedido']['direccion']." ".$row['informacion_pedido']['nota'].")"?></small></span>
 
                                   </div>
 
-                              <?  endif;  ?>
+                              <?php  endif;  ?>
                               <hr>
                           </div>
 
@@ -117,9 +117,9 @@ if( count($pedidos) > 0):
                           
 
                           <!-- <button type="button" class="btn btn-primary btn-lg btn-block">Checkout</button>-->
-                            <?  $estados = array(); ?>
+                            <?php  $estados = array(); ?>
                                           
-                            <?  foreach ($estados_pedidos as $row3):  
+                            <?php  foreach ($estados_pedidos as $row3):  
 
                                   
                                     $estados[$row3['id_pedido_estado']] = strtoupper($row3['descripcion']);
@@ -139,7 +139,7 @@ if( count($pedidos) > 0):
         
         </form>
 
-      <?  
+      <?php  
       $i++;
   } 
 
@@ -151,7 +151,7 @@ else: ?>
         </div>
     </div>
 
-<?
+<?php
 endif;
 
 ?>

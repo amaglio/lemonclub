@@ -34,6 +34,53 @@ class Pedido extends CI_Controller {
 		$this->load->view(self::$solapa.'/index', $data);
 	}
 
+	public function ver_editar_ingredientes_producto($id_pedido_producto)
+	{	
+
+		if ($this->form_validation->run('ver_editar_ingredientes_producto') == FALSE):
+
+			chrome_log("No paso validacion");
+			$return["resultado"] = FALSE;
+			$return["mensaje"] ='Ha ocurrido un error en la validacion.'; 
+
+
+		endif;
+
+		// Buscamos la informacion del pedido_producto
+
+		$datos['informacion_pedido_producto'] =  $this->pedido_model->get_informacion_pedido_producto($id_pedido_producto);
+
+		// Buscamos los ingredientes del pedido_producto
+
+		$datos['informacion_ingredientes_pedido_producto'] =  $this->pedido_model->get_ingredientes_pedido_producto($id_pedido_producto);
+
+		// Buscamos informacion del producto: aca habria que comprobar el estado del producto. 
+
+		$datos['informacion_producto'] =  $this->producto_model->get_informacion_producto($datos['informacion_pedido_producto']['id_producto']);
+
+		// Buscamos los grupos que forman el producto.
+
+		$grupos_producto =  $this->producto_model->get_grupos_producto($datos['informacion_pedido_producto']['id_producto']);
+
+		$array_grupos = array();
+
+		foreach ($grupos_producto as $row) // Recorremos los grupos para traer los ingredientes.
+		{
+			$grupo['datos_grupo'] = $row;
+
+			// Buscamos los ingredientes del grupo: aca habria que comprobar el estado del ingrediente.  
+			$grupo['ingredientes_grupo'] = $this->producto_model->get_ingredientes_grupo( $row['id_grupo'] );
+			array_push($array_grupos, $grupo);
+		}
+
+		$datos['grupos_producto'] = $array_grupos;
+		print_r($datos['grupos_producto']);
+
+		$datos['total'] = 0;
+
+		$this->load->view(self::$solapa.'/ver_editar_pedido_producto', $datos);
+	}
+
 	public function agregar_producto_ajax()
 	{
 		//$_POST['id'] = 1;

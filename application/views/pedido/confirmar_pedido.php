@@ -67,7 +67,7 @@ $this->load->view('templates/head');
 						    </div>
 						    <div class="subtitulo" style="float: right"><?=$datos_usuario->tipo_usuario?></div>
 						</div>
-						<?
+						<?php
 						if($datos_usuario->tipo_usuario == "Usuario Registrado")
 						{
 						?>
@@ -79,7 +79,7 @@ $this->load->view('templates/head');
 						    	<input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" value="<?=$datos_usuario->apellido?>" readonly="readonly">
 						    </div>
 						</div>
-						<?
+						<?php
 						}
 						?>
 						<hr>

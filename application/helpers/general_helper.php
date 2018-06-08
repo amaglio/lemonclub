@@ -205,7 +205,7 @@ if(!function_exists('mensaje_resultado'))
                 </div>
             </div>
             </div>
-        <? endif;  
+        <?php endif;  
     }
 }
 
