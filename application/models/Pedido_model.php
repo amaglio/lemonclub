@@ -98,7 +98,7 @@ class Pedido_model extends CI_Model {
 
 				WHERE
 				        ppi.id_pedido_producto = ?
-				AND    	i.id_ingrediente = i.id_ingrediente  "; 
+				AND    	ppi.id_ingrediente = i.id_ingrediente  "; 
 
 		$query = $this->db->query($sql, array($id_pedido_producto) );
 	 
@@ -271,7 +271,8 @@ class Pedido_model extends CI_Model {
 	            'id_producto' => $producto['id_producto'],
 	            'precio_unitario' => $producto['precio']
 	        );
-	        $result = $this->db->insert('pedido_producto', $array);
+	        $this->db->insert('pedido_producto', $array);
+	        $id_pedido_producto = $this->db->insert_id();
 
 	        //-----------------------------------------
 	        //-------------- [NUEVO] -------------------
@@ -282,7 +283,7 @@ class Pedido_model extends CI_Model {
 		        // Recorro los ingredientes
 		        foreach ($array_grupo_ingredientes as $row) 
 		        {
-		        	$result = $this->set_pedido_producto_ingrediente($row['id_grupo'], $row['id_ingrediente']);
+		        	$result = $this->set_pedido_producto_ingrediente($id_pedido_producto, $row['id_grupo'], $row['id_ingrediente']);
 		        }
 
 	        //-----------------------------------------
@@ -293,15 +294,21 @@ class Pedido_model extends CI_Model {
         return $result;
 	}
 
-	public function set_pedido_producto_ingrediente($id_grupo, $ingrediente)
+	public function set_pedido_producto_ingrediente($id_pedido_producto, $id_grupo, $id_ingrediente)
 	{
 		$array_ingredientes = array(
-            'id_pedido_producto' => $this->session->userdata('id_pedido'),
+            'id_pedido_producto' => $id_pedido_producto,
             'id_grupo' => $id_grupo,
             'id_ingrediente' => $id_ingrediente
     	);
 
     	return $this->db->insert('pedido_producto_ingrediente', $array_ingredientes);
+	}
+
+	public function delete_pedido_producto_ingredientes($id_pedido_producto)
+	{
+		$this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
+        return $this->db->delete('pedido_producto_ingrediente');
 	}
 
 	public function get_ingredientes_default_producto($id_producto)

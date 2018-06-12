@@ -36,20 +36,6 @@ class Pedido extends CI_Controller {
 
 	public function ver_editar_ingredientes_producto($id_pedido_producto)
 	{	
-		$datos['resultado'] = FALSE;
-
-		if ($this->form_validation->run('ver_editar_ingredientes_producto') == FALSE)
-		{
-			chrome_log("No paso validacion");
-			$datos["resultado"] = FALSE;
-			$datos["mensaje"] ='Ha ocurrido un error en la validacion.'; 
-		}
-		else
-		{
-			$datos["resultado"] = TRUE;
-			$datos["mensaje"] ='Perfecto.'; 
-		}
-
 		// Buscamos la informacion del pedido_producto
 
 		$datos['informacion_pedido_producto'] =  $this->pedido_model->get_informacion_pedido_producto($id_pedido_producto);
@@ -68,12 +54,26 @@ class Pedido extends CI_Controller {
 
 		$array_grupos = array();
 
+		$datos['cantidad'] = 0;
+
 		foreach ($grupos_producto as $row) // Recorremos los grupos para traer los ingredientes.
 		{
 			$grupo['datos_grupo'] = $row;
 
 			// Buscamos los ingredientes del grupo: aca habria que comprobar el estado del ingrediente.  
 			$grupo['ingredientes_grupo'] = $this->producto_model->get_ingredientes_grupo( $row['id_grupo'] );
+			foreach ($grupo['ingredientes_grupo'] as $key_ingrediente_grupo => $ingrediente_grupo)
+			{
+				foreach ($datos['informacion_ingredientes_pedido_producto'] as $key_ingrediente_pedido_producto => $ingrediente_pedido_producto)
+				{
+					if($ingrediente_grupo['id_ingrediente'] == $ingrediente_pedido_producto['id_ingrediente'] && $row['id_grupo'] == $ingrediente_pedido_producto['id_grupo'])
+					{
+						$grupo['ingredientes_grupo'][$key_ingrediente_grupo]['seleccionado'] = TRUE;
+						$datos['cantidad']++;
+					}
+				}
+			}
+			
 			array_push($array_grupos, $grupo);
 		}
 
@@ -84,13 +84,42 @@ class Pedido extends CI_Controller {
 		$this->load->view(self::$solapa.'/ver_editar_pedido_producto', $datos);
 	}
 
+	public function editar_ingredientes_producto_ajax()
+	{
+		if ($this->form_validation->run('ver_editar_ingredientes_producto') == FALSE)
+		{
+			chrome_log("No paso validacion");
+			$return["resultado"] = FALSE;
+			$return["mensaje"] = 'Ha ocurrido un error en la validacion.'; 
+		}
+		else
+		{
+			$this->pedido_model->delete_pedido_producto_ingredientes($this->input->post('id_pedido_producto'));
+
+			$id_grupos = $this->input->post('id_grupo[]');
+			$id_ingredientes = $this->input->post('id_ingrediente[]');
+			if($this->input->post('ingredientes[]') != "")
+			{
+				foreach ($this->input->post('ingredientes[]') as $key => $value)
+				{
+					$this->pedido_model->set_pedido_producto_ingrediente($this->input->post('id_pedido_producto'), $id_grupos[$value], $id_ingredientes[$value]);
+				}
+			}
+
+			$return["resultado"] = TRUE;
+			$return["mensaje"] = 'Perfecto';
+		}
+
+		echo json_encode($return);
+	}
+
 	public function agregar_producto_ajax()
 	{
 		//$_POST['id'] = 1;
 		if ( $this->form_validation->run('agregar_producto_ajax') == FALSE):
 
 			$return['error'] = TRUE;
-			$return['data'] = validation_errors();;
+			$return['data'] = validation_errors();
 
 		else:
 
