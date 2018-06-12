@@ -36,15 +36,19 @@ class Pedido extends CI_Controller {
 
 	public function ver_editar_ingredientes_producto($id_pedido_producto)
 	{	
+		$datos['resultado'] = FALSE;
 
-		if ($this->form_validation->run('ver_editar_ingredientes_producto') == FALSE):
-
+		if ($this->form_validation->run('ver_editar_ingredientes_producto') == FALSE)
+		{
 			chrome_log("No paso validacion");
-			$return["resultado"] = FALSE;
-			$return["mensaje"] ='Ha ocurrido un error en la validacion.'; 
-
-
-		endif;
+			$datos["resultado"] = FALSE;
+			$datos["mensaje"] ='Ha ocurrido un error en la validacion.'; 
+		}
+		else
+		{
+			$datos["resultado"] = TRUE;
+			$datos["mensaje"] ='Perfecto.'; 
+		}
 
 		// Buscamos la informacion del pedido_producto
 
@@ -74,7 +78,6 @@ class Pedido extends CI_Controller {
 		}
 
 		$datos['grupos_producto'] = $array_grupos;
-		print_r($datos['grupos_producto']);
 
 		$datos['total'] = 0;
 

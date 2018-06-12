@@ -76,7 +76,7 @@ class Pedido_model extends CI_Model {
 				FROM
 				           pedido_producto pp 
 				WHERE
-				         pp.id_pedido = ? "; 
+				         pp.id_pedido_producto = ? "; 
 
 		$query = $this->db->query($sql, array($id_pedido_producto) );
 	 
@@ -282,15 +282,7 @@ class Pedido_model extends CI_Model {
 		        // Recorro los ingredientes
 		        foreach ($array_grupo_ingredientes as $row) 
 		        {
-
-					$array_ingredientes = array(
-			            'id_pedido_producto' => $this->session->userdata('id_pedido'),
-			            'id_grupo' => $row['id_grupo'],
-			            'id_ingrediente' => $row['id_ingrediente']
-		        	);
-
-		        	$result = $this->db->insert('pedido_producto_ingrediente', $array_ingredientes);
-	 
+		        	$result = $this->set_pedido_producto_ingrediente($row['id_grupo'], $row['id_ingrediente']);
 		        }
 
 	        //-----------------------------------------
@@ -299,6 +291,17 @@ class Pedido_model extends CI_Model {
 		}
 
         return $result;
+	}
+
+	public function set_pedido_producto_ingrediente($id_grupo, $ingrediente)
+	{
+		$array_ingredientes = array(
+            'id_pedido_producto' => $this->session->userdata('id_pedido'),
+            'id_grupo' => $id_grupo,
+            'id_ingrediente' => $id_ingrediente
+    	);
+
+    	return $this->db->insert('pedido_producto_ingrediente', $array_ingredientes);
 	}
 
 	public function get_ingredientes_default_producto($id_producto)
