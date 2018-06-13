@@ -366,6 +366,26 @@ class Pedido_model extends CI_Model {
         return $this->db->update('pedido_producto', $array);
 	}
 
+	public function modificar_producto_precio( $id_pedido_producto, $precio )
+	{
+		if($this->session->userdata('id_usuario') == "")
+		{
+			$data = array(
+		        'rowid' => $id_pedido_producto,
+		        'price'   => $precio
+			);
+
+			return $this->cart->update($data);
+		}
+
+		$array = array(
+            'precio' => $precio
+        );
+
+        $this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
+        return $this->db->update('pedido_producto', $array);
+	}
+
 	public function eliminar_producto( $id_pedido_producto )
 	{
 		if($this->session->userdata('id_usuario') == "")

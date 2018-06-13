@@ -34,20 +34,21 @@ $this->load->view('templates/head');
 					<div class="table">
 						<?php
 						echo '<input type="hidden" value="'.$informacion_pedido_producto['id_pedido_producto'].'" name="id_pedido_producto">';
-						foreach ($informacion_producto as $key => $item)
-						{
-							echo '<div class="row item" style="background:#ccc; margin:0px;">
-									<div class="col-xs-12 col-sm-2"><img src="'.base_url('assets/images/productos/'.$item['path_imagen']).'" class="img-responsive"></div>
-									<div class="col-xs-12 col-sm-6">
-										<span class="title">'.$item['nombre'].'</span><br>
-										<span class="descripcion">'.$item['descripcion'].'</span>
+						echo '<input type="hidden" value="'.$informacion_pedido_producto['id_producto'].'" name="id_producto">';
+
+
+						echo '<div class="row item" style="background:#ccc; margin:0px;">
+								<div class="col-xs-12 col-sm-2"><img src="'.base_url('assets/images/productos/'.$informacion_producto[0]['path_imagen']).'" class="img-responsive"></div>
+								<div class="col-xs-12 col-sm-6">
+									<span class="title">'.$informacion_producto[0]['nombre'].'</span><br>
+									<span class="descripcion">'.$informacion_producto[0]['descripcion'].'</span>
+								</div>
+								<div class="col-xs-12 col-sm-2 precio">$'.$this->cart->format_number($informacion_producto[0]['precio']).'</div>
+								<div class="col-xs-12 col-sm-2 cantidad">
+									<input type="number" min="1" step="1" name="cantidad[]" value="'.$informacion_pedido_producto['cantidad'].'" class="form-control pull-left" disabled>
 									</div>
-									<div class="col-xs-12 col-sm-2 precio">$'.$this->cart->format_number($item['precio']).'</div>
-									<div class="col-xs-12 col-sm-2 cantidad">
-										<input type="number" min="1" step="1" name="cantidad[]" value="'.$informacion_pedido_producto['cantidad'].'" class="form-control pull-left" disabled>
-										</div>
-								</div>';
-						}
+							</div>';
+
 						
 						echo '<div class="row hidden-xs">
 								<div class="col-xs-2 th"></div>
@@ -86,7 +87,7 @@ $this->load->view('templates/head');
 										{
 											$checked = "checked";
 										}
-										echo '<input type="checkbox" name="ingredientes[]" value="'.$key.'" '.$checked.'>';
+										echo '<input type="checkbox" name="ingredientes[]" value="'.$key.'" '.$checked.' onclick="editar_precio()">';
 									echo '</div>';
 								echo '</div>';
 							}
@@ -95,7 +96,7 @@ $this->load->view('templates/head');
 					</div>
 					<div class="col-xs-12 col-sm-4 col-sm-offset-8 total">
 						<div class="col-xs-6">Total</div>
-						<div class="col-xs-6" id="total">$<?php echo $total; ?></div>
+						<div class="col-xs-6" id="total">$<?php echo $this->cart->format_number($informacion_producto[0]['precio']); ?></div>
 					</div>
 					
 					<div class="row">
@@ -121,49 +122,87 @@ $this->load->view('templates/footer');
 
 <script type="text/javascript">
 $('#form-confirmar').submit(function( event ) {
-		event.preventDefault();
-		$('#btn-comprar').button('loading');
-		$('#area-mensaje').html("");
-	  	$.ajax({
-	       type: 'POST',
-	        data: $(event.target).serialize(),
-	        cache: false,
-	        dataType: 'json',
-	        processData: false, // Don't process the files
-	        //contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-	       url: SITE_URL+"/pedido/editar_ingredientes_producto_ajax",
-	       success: function(data){
-	       	//alert(JSON.stringify(data));
-	          if(data.resultado == true)
-	          {
-	            var htmlData = '<div class="alert with-icon alert-success" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
-	            htmlData += data.mensaje;
-	            htmlData += '</div>';
-	            $('#area-mensaje').html(htmlData);
+	event.preventDefault();
+	$('#btn-comprar').button('loading');
+	$('#area-mensaje').html("");
+  	$.ajax({
+       type: 'POST',
+        data: $(event.target).serialize(),
+        cache: false,
+        dataType: 'json',
+        processData: false, // Don't process the files
+        //contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+       url: SITE_URL+"/pedido/editar_ingredientes_producto_ajax",
+       success: function(data){
+       	//alert(JSON.stringify(data));
+          if(data.resultado == true)
+          {
+            var htmlData = '<div class="alert with-icon alert-success" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += data.mensaje;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
 
-	            if(data.link)
-	            {
-	            	window.location.href = data.link;
-	            }
-	          }
-	          else
-	          {
-	            var htmlData = '<div class="alert with-icon alert-danger" role="alert">';
-	            htmlData += data.mensaje;
-	            htmlData += '</div>';
-	            $('#area-mensaje').html(htmlData);
-	          }
-	          $('#btn-comprar').button('reset');
-	       },
-	       error: function(x, status, error){
-	          	var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
-	            htmlData += " Error: " + error;
-	            htmlData += '</div>';
-	            $('#area-mensaje').html(htmlData);
-	            $('#btn-comprar').button('reset');
-	       }
-	  	});
-	});
+            if(data.link)
+            {
+            	window.location.href = data.link;
+            }
+          }
+          else
+          {
+            var htmlData = '<div class="alert with-icon alert-danger" role="alert">';
+            htmlData += data.mensaje;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+          }
+          $('#btn-comprar').button('reset');
+       },
+       error: function(x, status, error){
+          	var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += " Error: " + error;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+            $('#btn-comprar').button('reset');
+       }
+  	});
+});
+
+function editar_precio()
+{
+	$('#btn-comprar').button('loading');
+	$('#area-mensaje').html("");
+  	$.ajax({
+       type: 'POST',
+        data: $('#form-confirmar').serialize(),
+        cache: false,
+        dataType: 'json',
+        processData: false, // Don't process the files
+        //contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+       url: SITE_URL+"/pedido/editar_precio_producto_ajax",
+       success: function(data){
+       	//alert(JSON.stringify(data));
+          if(data.resultado == true)
+          {
+            $('#total').html('$ '+data.precio);
+            $('#cant_items_carrito').html('('+data.cantidad+')');
+          }
+          else
+          {
+            var htmlData = '<div class="alert with-icon alert-danger" role="alert">';
+            htmlData += data.mensaje;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+          }
+          $('#btn-comprar').button('reset');
+       },
+       error: function(x, status, error){
+          	var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += " Error: " + error;
+            htmlData += '</div>';
+            $('#area-mensaje').html(htmlData);
+            $('#btn-comprar').button('reset');
+       }
+  	});
+}
 
 function mensaje_no_items()
 {
