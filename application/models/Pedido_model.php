@@ -94,7 +94,7 @@ class Pedido_model extends CI_Model {
 			           	i.calorias
 				FROM
 				        pedido_producto_ingrediente ppi,
-				      	ingrediente i 
+				      	ingrediente i
 
 				WHERE
 				        ppi.id_pedido_producto = ?
@@ -251,7 +251,7 @@ class Pedido_model extends CI_Model {
 		                            AND P.id_producto='.$id_producto);
 		
 		$pedido_producto = $query->row_array();
-
+		/*
 		if($pedido_producto)
 		{
 			// UPDATE
@@ -265,14 +265,20 @@ class Pedido_model extends CI_Model {
 		}
 		else
 		{
+			*/
 			//INSERT
 			$array = array(
 	            'id_pedido' => $this->session->userdata('id_pedido'),
 	            'id_producto' => $producto['id_producto'],
+	            'cantidad' => 1,
 	            'precio_unitario' => $producto['precio']
 	        );
 	        $this->db->insert('pedido_producto', $array);
 	        $id_pedido_producto = $this->db->insert_id();
+	        if($id_pedido_producto)
+	        {
+	        	$result = TRUE;
+	        }
 
 	        //-----------------------------------------
 	        //-------------- [NUEVO] -------------------
@@ -289,7 +295,7 @@ class Pedido_model extends CI_Model {
 	        //-----------------------------------------
 	        //-------------- [FIN NUEVO] -------------------
 	        //-----------------------------------------
-		}
+		//}
 
         return $result;
 	}
@@ -317,7 +323,7 @@ class Pedido_model extends CI_Model {
 
         // Traigo los ingredientes default del producto 
 
-        $sql = "SELECT pg.id_grupo
+        $sql = "SELECT pg.id_grupo, pgi.id_ingrediente
                 FROM producto_grupo pg,
                      producto_grupo_ingrediente pgi 
                 WHERE pg.id_producto = ? 
@@ -379,7 +385,7 @@ class Pedido_model extends CI_Model {
 		}
 
 		$array = array(
-            'precio' => $precio
+            'precio_unitario' => $precio
         );
 
         $this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
@@ -392,6 +398,9 @@ class Pedido_model extends CI_Model {
 		{
 			return $this->cart->remove($id_pedido_producto);
 		}
+
+		$this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
+        $this->db->delete('pedido_producto_ingrediente');
 
         $this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
         return $this->db->delete('pedido_producto');

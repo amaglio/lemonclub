@@ -57,11 +57,15 @@ class Producto_model extends CI_Model {
         return $this->db->insert('producto_grupo', $array);
     }
 
-    function get_ingredientes_grupo_producto($id_producto)
+    function get_ingredientes_grupo_producto($id_grupo, $id_producto)
     {
-        $sql =  '   ' ; 
+        $sql =  '   SELECT  *
+                    FROM    producto_grupo_ingrediente pgi
+                    INNER JOIN ingrediente i ON pgi.id_ingrediente = i.id_ingrediente
+                    WHERE pgi.id_grupo = ?
+                    AND pgi.id_producto = ?' ; 
 
-        $query = $this->db->query($sql, array( $id_producto) ); 
+        $query = $this->db->query($sql, array( $id_grupo, $id_producto) ); 
 
         return $query->result_array();
     }

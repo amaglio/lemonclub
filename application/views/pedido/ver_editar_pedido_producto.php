@@ -79,7 +79,7 @@ $this->load->view('templates/head');
 										echo $row['nombre'];
 									echo '</div>';
 									echo '<div class="col-xs-12 col-sm-2">';
-										echo $grupos_producto[$i]['datos_grupo']['precio_adicional'];
+										echo '$'.$grupos_producto[$i]['datos_grupo']['precio_adicional'];
 									echo '</div>';
 									echo '<div class="col-xs-12 col-sm-2">';
 										$checked = "";
@@ -87,7 +87,14 @@ $this->load->view('templates/head');
 										{
 											$checked = "checked";
 										}
-										echo '<input type="checkbox" name="ingredientes[]" value="'.$key.'" '.$checked.' onclick="editar_precio()">';
+										$disabled = "";
+										if($row['es_fijo'])
+										{
+											$disabled = "disabled";
+											$checked = "checked";
+											echo '<input type="hidden" name="ingredientes[]" value="'.$key.'">';
+										}
+										echo '<input type="checkbox" name="ingredientes[]" value="'.$key.'" '.$checked.' onclick="editar_precio()" '.$disabled.'>';
 									echo '</div>';
 								echo '</div>';
 							}
@@ -96,7 +103,7 @@ $this->load->view('templates/head');
 					</div>
 					<div class="col-xs-12 col-sm-4 col-sm-offset-8 total">
 						<div class="col-xs-6">Total</div>
-						<div class="col-xs-6" id="total">$<?php echo $this->cart->format_number($informacion_producto[0]['precio']); ?></div>
+						<div class="col-xs-6" id="total">$<?php echo $this->cart->format_number($informacion_pedido_producto['precio_unitario']); ?></div>
 					</div>
 					
 					<div class="row">
@@ -142,10 +149,7 @@ $('#form-confirmar').submit(function( event ) {
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
 
-            if(data.link)
-            {
-            	window.location.href = data.link;
-            }
+            window.location.href = SITE_URL+"/pedido";
           }
           else
           {
