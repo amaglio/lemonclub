@@ -231,6 +231,19 @@ $config = array(
                                         ) 
                                 ),
 
+            'eliminar_grupo_producto' => array(
+                                    array(
+                                            'field' => 'id_producto',
+                                            'label' => 'id_producto',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'id_grupo',
+                                            'label' => 'id_grupo',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ) 
+                                ),
+
 
 
 // --------------------------------- PEDIDO ------------------------------ 

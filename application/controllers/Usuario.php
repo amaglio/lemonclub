@@ -86,10 +86,11 @@ public function procesa_logueo()
 			// Creo el pedido del carrito
  
 			$aux = array( 'id_usuario' => $id_usuario );
+			/*
 			$id_pedido = $this->pedido_model->set_pedido( $aux );
 			$this->session->set_userdata('id_pedido', $id_pedido);
 			$this->pedido_model->mover_productos_carrito(); 
-		 	
+		 	*/
 		 	$return["resultado"] = TRUE;
 			$return["mensaje"] = 'Logueo exitoso';
 			$this->session->set_userdata('id_usuario', $id_usuario);
@@ -132,12 +133,11 @@ public function procesa_logueo_ingresar()
 			$this->session->set_userdata('id_usuario', $id_usuario);
 
 			$aux = array( 'id_usuario' => $id_usuario );
-
+			/*
 			$id_pedido = $this->pedido_model->set_pedido( $aux );
 			$this->session->set_userdata('id_pedido', $id_pedido);
-
 			$this->pedido_model->mover_productos_carrito();
-
+			*/
 			$return["resultado"] = TRUE;
 			$return["mensaje"] = 'Logueo exitoso';
 		 				 
@@ -180,12 +180,11 @@ public function procesa_invitado_ingresar()
 		$this->session->set_userdata('id_usuario', $id_usuario);
 
 		$aux = array( 'id_usuario' => $id_usuario );
-
+		/*
 		$id_pedido = $this->pedido_model->set_pedido( $aux );
 		$this->session->set_userdata('id_pedido', $id_pedido);
-
 		$this->pedido_model->mover_productos_carrito();
-
+		*/
 		$this->Usuario_model->token_pedido_invitado( $id_usuario, $token, $id_pedido );
 
 		if ( $id_usuario && $id_pedido ):   // Si se creo el token, se envia el email
@@ -351,10 +350,11 @@ public function procesa_registrarse_ingresar()
 		$this->session->set_userdata('id_usuario', $id_usuario);
 
 		$aux = array( 'id_usuario' => $id_usuario );
+		/*
 		$id_pedido = $this->pedido_model->set_pedido( $aux );
 		$this->session->set_userdata('id_pedido', $id_pedido);
 		$this->pedido_model->mover_productos_carrito();
-
+		*/
 		$this->Usuario_model->crear_token_registrar_ingresar( $token, $id_pedido, $id_usuario  );
 		 
 		if ( $id_usuario ):  
@@ -572,10 +572,11 @@ public function procesa_recuperar_clave()
 		$this->session->set_userdata('id_usuario', $id_usuario);
 
 		$aux = array( 'id_usuario' => $id_usuario );
+		/*
 		$id_pedido = $this->pedido_model->set_pedido( $aux );
 		$this->session->set_userdata('id_pedido', $id_pedido);
 		$this->pedido_model->mover_productos_carrito();
-
+		*/
 		$this->Usuario_model->crear_token_recuperar_clave( $token, $id_usuario );
 		 
 		if ( $id_usuario ):  
@@ -689,12 +690,11 @@ public function procesa_cambiar_password()
 			$this->session->set_userdata('id_usuario', $id_usuario);
 
 			$aux = array( 'id_usuario' => $id_usuario );
-
+			/*
 			$id_pedido = $this->pedido_model->set_pedido( $aux );
 			$this->session->set_userdata('id_pedido', $id_pedido);
-
 			$this->pedido_model->mover_productos_carrito();
-
+			*/
 			$return["resultado"] = TRUE;
 			$return["mensaje"] = 'Cambio exitoso';
 		 				 
