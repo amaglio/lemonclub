@@ -331,10 +331,10 @@ public function procesa_registrarse_ingresar()
 	$_POST['apellido'] = "adrian";
 	$_POST['clave2'] = 'asdasd';
 	$_POST['clave'] = 'asdasd';
-	$_POST['email'] = 'adrian.magliola@gmail.com';*/
+	$_POST['email'] = 'adrian.magliola@gmail.com';
 
 	$this->form_validation->set_data($_POST);
-
+	*/
 	if ($this->form_validation->run('registrarse') == FALSE): 
 
 		chrome_log("No Paso validacion");

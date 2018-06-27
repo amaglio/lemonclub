@@ -36,7 +36,8 @@ $this->load->view('templates/head');
 						echo '<input type="hidden" value="'.$informacion_pedido_producto['id_pedido_producto'].'" name="id_pedido_producto">';
 						echo '<input type="hidden" value="'.$informacion_pedido_producto['id_producto'].'" name="id_producto">';
 
-
+						if($informacion_producto)
+						{
 						echo '<div class="row item" style="background:#ccc; margin:0px;">
 								<div class="col-xs-12 col-sm-2"><img src="'.base_url('assets/images/productos/'.$informacion_producto[0]['path_imagen']).'" class="img-responsive"></div>
 								<div class="col-xs-12 col-sm-6">
@@ -48,7 +49,7 @@ $this->load->view('templates/head');
 									<input type="number" min="1" step="1" name="cantidad[]" value="'.$informacion_pedido_producto['cantidad'].'" class="form-control pull-left" disabled>
 									</div>
 							</div>';
-
+						}
 						
 						echo '<div class="row hidden-xs">
 								<div class="col-xs-2 th"></div>

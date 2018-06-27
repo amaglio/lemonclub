@@ -344,8 +344,8 @@ class Pedido extends CI_Controller {
 		chrome_log("pedido/finalizar_pedido_ajax");
  		
  		$return["resultado"] = TRUE;
- 		 
- 		$this->session->set_userdata('id_pedido',12);
+ 		/*
+ 		//$this->session->set_userdata('id_pedido',12);
 
  		$_POST['id_pedido'] = $this->session->userdata('id_pedido');
  		$_POST['mail'] = "fabianmayoral@hotmail.com";
@@ -353,18 +353,18 @@ class Pedido extends CI_Controller {
  		$_POST['apellido'] = "mayoral";
  		$_POST['calle'] = "cerrito";
  		$_POST['altura'] = 620;
- 		$_POST['pago'] = FORMA_PAGO_ONLINE;
+ 		$_POST['pago'] = FORMA_PAGO_EFECTIVO;
  		$_POST['entrega'] = FORMA_ENTREGA_TAKEAWAY;
  		$_POST['horario'] = "12:00:00";
 
- 			$this->form_validation->set_data($_POST);
-	 
+ 		$this->form_validation->set_data($_POST);
+		*/
 		if ($this->form_validation->run('finalizar_pedido') == FALSE):
 
 			chrome_log("No paso validacion");
 			$return["resultado"] = FALSE;
 			$return["mensaje"] = validation_errors(); 
-			echo validation_errors();
+			//echo validation_errors();
 			
 		else: 
 			chrome_log("Paso validacion");
