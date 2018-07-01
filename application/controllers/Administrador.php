@@ -537,8 +537,37 @@ public function eliminar_ingrediente_grupo()
 
 	print json_encode($return);	 
 }
+ 
+public function ajax_eliminar_grupo_producto()
+{	
+	if ($this->form_validation->run('eliminar_grupo_producto') == FALSE):
 
-// PRODUCTO - GRUPOS 
+		chrome_log("No paso validacion");
+		$return["error"] = TRUE;
+		$return["mensaje"] = 'Error, no paso validacion ';
+
+	else:
+
+		chrome_log("Paso validacion");
+
+		if( $this->Grupo_model->eliminar_grupo_producto( $this->input->post()) ):
+
+ 			$return["mensaje"] = 'Se le ha eliminado el grupo exitosamente ';
+			$return["error"] = FALSE;
+
+		else:
+
+			$return["mensaje"] = 'Error, no se le ha eliminado el grupo.';
+			$return["error"] = TRUE;
+
+		endif;
+		 
+
+	endif;		
+
+	print json_encode($return);	 
+}
+ 
 
 public function agregar_grupo_producto()
 {

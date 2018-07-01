@@ -29,7 +29,7 @@ $this->load->view('templates/head');
  
               <form class="form-horizontal" action="#" method="POST" id="form-registro"> 
            
-                <? echo '<div id="area-mensaje"></div>';?>
+                <?php echo '<div id="area-mensaje"></div>';?>
 
                 <div class="form-group">
                     <div class="col-sm-6">

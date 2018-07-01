@@ -45,7 +45,7 @@
 
 </div>
 <div class="col-md-5">
-  <? mensaje_resultado($mensaje); ?>
+  <?php mensaje_resultado($mensaje); ?>
 	<div class="panel panel-default">
 	  	<div class="panel-heading"><strong>Grupos del producto</strong></div>
   		<div class="panel-body">
@@ -95,7 +95,9 @@
                 <tr>
                   <td><?=$row['nombre']?></td> 
                   <td>
+ 
                     <a class="btn btn-danger btn-xs" onclick="eliminar_grupo_producto(<?=$row['id_producto']?>,<?=$row['id_grupo']?>)">
+ 
                       Eliminar
                     </a>
                   </td> 
@@ -295,6 +297,33 @@
         jq_ui('#grupo_seleccionado').val("");
         jq_ui('#grupo').val("");
         jq_ui('#grupo').attr('readonly', false);
+    }
+
+    function eliminar_grupo(id_producto, id_grupo)
+    {
+      $.ajax({
+         type: 'POST',
+          data: jQuery.param({ id_producto:id_producto, id_grupo:id_grupo}),
+          cache: false,
+          dataType: 'json',
+          processData: false, // Don't process the files
+          //contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+         url: "<?php echo site_url('administrador/ajax_eliminar_grupo_producto'); ?>",
+         success: function(data){
+          //alert(JSON.stringify(data));
+            if(data.error == false)
+            {
+              location.reload();
+            }
+            else
+            {
+              alert(data.mensaje);
+            }
+         },
+         error: function(x, status, error){
+              alert(error);
+         }
+      });
     }
 
 

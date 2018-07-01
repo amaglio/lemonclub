@@ -9,6 +9,7 @@ class Pedido_model extends CI_Model {
 	
 	public function get_pedido( $id ) 
 	{
+		/*
 		if($this->session->userdata('id_usuario') == "")
 		{
 			$aux = array(
@@ -23,7 +24,7 @@ class Pedido_model extends CI_Model {
 	        );
 	        return $aux;
 		}
-
+		*/
 		$query = $this->db->query('SELECT *
 		                            FROM pedido AS P
 		                            WHERE P.id_pedido='.$id);
@@ -32,6 +33,7 @@ class Pedido_model extends CI_Model {
 	
 	public function get_pedido_productos( $id ) 
 	{
+		/*
 		if($this->session->userdata('id_usuario') == "")
 		{
 			$array = array();
@@ -59,21 +61,60 @@ class Pedido_model extends CI_Model {
 			}
 			return $array;
 		}
-
+		*/
 		$query = $this->db->query('SELECT *
 		                            FROM pedido_producto AS PP
 		                            INNER JOIN producto AS P ON PP.id_producto = P.id_producto
 		                            WHERE PP.id_pedido='.$id);
 		return $query->result_array();
 	}
+
+	public function get_informacion_pedido_producto($id_pedido_producto)
+	{
+		chrome_log("Pedido_model/get_informacion_pedido_producto");
+
+	 	$sql = "SELECT 
+				           pp.*
+				FROM
+				           pedido_producto pp 
+				WHERE
+				         pp.id_pedido_producto = ? "; 
+
+		$query = $this->db->query($sql, array($id_pedido_producto) );
+	 
+	    return $query->row_array();
+	}
+
+	public function get_ingredientes_pedido_producto($id_pedido_producto)
+	{
+		chrome_log("Pedido_model/get_ingredientes_pedido_producto");
+
+		$sql = "SELECT 	ppi.*, 
+			           	i.nombre,
+			           	i.path_imagen,
+			           	i.precio,
+			           	i.calorias
+				FROM
+				        pedido_producto_ingrediente ppi,
+				      	ingrediente i
+
+				WHERE
+				        ppi.id_pedido_producto = ?
+				AND    	ppi.id_ingrediente = i.id_ingrediente  "; 
+
+		$query = $this->db->query($sql, array($id_pedido_producto) );
+	 
+	    return $query->result_array();
+	}
 	
 	public function get_total_pedido( $id ) 
 	{
+		/*
 		if($this->session->userdata('id_usuario') == "")
 		{
 			return number_format($this->cart->total(),2);
 		}
-
+		*/
 		$query = $this->db->query('SELECT SUM(PP.cantidad*PP.precio_unitario) as total
 		                            FROM pedido_producto AS PP
 		                            WHERE PP.id_pedido='.$id);
@@ -83,11 +124,12 @@ class Pedido_model extends CI_Model {
 
 	public function get_cantidad_items_pedido( $id ) 
 	{
+		/*
 		if($this->session->userdata('id_usuario') == "")
 		{
 			return $this->cart->total_items();
 		}
-
+		*/
 		$query = $this->db->query('SELECT SUM(PP.cantidad) as cantidad
 		                            FROM pedido_producto AS PP
 		                            WHERE PP.id_pedido='.$id);
@@ -106,12 +148,12 @@ class Pedido_model extends CI_Model {
 	public function set_pedido( $array = FALSE )
 	{
 		chrome_log("Pedido_model/set_pedido");
-
+		/*
 		if($this->session->userdata('id_usuario') == "")
 		{
 			return NULL;
 		}
-
+		*/
 		if($array)
 		{
 			if(!array_key_exists('id_pedido_estado', $array))
@@ -194,7 +236,7 @@ class Pedido_model extends CI_Model {
 		                            WHERE P.id_producto='.$id_producto);
 		
 		$producto = $query->row_array();
-
+		/*
 		if($this->session->userdata('id_usuario') == "")
 		{
 			$aux = array(
@@ -206,14 +248,14 @@ class Pedido_model extends CI_Model {
 
 			return $this->cart->insert($aux);
 		}
-
+		
 		$query = $this->db->query('SELECT *
 		                            FROM pedido_producto AS P
 		                            WHERE P.id_pedido ='.$this->session->userdata('id_pedido').'
 		                            AND P.id_producto='.$id_producto);
 		
 		$pedido_producto = $query->row_array();
-
+		/*
 		if($pedido_producto)
 		{
 			// UPDATE
@@ -227,17 +269,76 @@ class Pedido_model extends CI_Model {
 		}
 		else
 		{
+			*/
 			//INSERT
 			$array = array(
 	            'id_pedido' => $this->session->userdata('id_pedido'),
 	            'id_producto' => $producto['id_producto'],
+	            'cantidad' => 1,
 	            'precio_unitario' => $producto['precio']
 	        );
-	        $result = $this->db->insert('pedido_producto', $array);
-		}
+	        $this->db->insert('pedido_producto', $array);
+	        $id_pedido_producto = $this->db->insert_id();
+	        if($id_pedido_producto)
+	        {
+	        	$result = TRUE;
+	        }
+
+	        //-----------------------------------------
+	        //-------------- [NUEVO] -------------------
+	        //-----------------------------------------
+
+		        $array_grupo_ingredientes = $this->get_ingredientes_default_producto($id_producto);
+
+		        // Recorro los ingredientes
+		        foreach ($array_grupo_ingredientes as $row) 
+		        {
+		        	$result = $this->set_pedido_producto_ingrediente($id_pedido_producto, $row['id_grupo'], $row['id_ingrediente']);
+		        }
+
+	        //-----------------------------------------
+	        //-------------- [FIN NUEVO] -------------------
+	        //-----------------------------------------
+		//}
 
         return $result;
 	}
+
+	public function set_pedido_producto_ingrediente($id_pedido_producto, $id_grupo, $id_ingrediente)
+	{
+		$array_ingredientes = array(
+            'id_pedido_producto' => $id_pedido_producto,
+            'id_grupo' => $id_grupo,
+            'id_ingrediente' => $id_ingrediente
+    	);
+
+    	return $this->db->insert('pedido_producto_ingrediente', $array_ingredientes);
+	}
+
+	public function delete_pedido_producto_ingredientes($id_pedido_producto)
+	{
+		$this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
+        return $this->db->delete('pedido_producto_ingrediente');
+	}
+
+	public function get_ingredientes_default_producto($id_producto)
+    {
+        chrome_log("Producto_model/get_ingredientes_producto");
+
+        // Traigo los ingredientes default del producto 
+
+        $sql = "SELECT pg.id_grupo, pgi.id_ingrediente
+                FROM producto_grupo pg,
+                     producto_grupo_ingrediente pgi 
+                WHERE pg.id_producto = ? 
+                AND pg.id_producto = pgi.id_producto
+                AND pg.id_grupo = pgi.id_grupo 
+                AND pgi.es_default = 1"; 
+
+        $query = $this->db->query($sql, array($id_producto) );
+     
+        return $query->result_array();
+    }
 
 	public function mover_productos_carrito()
 	{
@@ -257,6 +358,7 @@ class Pedido_model extends CI_Model {
 
 	public function modificar_producto_cantidad( $id_pedido_producto, $cantidad )
 	{
+		/*
 		if($this->session->userdata('id_usuario') == "")
 		{
 			$data = array(
@@ -266,7 +368,7 @@ class Pedido_model extends CI_Model {
 
 			return $this->cart->update($data);
 		}
-
+		*/
 		$array = array(
             'cantidad' => $cantidad
         );
@@ -275,12 +377,37 @@ class Pedido_model extends CI_Model {
         return $this->db->update('pedido_producto', $array);
 	}
 
+	public function modificar_producto_precio( $id_pedido_producto, $precio )
+	{
+		/*
+		if($this->session->userdata('id_usuario') == "")
+		{
+			$data = array(
+		        'rowid' => $id_pedido_producto,
+		        'price'   => $precio
+			);
+
+			return $this->cart->update($data);
+		}
+		*/
+		$array = array(
+            'precio_unitario' => $precio
+        );
+
+        $this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
+        return $this->db->update('pedido_producto', $array);
+	}
+
 	public function eliminar_producto( $id_pedido_producto )
 	{
+		/*
 		if($this->session->userdata('id_usuario') == "")
 		{
 			return $this->cart->remove($id_pedido_producto);
 		}
+		*/
+		$this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
+        $this->db->delete('pedido_producto_ingrediente');
 
         $this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
         return $this->db->delete('pedido_producto');

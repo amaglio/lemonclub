@@ -19,7 +19,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-<? mensaje_resultado($mensaje); ?>
+<?php mensaje_resultado($mensaje); ?>
 
 <div class="col-md-3">
 	<div class="panel panel-default">
@@ -61,7 +61,7 @@
   		<div class="panel-body">
         
           
-          <? if(count($grupo_ingredientes) > 0 ): ?>
+          <?php if(count($grupo_ingredientes) > 0 ): ?>
 
             <table class="table table-striped">
               <thead>
@@ -89,13 +89,13 @@
 
             </table>
 
-        <?  else: ?>
+        <?php  else: ?>
 
               <div class="alert alert-danger">
                 <strong>No hay ingredientes</strong>. Aún no se ha cargado ningún ingrediente al grupo.
               </div>
 
-        <?  endif;  ?> 
+        <?php  endif;  ?> 
 
   		</div>
 	</div>

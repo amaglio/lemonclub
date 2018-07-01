@@ -29,7 +29,7 @@ $this->load->view('templates/head');
  
               <form class="form-horizontal" action="#" method="POST" id="form-cambiar-password"> 
 
-                <? echo '<div id="area-mensaje"></div>';?> 
+                <?php echo '<div id="area-mensaje"></div>';?> 
 
                 <input type="hidden" name="id_usuario" id="id_usuario" value="<?=$id_usuario?>">
  
