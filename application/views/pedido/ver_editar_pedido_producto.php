@@ -51,13 +51,16 @@ $this->load->view('templates/head');
 							</div>';
 						}
 						
-						echo '<div class="row hidden-xs">
+						echo '<div class="row hidden-xs"  >
 								<div class="col-xs-2 th"></div>
 								<div class="col-xs-6 th">INGREDIENTE</div>
 								<div class="col-xs-2 th">PRECIO</div>
 								<div class="col-xs-2 th">SELECCIONADO</div>
 							</div>';
-						for ( $i=0; $i < count( $grupos_producto); $i++ )
+
+
+
+						for ( $i=0; $i < count( $grupos_producto) ; $i++ )
 						{
 							// Aca tenes toda la informacion para controlar el grupo
 							$informacion_grupo = $grupos_producto[$i]['datos_grupo'];
@@ -101,6 +104,7 @@ $this->load->view('templates/head');
 							}
 						}
 						?>
+
 					</div>
 					<div class="col-xs-12 col-sm-4 col-sm-offset-8 total">
 						<div class="col-xs-6">Total</div>

@@ -425,7 +425,6 @@ public function ver_grupos_producto()
  	$datos['mensaje'] = $this->session->flashdata('mensaje');
 	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
 	$output->titulo = traer_titulo($this->uri->segment(2));
-
 	$this->load->view('administrador/index.php',(array)$output);
 
 	$id_producto = $this->uri->segment(3);
@@ -572,10 +571,13 @@ public function ajax_eliminar_grupo_producto()
 public function agregar_grupo_producto()
 {
 	chrome_log("Administrador/agregar_grupo_producto");
+
+	$this->form_validation->set_message('existe_grupo_producto', 'Ya existe el grupo en el grupo');
  
 	if ($this->form_validation->run('agregar_grupo_producto') == FALSE):
-
-		chrome_log("No paso validacion");
+		
+		//echo validation_errors(); 
+		chrome_log("No paso validacion o ya existe el grupo en el producto");
 		$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.'); 
 
 	else: 
@@ -634,6 +636,44 @@ public function eliminar_grupo_producto()
 
 	print json_encode($return);	
 }
+
+
+public function configuracion_ingrediente_producto()
+{
+	chrome_log("configuracion_ingrediente_producto: ".$this->input->post("id_producto")." - ".$this->input->post("id_grupo")." - ".$this->input->post("id_ingrediente")); 
+ 
+	if ($this->form_validation->run('configuracion_ingrediente_producto') == FALSE):
+		
+ 
+		chrome_log("No paso validacion  ");
+		$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.'); 
+		$return["error"] = TRUE;
+
+	else: 
+	 
+		chrome_log("Paso validacion"); 
+ 
+		$query = $this->Producto_model->configuracion_ingrediente_producto( $this->input->post() );
+
+		if ( $query ):  
+		 
+			chrome_log("Pudo configurar el ingrediente al producto grupo");
+ 			$return["error"] = FALSE; 
+			$this->session->set_flashdata('mensaje', 'Se ha configurado el ingrediente del grupo ');
+		 				 
+		else: 
+
+ 			$this->session->set_flashdata('mensaje', 'Ha ocurrido un error, por favor, intentá mas tarde.');
+ 			$return["error"] = TRUE;
+
+		endif;  
+ 
+	endif; 
+
+	print json_encode($return);	
+	//redirect('Administrador/ver_grupos_producto/'.$this->input->post('id_producto'),'refresh'); 
+}
+
 
 
 
@@ -758,6 +798,25 @@ public function ajax_grupo()
 	}
 }
  
+
+
+
+public function existe_grupo_producto($id_producto=null, $id_grupo=null)
+{
+	chrome_log("callback_existe_grupo_producto: ".$this->input->post('id_producto')." - ".$this->input->post('id_grupo'));
+ 
+	if ( $this->Producto_model->existe_grupo_producto( $this->input->post('id_producto'), $this->input->post('id_grupo')) ):  
+	 
+		return false;
+	else: 
+
+		return true;
+
+	endif;  
+
+
+	
+}
 
 
 }

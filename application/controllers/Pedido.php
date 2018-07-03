@@ -52,18 +52,25 @@ class Pedido extends CI_Controller {
 
 		$grupos_producto =  $this->producto_model->get_grupos_producto($datos['informacion_pedido_producto']['id_producto']);
 
+		//var_dump($grupos_producto);
+
 		$array_grupos = array();
 
 		$datos['cantidad'] = 0;
 
 		foreach ($grupos_producto as $row) // Recorremos los grupos para traer los ingredientes.
 		{
+			chrome_log("Grupo: [".$row['id_grupo']."]- ".$row['nombre']."]- ".$row['id_producto']);
+
 			$grupo['datos_grupo'] = $row;
 
 			// Buscamos los ingredientes del grupo: aca habria que comprobar el estado del ingrediente.  
-			$grupo['ingredientes_grupo'] = $this->producto_model->get_ingredientes_grupo_producto( $row['id_grupo'], $row['id_producto'] );
+			$grupo['ingredientes_grupo'] = $this->producto_model->get_ingredientes_grupo_producto( $row['id_producto'], $row['id_grupo'] );
+
 			foreach ($grupo['ingredientes_grupo'] as $key_ingrediente_grupo => $ingrediente_grupo)
-			{
+			{	
+				chrome_log("Ingrediente: ".$ingrediente_grupo['nombre']);
+
 				foreach ($datos['informacion_ingredientes_pedido_producto'] as $key_ingrediente_pedido_producto => $ingrediente_pedido_producto)
 				{
 					if($ingrediente_grupo['id_ingrediente'] == $ingrediente_pedido_producto['id_ingrediente'] && $row['id_grupo'] == $ingrediente_pedido_producto['id_grupo'])
@@ -76,6 +83,8 @@ class Pedido extends CI_Controller {
 			
 			array_push($array_grupos, $grupo);
 		}
+
+		//print_r($array_grupos);
 
 		$datos['grupos_producto'] = $array_grupos;
 

@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Producto_model extends CI_Model {
-
+    
 	public function __construct()
 	{
 		parent::__construct();
@@ -47,6 +47,7 @@ class Producto_model extends CI_Model {
         return $query->result_array();
     }
 
+    /*
     function set_grupo_producto($array)
     {
         $array = array(
@@ -203,6 +204,63 @@ class Producto_model extends CI_Model {
  
         return $query->result_array();
     }
+
+    function existe_grupo_producto($id_producto, $id_grupo)
+    {
+        $sql =  '   SELECT *
+                    FROM    producto_grupo pg 
+                    WHERE   pg.id_producto = ?
+                    AND     pg.id_grupo = ?   ' ; 
+
+        $query = $this->db->query($sql, array( $id_producto, $id_grupo) ); 
+ 
+        return $query->result_array();
+    }
+    
+    function configuracion_ingrediente_producto($array)
+    {   
+        $this->db->trans_start();
+
+        // Elimino la relacion
+
+        $array_grupo_producto_ing['id_producto'] = utf8_decode($array['id_producto']);
+        $array_grupo_producto_ing['id_grupo'] = utf8_decode($array['id_grupo']); 
+        $array_grupo_producto_ing['id_ingrediente'] = utf8_decode($array['id_ingrediente']);
+
+        $this->db->delete('producto_grupo_ingrediente',  $array_grupo_producto_ing );
+
+        // Inserto la nueva relacion
+
+        $array_grupo_producto_insert['id_producto'] = utf8_decode($array['id_producto']);
+        $array_grupo_producto_insert['id_grupo'] = utf8_decode($array['id_grupo']); 
+        $array_grupo_producto_insert['id_ingrediente'] = utf8_decode($array['id_ingrediente']);
+        
+        if(isset($array['fijo']))
+            $array_grupo_producto_insert['es_fijo'] = 1;
+
+        if(isset($array['default']))
+            $array_grupo_producto_insert['es_default'] = 1;
+
+        $this->db->insert('producto_grupo_ingrediente',  $array_grupo_producto_insert );
+
+        $this->db->trans_complete();
+
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            $flag = false;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            $flag = true;
+        } 
+
+        return $flag; 
+        
+    }
+
 
 }
 

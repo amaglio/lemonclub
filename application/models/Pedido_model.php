@@ -279,6 +279,7 @@ class Pedido_model extends CI_Model {
 	        );
 	        $this->db->insert('pedido_producto', $array);
 	        $id_pedido_producto = $this->db->insert_id();
+
 	        if($id_pedido_producto)
 	        {
 	        	$result = TRUE;
@@ -315,12 +316,6 @@ class Pedido_model extends CI_Model {
     	return $this->db->insert('pedido_producto_ingrediente', $array_ingredientes);
 	}
 
-	public function delete_pedido_producto_ingredientes($id_pedido_producto)
-	{
-		$this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
-        return $this->db->delete('pedido_producto_ingrediente');
-	}
-
 	public function get_ingredientes_default_producto($id_producto)
     {
         chrome_log("Producto_model/get_ingredientes_producto");
@@ -339,6 +334,13 @@ class Pedido_model extends CI_Model {
      
         return $query->result_array();
     }
+
+	public function delete_pedido_producto_ingredientes($id_pedido_producto)
+	{
+		$this->db->where( array('id_pedido_producto' => $id_pedido_producto) );
+        return $this->db->delete('pedido_producto_ingrediente');
+	}
+
 
 	public function mover_productos_carrito()
 	{
