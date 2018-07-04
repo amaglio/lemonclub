@@ -137,9 +137,12 @@ public function tipos_productos()
 public function productos()
 {
 	$crud = new grocery_CRUD();
+	$crud->set_language("spanish"); 
+
+	$crud->where('fecha_baja IS NULL');
 
 	$crud->set_table('producto');
-	$crud->columns('id_producto','id_producto_tipo','nombre','descripcion','precio','path_imagen');
+	$crud->columns('id_producto','id_producto_tipo','nombre','precio','path_imagen');
 	$crud->display_as('id_producto','Id')
 		 ->display_as('descripcion','Descripcion del tipo de plato')
 		 ->display_as('id_producto_tipo','Tipo de producto');
@@ -154,15 +157,16 @@ public function productos()
 		$primary_key = $state_info->primary_key;
 		$crud->field_type('id_producto','readonly');
 	}
+ 
 
 	$crud->set_subject('Producto');
 	$crud->set_relation('id_producto_tipo','producto_tipo','descripcion');
 
-	$crud->set_language("spanish"); 
-
 	$crud->required_fields('id_producto_tipo' , 'nombre' , 'precio');
 
 	$crud->set_field_upload('path_imagen','assets/images/productos');
+
+	$crud->callback_delete(array($this,'delete_user'));
 
 	$output = $crud->render();
 
@@ -211,21 +215,20 @@ public function usuarios_registrados()
 public function ingredientes()
 {
 	$crud = new grocery_CRUD();
+	$crud->where('fecha_baja IS NULL');
 
 	$crud->set_table('ingrediente');
 	$crud->columns('id_ingrediente','nombre','precio','calorias', 'path_imagen'	);
-	$crud->display_as('id_ingrediente','Id')
-		 ->display_as('id_ingrediente_tipo','Tipo de Ingrediente')
+	$crud->display_as('id_ingrediente','Id') 
 		 ->display_as('descripcion','Descripcion del tipo')
 		 ->display_as('path_imagen','Imagen');
-	$crud->unset_delete();
+ 
 	$crud->set_language("spanish"); 
 	$crud->required_fields('descripcion');
 	
+	$crud->callback_delete(array($this,'delete_ingrediente'));
 
-	$crud->set_field_upload('path_imagen','assets/images/productos');
-
-	$crud->set_relation('id_ingrediente_tipo','ingrediente_tipo','descripcion');
+	$crud->set_field_upload('path_imagen','assets/images/productos'); 
 
 	$output = $crud->render();
 
@@ -675,8 +678,15 @@ public function configuracion_ingrediente_producto()
 }
 
 
+public function delete_user($primary_key)
+{
+	return $this->db->update('producto',array('fecha_baja' => date('Y-m-d H:i:s') ),array('id_producto' => $primary_key));
+}
 
-
+public function delete_ingrediente($primary_key)
+{
+	return $this->db->update('ingrediente',array('fecha_baja' => date('Y-m-d H:i:s') ),array('id_ingrediente' => $primary_key));
+}
 
 public function agregar_ingrediente_producto()
 {
@@ -724,6 +734,7 @@ public function ajax_ingrediente()
 		$query=$this->db->query("   SELECT *
 									FROM	ingrediente i
 									WHERE 	i.nombre like '%$buscar%'
+									AND i.fecha_baja IS NULL
 									ORDER BY i.nombre"
 								);
 
@@ -799,8 +810,6 @@ public function ajax_grupo()
 }
  
 
-
-
 public function existe_grupo_producto($id_producto=null, $id_grupo=null)
 {
 	chrome_log("callback_existe_grupo_producto: ".$this->input->post('id_producto')." - ".$this->input->post('id_grupo'));
@@ -812,10 +821,7 @@ public function existe_grupo_producto($id_producto=null, $id_grupo=null)
 
 		return true;
 
-	endif;  
-
-
-	
+	endif;  	
 }
 
 
