@@ -42,7 +42,7 @@ $this->load->view('templates/head');
 									<span class="descripcion">'.$item['descripcion'].'</span>
 									<a class="btn btn-warning" href="'.site_url('pedido/ver_editar_ingredientes_producto/'.$item['id_pedido_producto']).'"><i class="fa fa-pencil"></i></a>
 								</div>
-								<div class="col-xs-12 col-sm-2 precio">$'.$this->cart->format_number($item['precio']).'</div>
+								<div class="col-xs-12 col-sm-2 precio">$'.$this->cart->format_number($item['precio_unitario']).'</div>
 								<div class="col-xs-12 col-sm-2 cantidad">
 									<input type="number" min="1" step="1" name="cantidad[]" id="cant_'.$item['id_pedido_producto'].'" value="'.$item['cantidad'].'"  onchange="modificar_cantidad(\''.$item['id_pedido_producto'].'\', this.value);" class="form-control pull-left">
 									<button class="btn btn-danger" onclick="eliminar_producto(\''.$item['id_pedido_producto'].'\')"><i class="fa fa-times"></i></button>

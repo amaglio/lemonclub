@@ -36,7 +36,8 @@ $this->load->view('templates/head');
 						echo '<input type="hidden" value="'.$informacion_pedido_producto['id_pedido_producto'].'" name="id_pedido_producto">';
 						echo '<input type="hidden" value="'.$informacion_pedido_producto['id_producto'].'" name="id_producto">';
 
-
+						if($informacion_producto)
+						{
 						echo '<div class="row item" style="background:#ccc; margin:0px;">
 								<div class="col-xs-12 col-sm-2"><img src="'.base_url('assets/images/productos/'.$informacion_producto[0]['path_imagen']).'" class="img-responsive"></div>
 								<div class="col-xs-12 col-sm-6">
@@ -48,7 +49,7 @@ $this->load->view('templates/head');
 									<input type="number" min="1" step="1" name="cantidad[]" value="'.$informacion_pedido_producto['cantidad'].'" class="form-control pull-left" disabled>
 									</div>
 							</div>';
-
+						}
 						
 						echo '<div class="row hidden-xs">
 								<div class="col-xs-2 th"></div>
@@ -79,7 +80,7 @@ $this->load->view('templates/head');
 										echo $row['nombre'];
 									echo '</div>';
 									echo '<div class="col-xs-12 col-sm-2">';
-										echo $grupos_producto[$i]['datos_grupo']['precio_adicional'];
+										echo '$'.$grupos_producto[$i]['datos_grupo']['precio_adicional'];
 									echo '</div>';
 									echo '<div class="col-xs-12 col-sm-2">';
 										$checked = "";
@@ -87,7 +88,14 @@ $this->load->view('templates/head');
 										{
 											$checked = "checked";
 										}
-										echo '<input type="checkbox" name="ingredientes[]" value="'.$key.'" '.$checked.' onclick="editar_precio()">';
+										$disabled = "";
+										if($row['es_fijo'])
+										{
+											$disabled = "disabled";
+											$checked = "checked";
+											echo '<input type="hidden" name="ingredientes[]" value="'.$key.'">';
+										}
+										echo '<input type="checkbox" name="ingredientes[]" value="'.$key.'" '.$checked.' onclick="editar_precio()" '.$disabled.'>';
 									echo '</div>';
 								echo '</div>';
 							}
@@ -96,7 +104,7 @@ $this->load->view('templates/head');
 					</div>
 					<div class="col-xs-12 col-sm-4 col-sm-offset-8 total">
 						<div class="col-xs-6">Total</div>
-						<div class="col-xs-6" id="total">$<?php echo $this->cart->format_number($informacion_producto[0]['precio']); ?></div>
+						<div class="col-xs-6" id="total">$<?php echo $this->cart->format_number($informacion_pedido_producto['precio_unitario']); ?></div>
 					</div>
 					
 					<div class="row">
@@ -142,10 +150,7 @@ $('#form-confirmar').submit(function( event ) {
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
 
-            if(data.link)
-            {
-            	window.location.href = data.link;
-            }
+            window.location.href = SITE_URL+"/pedido";
           }
           else
           {

@@ -64,6 +64,17 @@ class Grupo_model extends CI_Model {
 
 	  	return $this->db->delete('grupo_ingrediente',$array_grupo_ingrediente);
 	}
+
+	public function eliminar_grupo_producto($array)
+	{	
+	 	$array_grupo_producto = array( 	'id_producto' => $array['id_producto'], 
+	 										'id_grupo' => $array['id_grupo'] 
+	 									);
+	 	
+	 	$this->db->where($array_grupo_producto);
+
+	  	return $this->db->delete('producto_grupo',$array_grupo_producto);
+	}
 }
 
 /* End of file  */

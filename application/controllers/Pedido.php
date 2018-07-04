@@ -61,7 +61,7 @@ class Pedido extends CI_Controller {
 			$grupo['datos_grupo'] = $row;
 
 			// Buscamos los ingredientes del grupo: aca habria que comprobar el estado del ingrediente.  
-			$grupo['ingredientes_grupo'] = $this->producto_model->get_ingredientes_grupo( $row['id_grupo'] );
+			$grupo['ingredientes_grupo'] = $this->producto_model->get_ingredientes_grupo_producto( $row['id_grupo'], $row['id_producto'] );
 			foreach ($grupo['ingredientes_grupo'] as $key_ingrediente_grupo => $ingrediente_grupo)
 			{
 				foreach ($datos['informacion_ingredientes_pedido_producto'] as $key_ingrediente_pedido_producto => $ingrediente_pedido_producto)
@@ -96,6 +96,12 @@ class Pedido extends CI_Controller {
 		{
 			$this->pedido_model->delete_pedido_producto_ingredientes($this->input->post('id_pedido_producto'));
 
+			$datos['informacion_producto'] =  $this->producto_model->get_informacion_producto($this->input->post('id_producto'));
+			$grupos_producto = $this->producto_model->get_grupos_producto($this->input->post('id_producto'));
+
+			$return["precio"] = $datos['informacion_producto'][0]['precio'];
+			$return['cantidad'] = 0;
+
 			$id_grupos = $this->input->post('id_grupo[]');
 			$id_ingredientes = $this->input->post('id_ingrediente[]');
 			if($this->input->post('ingredientes[]') != "")
@@ -103,13 +109,36 @@ class Pedido extends CI_Controller {
 				foreach ($this->input->post('ingredientes[]') as $key => $value)
 				{
 					$this->pedido_model->set_pedido_producto_ingrediente($this->input->post('id_pedido_producto'), $id_grupos[$value], $id_ingredientes[$value]);
+
+					$pos = array_search($id_grupos[$value], $grupos_producto);
+					if(array_key_exists('cantidad', $grupos_producto[$pos]))
+					{
+						$grupos_producto[$pos]['cantidad']++;
+					}
+					else
+					{
+						$grupos_producto[$pos]['cantidad'] = 1;
+					}
+
+					if($grupos_producto[$pos]['cantidad'] > $grupos_producto[$pos]['cantidad_default'])
+					{
+						$return["precio"] += $grupos_producto[$pos]['precio_adicional'];
+					}
+					$return['cantidad']++;
 				}
 			}
 
-			$this->pedido_model->modificar_producto_precio($this->input->post('id_pedido_producto'), $precio);
-
-			$return["resultado"] = TRUE;
-			$return["mensaje"] = 'Perfecto';
+			$result = $this->pedido_model->modificar_producto_precio($this->input->post('id_pedido_producto'), $return["precio"]);
+			if($result)
+			{
+				$return["resultado"] = TRUE;
+				$return["mensaje"] = 'Perfecto';
+			}
+			else
+			{
+				$return["resultado"] = FALSE;
+				$return["mensaje"] = 'Ocurrio un error al actualizar el producto.';
+			}
 		}
 
 		echo json_encode($return);
@@ -134,11 +163,6 @@ class Pedido extends CI_Controller {
 			$return["precio"] = $datos['informacion_producto'][0]['precio'];
 			$return['cantidad'] = 0;
 
-			foreach ($grupos_producto as $pos => $row) // Recorremos los grupos para traer los ingredientes.
-			{
-				$grupos_producto[$pos]['cantidad'] = 0;
-			}
-
 			$id_grupos = $this->input->post('id_grupo[]');
 			$id_ingredientes = $this->input->post('id_ingrediente[]');
 			if($this->input->post('ingredientes[]') != "")
@@ -146,8 +170,16 @@ class Pedido extends CI_Controller {
 				foreach ($this->input->post('ingredientes[]') as $key => $value)
 				{
 					//$this->pedido_model->set_pedido_producto_ingrediente($this->input->post('id_pedido_producto'), $id_grupos[$value], $id_ingredientes[$value]);
+					
 					$pos = array_search($id_grupos[$value], $grupos_producto);
-					$grupos_producto[$pos]['cantidad']++;
+					if(array_key_exists('cantidad', $grupos_producto[$pos]))
+					{
+						$grupos_producto[$pos]['cantidad']++;
+					}
+					else
+					{
+						$grupos_producto[$pos]['cantidad'] = 1;
+					}
 
 					if($grupos_producto[$pos]['cantidad'] > $grupos_producto[$pos]['cantidad_default'])
 					{
@@ -312,8 +344,8 @@ class Pedido extends CI_Controller {
 		chrome_log("pedido/finalizar_pedido_ajax");
  		
  		$return["resultado"] = TRUE;
- 		 
- 		$this->session->set_userdata('id_pedido',12);
+ 		/*
+ 		//$this->session->set_userdata('id_pedido',12);
 
  		$_POST['id_pedido'] = $this->session->userdata('id_pedido');
  		$_POST['mail'] = "fabianmayoral@hotmail.com";
@@ -321,18 +353,18 @@ class Pedido extends CI_Controller {
  		$_POST['apellido'] = "mayoral";
  		$_POST['calle'] = "cerrito";
  		$_POST['altura'] = 620;
- 		$_POST['pago'] = FORMA_PAGO_ONLINE;
+ 		$_POST['pago'] = FORMA_PAGO_EFECTIVO;
  		$_POST['entrega'] = FORMA_ENTREGA_TAKEAWAY;
  		$_POST['horario'] = "12:00:00";
 
- 			$this->form_validation->set_data($_POST);
-	 
+ 		$this->form_validation->set_data($_POST);
+		*/
 		if ($this->form_validation->run('finalizar_pedido') == FALSE):
 
 			chrome_log("No paso validacion");
 			$return["resultado"] = FALSE;
 			$return["mensaje"] = validation_errors(); 
-			echo validation_errors();
+			//echo validation_errors();
 			
 		else: 
 			chrome_log("Paso validacion");
