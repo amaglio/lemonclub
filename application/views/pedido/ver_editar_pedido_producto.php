@@ -38,7 +38,7 @@ $this->load->view('templates/head');
 
 						if($informacion_producto)
 						{
-						echo '<div class="row item" style="background:#ccc; margin:0px;">
+							echo '<div class="row item" style="background:#ccc; margin:0px;">
 								<div class="col-xs-12 col-sm-2"><img src="'.base_url('assets/images/productos/'.$informacion_producto[0]['path_imagen']).'" class="img-responsive"></div>
 								<div class="col-xs-12 col-sm-6">
 									<span class="title">'.$informacion_producto[0]['nombre'].'</span><br>
