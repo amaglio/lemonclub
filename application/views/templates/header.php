@@ -1,5 +1,5 @@
  
-    <?php  var_dump($_SESSION); ?>
+    <?php  //var_dump($_SESSION); ?>
  
  
     <div class="container-fluid barra-menu hidden-xs">

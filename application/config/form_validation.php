@@ -222,7 +222,7 @@ $config = array(
                                     array(
                                             'field' => 'id_producto',
                                             'label' => 'id_producto',
-                                            'rules' => 'required|trim|xss_clean'
+                                            'rules' => 'required|trim|xss_clean|callback_existe_grupo_producto'
                                         ),
                                     array(
                                             'field' => 'id_grupo',
@@ -230,7 +230,7 @@ $config = array(
                                             'rules' => 'required|trim|xss_clean'
                                         ) 
                                 ),
-
+ 
             'eliminar_grupo_producto' => array(
                                     array(
                                             'field' => 'id_producto',
@@ -399,9 +399,32 @@ $config = array(
                                         array(
                                                
                                             ) 
-                                    )
+                                    ),
 
- 
+ // --------------------------------- PRODUCTO GRUPO ------------------------------ 
+
+
+            'configuracion_ingrediente_producto' => array(
+
+                                        array(
+                                                'field' => 'id_producto',
+                                                'label' => 'id_producto',
+                                                'rules' => 'strip_tags|required|trim|xss_clean'
+                                            ),
+
+                                         array(
+                                                'field' => 'id_grupo',
+                                                'label' => 'id_grupo',
+                                                'rules' => 'strip_tags|required|trim|xss_clean'
+                                            ),
+
+                                         array(
+                                                 'field' => 'id_ingrediente',
+                                                 'label' => 'id_ingrediente',
+                                                 'rules' => 'strip_tags|required|trim|xss_clean'
+                                             )
+                                    ), 
+
                                 
 );
 

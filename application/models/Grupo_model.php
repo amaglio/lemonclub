@@ -6,7 +6,7 @@ class Grupo_model extends CI_Model {
 	{
 		parent::__construct();
 	}
-
+	
 	public function get_informacion_grupo( $id_grupo )
 	{
 		chrome_log("Grupo_model/get_informacion_grupo");

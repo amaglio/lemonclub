@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Producto_model extends CI_Model {
-
+    
 	public function __construct()
 	{
 		parent::__construct();
@@ -47,6 +47,7 @@ class Producto_model extends CI_Model {
         return $query->result_array();
     }
 
+    /*
     function set_grupo_producto($array)
     {
         $array = array(
@@ -56,7 +57,7 @@ class Producto_model extends CI_Model {
 
         return $this->db->insert('producto_grupo', $array);
     }
-
+    /*
     function get_ingredientes_grupo_producto($id_grupo, $id_producto)
     {
         $sql =  '   SELECT  *
@@ -68,7 +69,7 @@ class Producto_model extends CI_Model {
         $query = $this->db->query($sql, array( $id_grupo, $id_producto) ); 
 
         return $query->result_array();
-    }
+    }*/
 
     function get_informacion_producto($id_producto)
     {
@@ -107,18 +108,159 @@ class Producto_model extends CI_Model {
         return $query->result_array();
     }
 
-    function get_ingredientes_grupo($id_grupo)
+ 
+    function set_grupo_producto($array)
+    {   
+        $this->db->trans_start();
+
+        $array_grupo = array(
+                'id_producto' => $array['id_producto'],
+                'id_grupo' => $array['id_grupo']
+            );
+
+        $this->db->insert('producto_grupo', $array_grupo);
+
+        // Traigo los ingredientes del grupo y los agrego al producto-grupo
+
+        $this->load->model('Grupo_model');
+
+        $ingredientes = $this->Grupo_model->get_ingredientes_grupo($array['id_grupo']);
+
+        foreach ($ingredientes as $row) 
+        {
+            $array_ingrediente = array(
+                'id_producto' => $array['id_producto'],
+                'id_grupo' => $array['id_grupo'],
+                'id_ingrediente' => $row['id_ingrediente'],
+            );
+
+            $this->db->insert('producto_grupo_ingrediente', $array_ingrediente);
+        }
+
+        $this->db->trans_complete();
+
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            $flag = false;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            $flag = true;
+        } 
+
+        return $flag; 
+    }
+
+    function delete_grupo_producto($array)
+    {   
+        $this->db->trans_start();
+
+        // Eliminos los ingredientes grupos productos
+
+        $array_grupo_producto_ing['id_producto'] = utf8_decode($array['id_producto']);
+        $array_grupo_producto_ing['id_grupo'] = utf8_decode($array['id_grupo']); 
+
+        $this->db->delete('producto_grupo_ingrediente',  $array_grupo_producto_ing );
+
+        // Elimino el grupo
+
+        $array_grupo_producto['id_producto'] = utf8_decode($array['id_producto']);
+        $array_grupo_producto['id_grupo'] = utf8_decode($array['id_grupo']); 
+
+        $this->db->delete('producto_grupo',  $array_grupo_producto );
+
+        $this->db->trans_complete();
+
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            $flag = false;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            $flag = true;
+        } 
+
+        return $flag; 
+        
+    }
+
+    
+    function get_ingredientes_grupo_producto($id_producto, $id_grupo)
     {
-        $sql =  '   SELECT  *
-                    FROM    grupo_ingrediente gi,
+        $sql =  '   SELECT *
+                    FROM    producto_grupo_ingrediente pgi,
                             ingrediente i
-                    WHERE   gi.id_grupo = ?     
-                    AND     gi.id_ingrediente = i.id_ingrediente ' ; 
+                    WHERE   pgi.id_producto = ?
+                    AND     pgi.id_grupo = ?  
+                    AND     pgi.id_ingrediente = i.id_ingrediente ' ; 
 
-        $query = $this->db->query($sql, array( $id_grupo) ); 
-
+        $query = $this->db->query($sql, array( $id_producto, $id_grupo) ); 
+ 
         return $query->result_array();
     }
+
+    function existe_grupo_producto($id_producto, $id_grupo)
+    {
+        $sql =  '   SELECT *
+                    FROM    producto_grupo pg 
+                    WHERE   pg.id_producto = ?
+                    AND     pg.id_grupo = ?   ' ; 
+
+        $query = $this->db->query($sql, array( $id_producto, $id_grupo) ); 
+ 
+        return $query->result_array();
+    }
+    
+    function configuracion_ingrediente_producto($array)
+    {   
+        $this->db->trans_start();
+
+        // Elimino la relacion
+
+        $array_grupo_producto_ing['id_producto'] = utf8_decode($array['id_producto']);
+        $array_grupo_producto_ing['id_grupo'] = utf8_decode($array['id_grupo']); 
+        $array_grupo_producto_ing['id_ingrediente'] = utf8_decode($array['id_ingrediente']);
+
+        $this->db->delete('producto_grupo_ingrediente',  $array_grupo_producto_ing );
+
+        // Inserto la nueva relacion
+
+        $array_grupo_producto_insert['id_producto'] = utf8_decode($array['id_producto']);
+        $array_grupo_producto_insert['id_grupo'] = utf8_decode($array['id_grupo']); 
+        $array_grupo_producto_insert['id_ingrediente'] = utf8_decode($array['id_ingrediente']);
+        
+        if(isset($array['fijo']))
+            $array_grupo_producto_insert['es_fijo'] = 1;
+
+        if(isset($array['default']))
+            $array_grupo_producto_insert['es_default'] = 1;
+
+        $this->db->insert('producto_grupo_ingrediente',  $array_grupo_producto_insert );
+
+        $this->db->trans_complete();
+
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            $this->db->trans_rollback();
+            $flag = false;
+        }
+        else
+        {
+            $this->db->trans_commit();
+            $flag = true;
+        } 
+
+        return $flag; 
+        
+    }
+
 
 }
 
