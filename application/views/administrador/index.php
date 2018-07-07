@@ -51,7 +51,11 @@
 	
 	</style>
 
-
+	<?php
+		$CI =& get_instance();
+		$CI->load->model('Pedido_model');
+		$cantidad_pedidos_pendientes = $CI->Pedido_model->traer_pedidos_pendientes();
+	?>
 
 <?php 
 foreach($css_files as $file): ?>
@@ -83,7 +87,10 @@ foreach($css_files as $file): ?>
 
 	      	<li <?php echo ($this->uri->segment(2) == 'tipos_productos')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/tipos_productos')?>'><i class="fa fa-tags" aria-hidden="true"></i> Tipos de productos</a></li>
 
-			<li <?php echo ($this->uri->segment(2) == 'pedidos')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/pedidos')?>'><i class="fa fa-shopping-basket" aria-hidden="true"></i> Pedidos</a></li>
+			<li <?php echo ($this->uri->segment(2) == 'pedidos')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/pedidos')?>'><i class="fa fa-shopping-basket" aria-hidden="true"></i> Pedidos
+				<span class="badge badge-light"><? echo count($cantidad_pedidos_pendientes);?></span>
+				</a>
+			</li>
 
 	      	<li <?php echo ($this->uri->segment(2) == 'ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/ingredientes')?>'><i class="fa fa-flask" aria-hidden="true"></i> Ingredientes</a></li>
 

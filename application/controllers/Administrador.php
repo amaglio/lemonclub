@@ -2,6 +2,8 @@
 
 class Administrador extends CI_Controller {
 
+public $pedidos_pendientes;
+
 public function __construct()
 {
 	
@@ -15,10 +17,13 @@ public function __construct()
 	$this->load->model('Grupo_model');
 	$this->load->model('Estadisticas_model');
 	$this->load->library('grocery_CRUD'); 
+
+ 
 }
 
 public function _example_output($output = null)
 {
+
 
 	$output->titulo = traer_titulo($this->uri->segment(2));
 	$this->load->view('administrador/index.php',(array)$output);
@@ -157,7 +162,15 @@ public function productos()
 		$primary_key = $state_info->primary_key;
 		$crud->field_type('id_producto','readonly');
 	}
- 
+ 	
+ 	if($crud->getState() == 'add')
+    {
+        //Do your cool stuff here . You don't need any State info you are in add
+      
+        $crud->field_type('fecha_alta', 'hidden');
+        $crud->field_type('fecha_modificacion', 'hidden');
+        $crud->field_type('fecha_baja', 'hidden');
+    }
 
 	$crud->set_subject('Producto');
 	$crud->set_relation('id_producto_tipo','producto_tipo','descripcion');
@@ -230,6 +243,15 @@ public function ingredientes()
 
 	$crud->set_field_upload('path_imagen','assets/images/productos'); 
 
+	if($crud->getState() == 'add')
+    {
+        //Do your cool stuff here . You don't need any State info you are in add
+      
+        $crud->field_type('fecha_alta', 'hidden');
+        $crud->field_type('fecha_modificacion', 'hidden');
+        $crud->field_type('fecha_baja', 'hidden');
+    }
+
 	$output = $crud->render();
 
 	$this->_example_output($output);
@@ -248,6 +270,15 @@ public function grupo_ingregientes()
 
 	$crud->add_action('Ingredientes del grupo',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/ingredientes.png', 'Administrador/ver_agregar_ingrediente_grupo');
 
+	if($crud->getState() == 'add')
+    {
+        //Do your cool stuff here . You don't need any State info you are in add
+      
+        $crud->field_type('fecha_alta', 'hidden');
+        $crud->field_type('fecha_modificacion', 'hidden');
+        $crud->field_type('fecha_baja', 'hidden');
+    }
+    
 	$output = $crud->render();
 
 	$this->_example_output($output);
