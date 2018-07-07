@@ -90,7 +90,7 @@ class Pedido extends CI_Controller {
 
 		$datos['total'] = 0;
 
-		$this->load->view(self::$solapa.'/ver_editar_pedido_producto', $datos);
+		$this->load->view(self::$solapa.'/ver_editar_pedido_producto2', $datos);
 	}
 
 	public function editar_ingredientes_producto_ajax()
@@ -155,6 +155,8 @@ class Pedido extends CI_Controller {
 
 	public function editar_precio_producto_ajax()
 	{
+ 
+
 		if ($this->form_validation->run('ver_editar_ingredientes_producto') == FALSE)
 		{
 			chrome_log("No paso validacion");
@@ -166,7 +168,10 @@ class Pedido extends CI_Controller {
 			$return["resultado"] = TRUE;
 			$return["mensaje"] = 'Perfecto';
 
+		
 			$datos['informacion_producto'] =  $this->producto_model->get_informacion_producto($this->input->post('id_producto'));
+			
+
 			$grupos_producto = $this->producto_model->get_grupos_producto($this->input->post('id_producto'));
 
 			$return["precio"] = $datos['informacion_producto'][0]['precio'];
@@ -174,8 +179,10 @@ class Pedido extends CI_Controller {
 
 			$id_grupos = $this->input->post('id_grupo[]');
 			$id_ingredientes = $this->input->post('id_ingrediente[]');
+
+
 			if($this->input->post('ingredientes[]') != "")
-			{
+			{	
 				foreach ($this->input->post('ingredientes[]') as $key => $value)
 				{
 					//$this->pedido_model->set_pedido_producto_ingrediente($this->input->post('id_pedido_producto'), $id_grupos[$value], $id_ingredientes[$value]);
@@ -198,8 +205,11 @@ class Pedido extends CI_Controller {
 				}
 			}
 			
+			
 			foreach ($grupos_producto as $pos => $row)
 			{
+				chrome_log('Cantidad: '.$row['cantidad'].' cantidad_minima: '.$row['cantidad_minima']);
+			/*
 				if($row['cantidad'] < $row['cantidad_minima'])
 				{
 					$return["resultado"] = FALSE;
@@ -210,9 +220,10 @@ class Pedido extends CI_Controller {
 					$return["resultado"] = FALSE;
 					$return["mensaje"] = 'Tiene que seleccionar menos ingredientes';
 				}
+				*/
 			}
 
-			$return["precio"] = number_format($return["precio"],2);
+			$return["precio"] = number_format($return["precio"],2); 
 		}
 
 		echo json_encode($return);
