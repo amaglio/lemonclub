@@ -50,13 +50,7 @@
 		}
 	
 	</style>
-
-	<?php
-		$CI =& get_instance();
-		$CI->load->model('Pedido_model');
-		$cantidad_pedidos_pendientes = $CI->Pedido_model->traer_pedidos_pendientes();
-	?>
-
+ 
 <?php 
 foreach($css_files as $file): ?>
 	<link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
@@ -80,21 +74,27 @@ foreach($css_files as $file): ?>
 	      <a class="navbar-brand"  ><img   style="width:100px; margin-bottom:10px" src="<?=base_url()?>assets/images/lemonlogo_admin.png"  > </a>
 	    </div>
 	    <ul class="nav navbar-nav">
-		   
-	    	<li <?php echo ($this->uri->segment(2) == 'productos')? 'class="active"' : ' ' ;  ?> ><a  href='<?php echo site_url('administrador/productos')?>'><i class="fa fa-lemon-o" aria-hidden="true"></i> Productos</a></li>
-
-	    	<li <?php echo ($this->uri->segment(2) == 'producto_dia')? 'class="active"' : ' ' ;  ?> ><a  href='<?php echo site_url('administrador/producto_dia')?>'><i class="fa fa-lemon-o" aria-hidden="true"></i> Producto Dia</a></li>
-
-	      	<li <?php echo ($this->uri->segment(2) == 'tipos_productos')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/tipos_productos')?>'><i class="fa fa-tags" aria-hidden="true"></i> Tipos de productos</a></li>
-
-			<li <?php echo ($this->uri->segment(2) == 'pedidos')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/pedidos')?>'><i class="fa fa-shopping-basket" aria-hidden="true"></i> Pedidos
-				<span class="badge badge-light"><? echo count($cantidad_pedidos_pendientes);?></span>
+		   	
+		   	<li <?php echo ($this->uri->segment(2) == 'pedidos')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/pedidos')?>'><i class="fa fa-shopping-basket" aria-hidden="true"></i> Pedidos 
 				</a>
 			</li>
 
-	      	<li <?php echo ($this->uri->segment(2) == 'ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/ingredientes')?>'><i class="fa fa-flask" aria-hidden="true"></i> Ingredientes</a></li>
+	    	<li <?php echo ($this->uri->segment(2) == 'productos')? 'class="active"' : ' ' ;  ?> ><a  href='<?php echo site_url('administrador/productos')?>'><i class="fa fa-lemon-o" aria-hidden="true"></i> Productos</a>
+	    	</li>
 
-	      	<li <?php echo ($this->uri->segment(2) == 'grupo_ingregientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/grupo_ingregientes')?>'><i class="fa fa-tag" aria-hidden="true"></i> Grupos</a></li>
+	    	<li <?php echo ($this->uri->segment(2) == 'grupo_ingregientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/grupo_ingregientes')?>'><i class="fa fa-tag" aria-hidden="true"></i> Grupos de Ingr.</a>
+	    	</li>
+
+	    	<li <?php echo ($this->uri->segment(2) == 'ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/ingredientes')?>'><i class="fa fa-flask" aria-hidden="true"></i> Ingredientes</a>
+	    	</li>
+
+	    	<li <?php echo ($this->uri->segment(2) == 'producto_dia')? 'class="active"' : ' ' ;  ?> ><a  href='<?php echo site_url('administrador/producto_dia')?>'><i class="fa fa-lemon-o" aria-hidden="true"></i> Producto Dia</a></li>
+
+	      	<li <?php echo ($this->uri->segment(2) == 'tipos_productos')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/tipos_productos')?>'><i class="fa fa-tags" aria-hidden="true"></i> Tipos de productos</a>
+	      	</li>
+
+	      	<li <?php echo ($this->uri->segment(2) == 'estadisticas')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/estadisticas')?>'><i class="fa fa-bar-chart" aria-hidden="true"></i> Estadisticas</a>
+	      	</li>
 
 			<li <?php echo ($this->uri->segment(2) == 'usuarios_registrados' || $this->uri->segment(2) == 'usuarios_invitados' )? 'class="dropdown active"' :  'class="dropdown"' ;  ?>>
 	        	<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users" aria-hidden="true"></i> Usuarios<span class="caret"></span></a>
@@ -104,7 +104,6 @@ foreach($css_files as $file): ?>
 	            </ul>
 	        </li>
 
-	        <li <?php echo ($this->uri->segment(2) == 'estadisticas')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/estadisticas')?>'><i class="fa fa-bar-chart" aria-hidden="true"></i> Estadisticas</a></li>
 
 	      	<li ><a href='<?php echo site_url('login/logout')?>'><i class="fa fa-power-off" aria-hidden="true"></i> Salir</a></li>
 	    </ul>

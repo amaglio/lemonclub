@@ -35,6 +35,17 @@
       color: white;
     }
 
+    #imagen_producto{
+
+     padding: 10px;
+    background-color: #000000e3;
+    position: absolute;
+    top: 10%;
+    width: unset;
+    color: white;
+
+
+    }
 </style>
 
  
@@ -71,10 +82,11 @@ if( count($pedidos) > 0):
                       <h4>Pedido: <strong><?=$row['informacion_pedido']['id_pedido']?>
 
                       <a target="_blank" href="<?=site_url('administrador/imprimir_comanda/'.$row['informacion_pedido']['id_pedido'].'')?>"> <i class="fa fa-print" aria-hidden="true"></i> </a> </strong></h4> 
-                      <h5><strong>[ <?=$row['informacion_pedido']['email']?> ]</strong>
+                      <h5><strong>  <?=$row['informacion_pedido']['email']?>  </strong>
                       <?php if(isset($row['informacion_pedido']['nombre'])) echo '<i class="fa fa-registered" aria-hidden="true"></i>';?> 
                         
                       </h5>
+                      <small style="font-size: 15px; color: #ffe860;">  <?=$row['informacion_pedido']['fecha_entrega']?></small> 
                   </div>
                   <div class="panel-body">
 
@@ -83,10 +95,17 @@ if( count($pedidos) > 0):
                           <?php
                             foreach ($row['productos'] as $row2) 
                             { ?>
-                                <div class="col-md-12">
-                                    <strong><?=$row2['nombre']?> (x<?=$row2['cantidad']?>)</strong>
-                                    <div class="pull-right"><span>$</span><span><?=$row2['precio']?></span></div>
+                                <div class="col-md-12" style="padding: 0px; padding-bottom:  10px; ">
+                                    <img  class="img img-fluid" style="width: inherit; padding: 5px; border: 1px solid #808080a8;" src="<?=base_url()?>/assets/images/productos/<?=$row2['path_imagen']?>">  
+                                    <div id="imagen_producto">
+                                      <strong><?=$row2['nombre']?> (x<?=$row2['cantidad']?>)</strong><br>
+                                      <span>$</span><span><?=$row2['precio']?></span>
+                                    </div>
                                 </div>
+                                
+                                    
+                               
+
                           <?php
                             }
                           ?>
@@ -94,12 +113,11 @@ if( count($pedidos) > 0):
                           <div class="col-md-12">
                               <small>- <?=$row['informacion_pedido']['forma_pago']?></small><br>
                               <small>- <?=$row['informacion_pedido']['forma_entrega']?></small><br>
-                              <small>- <?=$row['informacion_pedido']['fecha_entrega']?></small><br>
-                              <small>- <?=$row['informacion_pedido']['fecha_pedido']?></small>
-                              
+                              <small>- Fecha del pedido: <?=$row['informacion_pedido']['fecha_pedido']?></small>
+                              <br>
                               <?php if($row['informacion_pedido']['forma_entrega'] == 'Delivery'): ?>
                                   
-                                  <div class="pull-right">
+                                  <div class="pull-left">
                                       <?php if(isset($row['informacion_pedido']['direccion']))?>
                                             <span><small><?="(".$row['informacion_pedido']['direccion']." ".$row['informacion_pedido']['nota'].")"?></small></span>
 
@@ -110,7 +128,7 @@ if( count($pedidos) > 0):
                           </div>
 
                           <div class="col-md-12">
-                              <strong>Total</strong>
+                              <strong style="font-size:20px; font-weight:bold">Total</strong>
                               <div class="pull-right"><span>$</span><span style="font-size:20px; font-weight:bold"> <?=$row['total_pedido']?> </span></div>
                               <hr>
                           </div>

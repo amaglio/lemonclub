@@ -17,7 +17,6 @@ public function __construct()
 	$this->load->model('Grupo_model');
 	$this->load->model('Estadisticas_model');
 	$this->load->library('grocery_CRUD'); 
-
  
 }
 
@@ -110,49 +109,70 @@ public function imprimir_comanda($id_pedido)
 
 public function index()
 {
-	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+	redirect ('Administrador/pedidos');
+	/*$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
 	$output->titulo = traer_titulo($this->uri->segment(2));
 	$this->load->view('administrador/index.php',(array)$output);
-	$this->load->view('administrador/footer');
+	$this->load->view('administrador/footer');*/
 }
 
-public function tipos_productos()
+public function pedidos($vista='tabla')
 {
-	$crud = new grocery_CRUD();
+		$data['mensaje'] = $this->session->flashdata('mensaje');
+		$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+		$output->titulo = traer_titulo($this->uri->segment(2));
+		$this->load->view('administrador/index.php',(array)$output);
 
-	$crud->set_table('producto_tipo');
-	$crud->columns('id_producto_tipo','descripcion');
-	$crud->display_as('id_producto_tipo','Id')
-		 ->display_as('descripcion','Descripcion del tipo');
-	$crud->unset_delete();
-	$crud->set_language("spanish"); 
-	$crud->required_fields('descripcion');
-	
-	// Deshabilitar agregar y editar
-	//$crud->unset_add();
-	//$crud->unset_edit();
+		//$pedidos = $this->Pedido_model->traer_pedidos_pendientes();
 
-	$output = $crud->render();
+		$pedidos = $this->Pedido_model->traer_pedidos_hoy();
+ 
+		$array_pedidos = array();
 
+		foreach($pedidos as $row)
+		{
+			$informacion['informacion_pedido'] =  $row;
+			$informacion['total_pedido'] = $this->Pedido_model->get_total_pedido($row['id_pedido']);
+			$informacion['productos'] = $this->Pedido_model->get_pedido_productos($row['id_pedido']);
 
+			array_push($array_pedidos, $informacion);
+		}
 
-	$this->_example_output($output);
+		$data['estados_pedidos'] = $this->Pedido_model->get_pedido_estados();
+
+		$data['pedidos'] = $array_pedidos;
+
+		$filtros['forma_entrega'] = $this->Pedido_model->get_forma_entrega();
+		$filtros['productos'] = $this->Producto_model->get_items();
+		$filtros['estados'] = $this->Pedido_model->get_pedido_estados();
+
+		$filtros['texto_filtros'] = "<span class='label label-primary'>Pedidos de HOY</span>";
+
+		$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
+		
+		if($vista == 'tabla')
+			$this->load->view('administrador/pedidos_tabla.php',$data);
+		else
+			$this->load->view('administrador/pedidos.php',$data);
 }
 
 public function productos()
 {
 	$crud = new grocery_CRUD();
 	$crud->set_language("spanish"); 
-
-	$crud->where('fecha_baja IS NULL');
+	$crud->set_theme('datatables');
+	
 
 	$crud->set_table('producto');
-	$crud->columns('id_producto','id_producto_tipo','nombre','precio','path_imagen');
+	$crud->where('producto.fecha_baja IS NULL');
+	$crud->columns('id_producto','nombre','id_producto_tipo','precio','path_imagen');
 	$crud->display_as('id_producto','Id')
 		 ->display_as('descripcion','Descripcion del tipo de plato')
+		 ->display_as('path_imagen','Imagen')
 		 ->display_as('id_producto_tipo','Tipo de producto');
 
 	$crud->add_action('Grupo de ingredientes',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/grupo_ingredientes.png', 'Administrador/ver_grupos_producto');
+
 
 	
 	$state_info = $crud->getStateInfo();
@@ -163,14 +183,16 @@ public function productos()
 		$crud->field_type('id_producto','readonly');
 	}
  	
- 	if($crud->getState() == 'add')
+ 	if($crud->getState() == 'add' OR $crud->getState() == 'edit')
     {
         //Do your cool stuff here . You don't need any State info you are in add
-      
+      	$crud->unset_texteditor(array('descripcion','full_text'));
         $crud->field_type('fecha_alta', 'hidden');
         $crud->field_type('fecha_modificacion', 'hidden');
         $crud->field_type('fecha_baja', 'hidden');
     }
+
+    $crud->unset_read();
 
 	$crud->set_subject('Producto');
 	$crud->set_relation('id_producto_tipo','producto_tipo','descripcion');
@@ -179,12 +201,163 @@ public function productos()
 
 	$crud->set_field_upload('path_imagen','assets/images/productos');
 
-	$crud->callback_delete(array($this,'delete_user'));
+	$crud->callback_delete(array($this,'delete_producto'));
 
 	$output = $crud->render();
 
 	$this->_example_output($output);
 }
+
+public function grupo_ingregientes()
+{
+	$crud = new grocery_CRUD();
+	$crud->set_theme('datatables');
+	$crud->set_table('grupo');
+	$crud->columns('id_grupo','nombre','cantidad_default','cantidad_minima'	,'cantidad_maxima','precio_adicional' );
+	$crud->display_as('id_grupo','Id') 
+	     ->display_as('cantidad_minima','Cantidad mínima')
+	     ->display_as('precio_adicional','Precio por adicional')
+	     ->display_as('cantidad_maxima','Cantidad máxima');
+	$crud->unset_delete();
+	$crud->set_language("spanish"); 
+	$crud->required_fields('nombre');
+
+	$crud->add_action('Ingredientes del grupo',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/ingredientes.png', 'Administrador/ver_agregar_ingrediente_grupo');
+
+	if($crud->getState() == 'add' OR $crud->getState() == 'edit')
+    {
+        //Do your cool stuff here . You don't need any State info you are in add
+      	$crud->field_type('usar_precio_ingrediente', 'hidden');
+        $crud->field_type('fecha_alta', 'hidden');
+        $crud->field_type('fecha_modificacion', 'hidden');
+        $crud->field_type('fecha_baja', 'hidden');
+
+    }
+    
+    $crud->unset_read();
+
+	$output = $crud->render();
+
+	$this->_example_output($output);
+}
+
+
+public function ingredientes()
+{
+	$crud = new grocery_CRUD();
+	$crud->set_table('ingrediente'); 
+	$crud->set_theme('datatables');
+	$crud->where('fecha_baja IS NULL');
+	
+	$crud->columns('id_ingrediente','nombre','precio', 'path_imagen'	);
+	$crud->display_as('id_ingrediente','Id') 
+		 ->display_as('descripcion','Descripcion del tipo')
+		 ->display_as('path_imagen','Imagen');
+ 
+	$crud->set_language("spanish"); 
+	$crud->required_fields('descripcion');
+	
+	$crud->callback_delete(array($this,'delete_ingrediente'));
+
+	$crud->set_field_upload('path_imagen','assets/images/productos'); 
+
+	if($crud->getState() == 'add' OR $crud->getState() == 'edit')
+    { 
+      	$crud->field_type('calorias', 'hidden');
+        $crud->field_type('fecha_alta', 'hidden');
+        $crud->field_type('fecha_modificacion', 'hidden');
+        $crud->field_type('fecha_baja', 'hidden');
+    }
+
+    $crud->unset_read();
+	$output = $crud->render();
+
+	$this->_example_output($output);
+}
+
+/*
+public function producto_dia()
+{
+	$crud = new grocery_CRUD();
+	$crud->set_language("spanish"); 
+	$crud->set_theme('datatables');
+	$crud->set_table('producto_dia');
+	$crud->set_relation('id_producto','producto','{nombre}'.'- '.'{path_imagen}'); 
+	$crud->display_as('id_producto', 'Plato del dia' );
+	
+	$crud->set_field_upload('path_imagen','assets/images/productos');
+
+	$crud->required_fields('id_producto');
+
+	$output = $crud->render();
+
+	$this->_example_output($output);
+}*/
+
+public function producto_dia()
+{
+	$crud = new grocery_CRUD();
+	$crud->set_theme('datatables');
+	$crud->set_table('producto_dia');
+	$crud->columns('id_producto','precio', 'path_imagen'	);
+
+	$crud->set_relation('id_producto','producto','nombre'); 
+
+	$crud->set_model('my_custom_model');
+
+	if($crud->getState() == "list")
+	{
+		$this->my_custom_model->join_where_solicitud_web_administrador();
+		$crud->callback_column('path_imagen',array($this,'_callback_webpage_url'));
+	}
+
+	$crud->display_as('path_imagen', 'Imagen' )
+		 ->display_as('id_producto', 'Plato del dia' );
+
+	$crud->set_field_upload('path_imagen','assets/images/');
+
+	$crud->unset_read();
+
+	$output = $crud->render();
+
+	$this->_example_output($output); 
+}
+
+
+public function tipos_productos()
+{
+	$crud = new grocery_CRUD();
+	$crud->set_theme('datatables');
+	$crud->set_table('producto_tipo');
+
+	$crud->where('producto_tipo.fecha_baja IS NULL');
+
+	$crud->columns('id_producto_tipo','descripcion','path_imagen');
+	$crud->display_as('id_producto_tipo','Id')
+			->display_as('path_imagen','Imagen')
+		 	->display_as('descripcion','Descripcion del tipo');
+	 
+	$crud->set_language("spanish"); 
+	$crud->required_fields('descripcion');
+
+	$crud->set_field_upload('path_imagen','assets/images');
+	
+	// Deshabilitar agregar y editar
+	$crud->unset_read();
+	$crud->callback_delete(array($this,'delete_tipo_producto'));
+	
+
+	if($crud->getState() == 'add' OR $crud->getState() == 'edit')
+    { 
+      	$crud->unset_fields('fecha_alta', 'fecha_modificacion','fecha_baja'); 
+    }
+
+    $output = $crud->render();
+
+	$this->_example_output($output);
+}
+
+
 
 public function usuarios_invitados()
 {
@@ -225,64 +398,7 @@ public function usuarios_registrados()
 	$this->_example_output($output);
 }
 
-public function ingredientes()
-{
-	$crud = new grocery_CRUD();
-	$crud->where('fecha_baja IS NULL');
 
-	$crud->set_table('ingrediente');
-	$crud->columns('id_ingrediente','nombre','precio','calorias', 'path_imagen'	);
-	$crud->display_as('id_ingrediente','Id') 
-		 ->display_as('descripcion','Descripcion del tipo')
-		 ->display_as('path_imagen','Imagen');
- 
-	$crud->set_language("spanish"); 
-	$crud->required_fields('descripcion');
-	
-	$crud->callback_delete(array($this,'delete_ingrediente'));
-
-	$crud->set_field_upload('path_imagen','assets/images/productos'); 
-
-	if($crud->getState() == 'add')
-    {
-        //Do your cool stuff here . You don't need any State info you are in add
-      
-        $crud->field_type('fecha_alta', 'hidden');
-        $crud->field_type('fecha_modificacion', 'hidden');
-        $crud->field_type('fecha_baja', 'hidden');
-    }
-
-	$output = $crud->render();
-
-	$this->_example_output($output);
-}
-
-public function grupo_ingregientes()
-{
-	$crud = new grocery_CRUD();
-
-	$crud->set_table('grupo');
-	$crud->columns('id_grupo','nombre','cantidad_default','cantidad_minima'	,'cantidad_maxima','precio_adicional' );
-	$crud->display_as('id_grupo','Id');
-	$crud->unset_delete();
-	$crud->set_language("spanish"); 
-	$crud->required_fields('nombre');
-
-	$crud->add_action('Ingredientes del grupo',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/ingredientes.png', 'Administrador/ver_agregar_ingrediente_grupo');
-
-	if($crud->getState() == 'add')
-    {
-        //Do your cool stuff here . You don't need any State info you are in add
-      
-        $crud->field_type('fecha_alta', 'hidden');
-        $crud->field_type('fecha_modificacion', 'hidden');
-        $crud->field_type('fecha_baja', 'hidden');
-    }
-    
-	$output = $crud->render();
-
-	$this->_example_output($output);
-}
 
 public function tipos_ingredientes()
 {
@@ -303,16 +419,21 @@ public function tipos_ingredientes()
 	$this->_example_output($output);
 }
 
-public function pedidos($vista=null)
+public function buscar_pedidos($vista=null)
 {
-		$data['mensaje'] = $this->session->flashdata('mensaje');
-		$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
-		$output->titulo = traer_titulo($this->uri->segment(2));
-		$this->load->view('administrador/index.php',(array)$output);
+	$data['mensaje'] = $this->session->flashdata('mensaje');
+	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+	$output->titulo = traer_titulo($this->uri->segment(2));
+	$this->load->view('administrador/index.php',(array)$output);
 
-		$pedidos = $this->Pedido_model->traer_pedidos_pendientes();
- 
-		$array_pedidos = array();
+	$texto_filtros = "";
+
+	
+	$pedidos = $this->Pedido_model->buscar_pedidos( $this->input->post(), $texto_filtros );
+	
+	$array_pedidos = array();
+
+	if( $pedidos ): 
 
 		foreach($pedidos as $row)
 		{
@@ -322,70 +443,29 @@ public function pedidos($vista=null)
 
 			array_push($array_pedidos, $informacion);
 		}
+	else:
 
-		$data['estados_pedidos'] = $this->Pedido_model->get_pedido_estados();
+		$array_pedidos = NULL;
+	
+	endif;
 
-		$data['pedidos'] = $array_pedidos;
+	$data['estados_pedidos'] = $this->Pedido_model->get_pedido_estados();
 
-		$filtros['forma_entrega'] = $this->Pedido_model->get_forma_entrega();
-		$filtros['productos'] = $this->Producto_model->get_items();
-		$filtros['estados'] = $this->Pedido_model->get_pedido_estados();
+	$data['pedidos'] = $array_pedidos;
 
-		$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
-		
-		if($vista == 'tabla')
-			$this->load->view('administrador/pedidos_tabla.php',$data);
-		else
-			$this->load->view('administrador/pedidos.php',$data);
-}
+	$filtros['forma_entrega'] = $this->Pedido_model->get_forma_entrega();
+	$filtros['productos'] = $this->Producto_model->get_items();
+	$filtros['estados'] = $this->Pedido_model->get_pedido_estados();
+	
+	$filtros['opciones_busqueda'] = $this->input->post();
+	$filtros['texto_filtros'] = $texto_filtros;
 
-public function buscar_pedidos($vista=null)
-{
-		$data['mensaje'] = $this->session->flashdata('mensaje');
-		$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
-		$output->titulo = traer_titulo($this->uri->segment(2));
-		$this->load->view('administrador/index.php',(array)$output);
-
-		$texto_filtros = "";
-
-		
-		$pedidos = $this->Pedido_model->buscar_pedidos( $this->input->post(), $texto_filtros );
- 	
-		$array_pedidos = array();
- 
-		if( $pedidos ): 
-
-			foreach($pedidos as $row)
-			{
-				$informacion['informacion_pedido'] =  $row;
-				$informacion['total_pedido'] = $this->Pedido_model->get_total_pedido($row['id_pedido']);
-				$informacion['productos'] = $this->Pedido_model->get_pedido_productos($row['id_pedido']);
-
-				array_push($array_pedidos, $informacion);
-			}
-		else:
-
-			$array_pedidos = NULL;
-		
-		endif;
-
-		$data['estados_pedidos'] = $this->Pedido_model->get_pedido_estados();
-
-		$data['pedidos'] = $array_pedidos;
-
-		$filtros['forma_entrega'] = $this->Pedido_model->get_forma_entrega();
-		$filtros['productos'] = $this->Producto_model->get_items();
-		$filtros['estados'] = $this->Pedido_model->get_pedido_estados();
-		
-		$filtros['opciones_busqueda'] = $this->input->post();
-		$filtros['texto_filtros'] = $texto_filtros;
-
-		$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
-		
-		if($vista == 'tabla')
-			$this->load->view('administrador/pedidos_tabla.php',$data);
-		else
-			$this->load->view('administrador/pedidos.php',$data);
+	$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
+	
+	if($vista == 'tabla')
+		$this->load->view('administrador/pedidos_tabla.php',$data);
+	else
+		$this->load->view('administrador/pedidos.php',$data);
 }
 
 public function estadisticas( )
@@ -709,10 +789,18 @@ public function configuracion_ingrediente_producto()
 }
 
 
-public function delete_user($primary_key)
+public function delete_producto($primary_key)
 {
+
 	return $this->db->update('producto',array('fecha_baja' => date('Y-m-d H:i:s') ),array('id_producto' => $primary_key));
 }
+
+public function delete_tipo_producto($primary_key)
+{
+
+	return $this->db->update('producto_tipo',array('fecha_baja' => date('Y-m-d H:i:s') ),array('id_producto_tipo' => $primary_key));
+}
+
 
 public function delete_ingrediente($primary_key)
 {
@@ -787,25 +875,7 @@ public function ajax_ingrediente()
 		echo json_encode($result);
 	}
 }
- 
-public function producto_dia()
-{
-	$crud = new grocery_CRUD();
 
-	$crud->set_table('producto_dia');
-	$crud->columns('id_producto');
-	$crud->display_as('id_producto','Id');
-	$crud->set_relation('id_producto','producto','nombre');
-
-	$crud->set_language("spanish"); 
-
-	$crud->required_fields('id_producto');
-
-
-	$output = $crud->render();
-
-	$this->_example_output($output);
-}
  
 public function ajax_grupo()
 {
@@ -853,6 +923,14 @@ public function existe_grupo_producto($id_producto=null, $id_grupo=null)
 		return true;
 
 	endif;  	
+}
+
+public function _callback_webpage_url($value, $row)
+{	
+	return "<a href='http://localhost/lemonclub/assets/images/productos/".$value."' class='image-thumbnail'><img src='http://localhost/lemonclub/assets/images/productos/".$value."' height='50px'></a>";
+
+
+	//return "<img class='thumbnail'  src='".base_url()."assets/images/productos/".."'>";
 }
 
 

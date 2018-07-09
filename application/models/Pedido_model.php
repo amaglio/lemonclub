@@ -545,6 +545,31 @@ class Pedido_model extends CI_Model {
     	return $resultado->result_array();
     }
 
+    public function traer_pedidos_hoy()
+    {
+   		$fecha_hoy = date('Y-m-d');
+    	$resultado = $this->db->query("	SELECT pe.*,
+    										   pd.direccion, pd.telefono, pd.nota,
+    										   fp.descripcion as forma_pago,
+    										   fe.descripcion as forma_entrega,
+    										   pes.descripcion as estado,
+    										   u.email,
+    										   ur.nombre
+						    			FROM pedido pe
+							    				 left join pedido_delivery pd ON pe.id_pedido = pd.id_pedido
+							    				 inner join forma_pago fp ON pe.id_forma_pago =  fp.id_forma_pago
+							    				 inner join forma_entrega fe ON pe.id_forma_entrega =  fe.id_forma_entrega
+							    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado,
+						    				 usuario u
+						    				 	left join usuario_registrado ur ON ur.id_usuario =  u.id_usuario
+						    			WHERE pe.id_pedido_estado != 1
+						    			AND pe.id_usuario =  u.id_usuario
+						    			AND  pe.fecha_pedido LIKE '%$fecha_hoy%'
+						    			ORDER BY id_pedido DESC "  ); //traer_pedidos_pendientes
+ 
+    	return $resultado->result_array();
+    }
+
     public function get_informacion_pedido($id_pedido)
     {
    	

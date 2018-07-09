@@ -631,7 +631,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 				$columns = $this->get_columns();
 
 				$search_text = $state_info->search->text;
-
+				
 				if(!empty($this->where))
 					foreach($this->where as $where)
 						$this->basic_model->having($where[0],$where[1],$where[2]);

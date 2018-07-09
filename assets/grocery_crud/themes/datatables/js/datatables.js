@@ -207,8 +207,10 @@ function delete_row(delete_url , row_id)
 			{
 				if(data.success)
 				{
-					success_message(data.success_message);
-
+					//success_message(data.success_message);
+					$('#list-report-success').slideUp('fast');               
+					$('#list-report-success').html(data.success_message);
+					$('#list-report-success').slideDown('normal');
 					chosen_table = datatables_get_chosen_table($('tr#row-'+row_id).closest('.groceryCrudTable'));
 
 					$('tr#row-'+row_id).addClass('row_selected');
