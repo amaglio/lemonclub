@@ -328,7 +328,7 @@ class Pedido_model extends CI_Model {
                 WHERE pg.id_producto = ? 
                 AND pg.id_producto = pgi.id_producto
                 AND pg.id_grupo = pgi.id_grupo 
-                AND pgi.es_default = 1"; 
+                AND (pgi.es_default = 1 OR pgi.es_fijo = 1)"; 
 
         $query = $this->db->query($sql, array($id_producto) );
      
