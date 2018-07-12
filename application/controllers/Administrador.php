@@ -298,6 +298,7 @@ public function producto_dia()
 {
 	$crud = new grocery_CRUD();
 	$crud->set_theme('datatables');
+	$crud->set_language("spanish");
 	$crud->set_table('producto_dia');
 	$crud->columns('id_producto','precio', 'path_imagen'	);
 
@@ -362,8 +363,9 @@ public function tipos_productos()
 public function usuarios_invitados()
 {
 	$crud = new grocery_CRUD();
-
+	$crud->set_theme('datatables');
 	$crud->set_table('usuario');
+	$crud->set_language("spanish");
 	$crud->columns('email');
 	$crud->display_as('id_usuario','Usuario Registrado');
 
@@ -382,7 +384,8 @@ public function usuarios_invitados()
 public function usuarios_registrados()
 {
 	$crud = new grocery_CRUD();
-
+	$crud->set_theme('datatables');
+	$crud->set_language("spanish");
 	$crud->set_table('usuario_registrado');
 	$crud->columns('id_usuario','nombre','apellido','telefono', 'direccion');
 	$crud->display_as('id_usuario','ID - Email');
@@ -403,7 +406,7 @@ public function usuarios_registrados()
 public function tipos_ingredientes()
 {
 	$crud = new grocery_CRUD();
-
+	$crud->set_theme('datatables');
 	$crud->set_table('ingrediente_tipo');
 	$crud->columns('id_ingrediente_tipo','descripcion');
 	$crud->display_as('id_ingrediente_tipo','Id')
@@ -684,13 +687,12 @@ public function ajax_eliminar_grupo_producto()
 
 public function agregar_grupo_producto()
 {
-	chrome_log("Administrador/agregar_grupo_producto");
+	chrome_log("Administrador/agregar_grupo_producto: ".$this->input->post('id_producto'));
 
 	$this->form_validation->set_message('existe_grupo_producto', 'Ya existe el grupo en el grupo');
  
 	if ($this->form_validation->run('agregar_grupo_producto') == FALSE):
-		
-		//echo validation_errors(); 
+ 
 		chrome_log("No paso validacion o ya existe el grupo en el producto");
 		$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.'); 
 
@@ -713,7 +715,7 @@ public function agregar_grupo_producto()
 		endif;  
  
 	endif; 
-
+	
 	redirect('Administrador/ver_grupos_producto/'.$this->input->post('id_producto'),'refresh');
 }
 
