@@ -119,7 +119,15 @@ class Pedido extends CI_Controller {
 				{
 					$this->pedido_model->set_pedido_producto_ingrediente($this->input->post('id_pedido_producto'), $id_grupos[$value], $id_ingredientes[$value]);
 
-					$pos = array_search($id_grupos[$value], $grupos_producto);
+					foreach ($grupos_producto as $key2 => $row)
+					{
+						if($id_grupos[$value] == $row['id_grupo'])
+						{
+							$pos = $key2;
+							break;
+						}
+					}
+
 					if(array_key_exists('cantidad', $grupos_producto[$pos]))
 					{
 						$grupos_producto[$pos]['cantidad']++;
@@ -155,8 +163,6 @@ class Pedido extends CI_Controller {
 
 	public function editar_precio_producto_ajax()
 	{
- 
-
 		if ($this->form_validation->run('ver_editar_ingredientes_producto') == FALSE)
 		{
 			chrome_log("No paso validacion");
@@ -179,15 +185,22 @@ class Pedido extends CI_Controller {
 
 			$id_grupos = $this->input->post('id_grupo[]');
 			$id_ingredientes = $this->input->post('id_ingrediente[]');
-
-
+			$aux = "";
 			if($this->input->post('ingredientes[]') != "")
 			{	
 				foreach ($this->input->post('ingredientes[]') as $key => $value)
 				{
 					//$this->pedido_model->set_pedido_producto_ingrediente($this->input->post('id_pedido_producto'), $id_grupos[$value], $id_ingredientes[$value]);
-					
-					$pos = array_search($id_grupos[$value], $grupos_producto);
+					$pos = 0;
+					foreach ($grupos_producto as $key2 => $row)
+					{
+						if($id_grupos[$value] == $row['id_grupo'])
+						{
+							$pos = $key2;
+							break;
+						}
+					}
+
 					if(array_key_exists('cantidad', $grupos_producto[$pos]))
 					{
 						$grupos_producto[$pos]['cantidad']++;
@@ -205,24 +218,25 @@ class Pedido extends CI_Controller {
 				}
 			}
 			
-			
 			foreach ($grupos_producto as $pos => $row)
 			{
-				chrome_log('Cantidad: '.$row['cantidad'].' cantidad_minima: '.$row['cantidad_minima']);
-			/*
+				if(!array_key_exists('cantidad', $row))
+				{
+					$row['cantidad'] = 0;
+				}
+				
 				if($row['cantidad'] < $row['cantidad_minima'])
 				{
 					$return["resultado"] = FALSE;
-					$return["mensaje"] = 'Tiene que seleccionar mas ingredientes';
+					$return["mensaje"] = 'Tiene que seleccionar mas ingredientes'.$aux;
 				}
 				if($row['cantidad'] > $row['cantidad_maxima'])
 				{
 					$return["resultado"] = FALSE;
 					$return["mensaje"] = 'Tiene que seleccionar menos ingredientes';
 				}
-				*/
 			}
-
+			
 			$return["precio"] = number_format($return["precio"],2); 
 		}
 

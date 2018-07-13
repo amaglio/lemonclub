@@ -69,29 +69,6 @@ CREATE TABLE `forma_entrega` (
 -- Volcado de datos para la tabla `forma_entrega`
 --
 
-INSERT INTO `forma_entrega` (`id_forma_entrega`, `descripcion`) VALUES
-(1, 'Take away'),
-(2, 'Delivery');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `forma_pago`
---
-
-CREATE TABLE `forma_pago` (
-  `id_forma_pago` int(11) NOT NULL,
-  `descripcion` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `forma_pago`
---
-
-INSERT INTO `forma_pago` (`id_forma_pago`, `descripcion`) VALUES
-(1, 'Efectivo'),
-(2, 'Digital');
-
 -- --------------------------------------------------------
 
 --
@@ -158,12 +135,12 @@ CREATE TABLE `ingrediente` (
 -- Volcado de datos para la tabla `ingrediente`
 --
 
-INSERT INTO `ingrediente` (`id_ingrediente`, `id_ingrediente_tipo`, `nombre`, `path_imagen`, `precio`, `calorias`) VALUES
-(3, 1, 'tomate', '703d2-tomate-cana-andaluz.jpg', '1.00', 124),
-(7, 1, 'cebolla', '9f245-0000000003286l.jpg', '120.00', 1),
-(8, 1, 'zanahoria', '3f8e5-download.jpeg', '0.00', 0),
-(9, 2, 'Pechuga', '94441-pechuga.jpeg', '0.00', 0),
-(11, 2, 'Bife', '0cfcc-vaca.jpg', '0.00', 0);
+INSERT INTO `ingrediente` (`id_ingrediente`, `nombre`, `path_imagen`, `precio`, `calorias`) VALUES
+(3,  'tomate', '703d2-tomate-cana-andaluz.jpg', '1.00', 124),
+(7,  'cebolla', '9f245-0000000003286l.jpg', '120.00', 1),
+(8,  'zanahoria', '3f8e5-download.jpeg', '0.00', 0),
+(9, 'Pechuga', '94441-pechuga.jpeg', '0.00', 0),
+(11,  'Bife', '0cfcc-vaca.jpg', '0.00', 0);
 
 -- --------------------------------------------------------
 
@@ -190,22 +167,6 @@ CREATE TABLE `ingrediente_estado_sucursal` (
 
 -- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `ingrediente_tipo`
---
-
-CREATE TABLE `ingrediente_tipo` (
-  `id_ingrediente_tipo` int(11) NOT NULL,
-  `descripcion` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `ingrediente_tipo`
---
-
-INSERT INTO `ingrediente_tipo` (`id_ingrediente_tipo`, `descripcion`) VALUES
-(1, 'vegetanles'),
-(2, 'carnes');
 
 -- --------------------------------------------------------
 

@@ -33,7 +33,7 @@ $this->load->view('templates/head');
 
 					
 						<?php
-						echo '<div class="table">';
+						echo '<div class="table" style="margin-bottom:20px;">';
 						echo '<input type="hidden" value="'.$informacion_pedido_producto['id_pedido_producto'].'" name="id_pedido_producto">';
 						echo '<input type="hidden" value="'.$informacion_pedido_producto['id_producto'].'" name="id_producto">';
 
@@ -60,83 +60,58 @@ $this->load->view('templates/head');
 								<div class="col-xs-2 th">SELECCIONADO</div>
 							</div>';
 						*/
-						echo '<div class="row area-menu-items" style="border:1px solid #ccc; border-radius:10px;">';
+						$numero_item = 0;
 						for ( $i=0; $i < count( $grupos_producto); $i++ )
 						{
 							// Aca tenes toda la informacion para controlar el grupo
 							$informacion_grupo = $grupos_producto[$i]['datos_grupo'];
-							echo '<h3 class="col-xs-12" style="background:#FFC50A; margin:0px; border-top-left-radius:8px; border-top-right-radius:8px; border-bottom:solid 1px #ccc; padding:10px;">'.$informacion_grupo['nombre'].'</h3>';
-
-							// Listamos los ingredientes y hacemos checkbox.
-							foreach ($grupos_producto[$i]['ingredientes_grupo'] as $key => $row)
-							{
-								echo '<input type="hidden" name="id_grupo[]" value="'.$row['id_grupo'].'">';
-								echo '<input type="hidden" name="id_ingrediente[]" value="'.$row['id_ingrediente'].'">';
-								$checked = "";
-								$visible1 = "";
-								$visible2 = "display:none;";
-								if(array_key_exists('seleccionado', $row))
+							echo '<div class="titulo">'.$informacion_grupo['nombre'].'</div>';
+							echo '<div class="row" style="margin:auto;">';
+								echo '<div class="col-xs-12 area-menu-items" style="border:1px solid #ccc; margin-top:0px;">';
+								// Listamos los ingredientes y hacemos checkbox.
+								foreach ($grupos_producto[$i]['ingredientes_grupo'] as $key => $row)
 								{
-									$visible1 = "display:none;";
-									$visible2 = "";
-									$checked = "checked";
-								}
-								$disabled = "";
-								if($row['es_fijo'])
-								{
-									$disabled = "disabled";
-									$checked = "checked";
-								}
-								echo '<input type="checkbox" name="ingredientes[]" id="ingredientes'.$row['id_ingrediente'].'" value="'.$key.'" '.$checked.' style="display:none;">';
-
-								echo '<div class="col-xs-12 col-sm-3 item" style="text-align:center;">';
-									echo '<div class="area-imagen" style="background:url('.base_url('assets/images/productos/'.$row['path_imagen']).'); background-size:cover; background-position:center;"></div>';
-									echo '<div class="descripcion">'.$row['nombre'].'</div>';
-									echo '<div class="precio">$'.$grupos_producto[$i]['datos_grupo']['precio_adicional'].'</div>';
-
-									echo '<img src="'.base_url('assets/images/success.png').'" width="50px" style="position:absolute; top:0px; right:10px; '.$visible2.'" id="success'.$row['id_ingrediente'].'">';
-									echo '<img src="'.base_url('assets/images/failure.png').'" width="50px" style="position:absolute; top:0px; right:10px; '.$visible1.'" id="failure'.$row['id_ingrediente'].'">';
-									echo '<button type="button" onclick="sacar_producto('.$row['id_ingrediente'].');"   style="'.$visible2.'" id="btn_sacar'.$row['id_ingrediente'].'" '.$disabled.' class="btn btn-danger btn-mas-padding"   data-loading-text="CARGANDO...">SACAR</button>';
-									echo '<button type="button" onclick="agregar_producto('.$row['id_ingrediente'].');" style="'.$visible1.'" id="btn_poner'.$row['id_ingrediente'].'" '.$disabled.' class="btn btn-amarillo btn-mas-padding" data-loading-text="CARGANDO...">AGREGAR</button>';
-								echo '</div>';
-								/*
-								// Hay que controlar si le ingrediente ya esta en el pedido para chequearlo.
-								// hay que usar el array:  $informacion_ingredientes_pedido_producto.
-								$dato['id_grupo'] = $row['id_grupo'];
-								$dato['id_ingrediente'] = $row['id_ingrediente'];
-								$json_dato = json_encode($dato);
-								echo '<div class="row item" id="item_'.$row['id_grupo'].'">';
 									echo '<input type="hidden" name="id_grupo[]" value="'.$row['id_grupo'].'">';
 									echo '<input type="hidden" name="id_ingrediente[]" value="'.$row['id_ingrediente'].'">';
-									echo '<div class="col-xs-12 col-sm-2">';
-										echo '<img src="'.base_url('assets/images/productos/'.$row['path_imagen']).'" class="img-responsive">';
-									echo '</div>';
-									echo '<div class="col-xs-12 col-sm-6">';
-										echo $row['nombre'];
-									echo '</div>';
-									echo '<div class="col-xs-12 col-sm-2">';
-										echo '$'.$grupos_producto[$i]['datos_grupo']['precio_adicional'];
-									echo '</div>';
-									echo '<div class="col-xs-12 col-sm-2">';
-										$checked = "";
-										if(array_key_exists('seleccionado', $row))
-										{
-											$checked = "checked";
-										}
-										$disabled = "";
+									$checked = "";
+									$visible1 = "";
+									$visible2 = "display:none;";
+									$color = "alert-danger";
+									$disabled = "";
+									$opacidad = "";
+									if(array_key_exists('seleccionado', $row) || $row['es_fijo'])
+									{
+										$color = "alert-success";
+										$visible1 = "display:none;";
+										$visible2 = "";
+										$checked = "checked";
 										if($row['es_fijo'])
 										{
 											$disabled = "disabled";
-											$checked = "checked";
-											echo '<input type="hidden" name="ingredientes[]" value="'.$key.'">';
+											$opacidad = "opacity:0.5;";
 										}
-										echo '<input type="checkbox" name="ingredientes[]" value="'.$key.'" '.$checked.' onclick="editar_precio()" '.$disabled.'>';
+									}
+									echo '<input type="checkbox" name="ingredientes[]" id="ingredientes'.$row['id_ingrediente'].'" value="'.$numero_item.'" '.$checked.' style="display:none;">';
+
+									echo '<div class="col-xs-12 col-sm-3 item" style="text-align:center;">';
+										echo '<div class="alert '.$color.'" data-fijo="'.$row['es_fijo'].'" onclick="toggle_producto('.$row['id_ingrediente'].');" id="item_color_'.$row['id_ingrediente'].'">';
+											echo '<div class="area-imagen" style="background:url('.base_url('assets/images/productos/'.$row['path_imagen']).'); background-size:cover; background-position:center;"></div>';
+											echo '<div class="descripcion">'.$row['nombre'].'</div>';
+											echo '<div class="precio">$'.$grupos_producto[$i]['datos_grupo']['precio_adicional'].'</div>';
+
+											echo '<img src="'.base_url('assets/images/success.png').'" width="50px" style="position:absolute; top:0px; right:10px; '.$visible2.' '.$opacidad.'" id="success'.$row['id_ingrediente'].'">';
+											echo '<img src="'.base_url('assets/images/failure.png').'" width="50px" style="position:absolute; top:0px; right:10px; '.$visible1.'" id="failure'.$row['id_ingrediente'].'">';
+											echo '<img src="'.base_url('assets/images/loading.gif').'" width="50px" style="position:absolute; top:0px; right:10px; display:none;" id="loading'.$row['id_ingrediente'].'">';
+											//echo '<button type="button" onclick="sacar_producto('.$row['id_ingrediente'].');"   style="'.$visible2.'" id="btn_sacar'.$row['id_ingrediente'].'" '.$disabled.' class="btn btn-danger btn-mas-padding"   data-loading-text="CARGANDO...">SACAR</button>';
+											//echo '<button type="button" onclick="agregar_producto('.$row['id_ingrediente'].');" style="'.$visible1.'" id="btn_poner'.$row['id_ingrediente'].'" '.$disabled.' class="btn btn-amarillo btn-mas-padding" data-loading-text="CARGANDO...">AGREGAR</button>';
+										echo '</div>';
 									echo '</div>';
+
+									$numero_item++;
+								}
 								echo '</div>';
-								*/
-							}
+							echo '</div>';
 						}
-						echo '</div>';
 						?>
 					
 					<div class="col-xs-12 col-sm-4 col-sm-offset-8 total" style="border-top:solid 1px #999;">
@@ -208,7 +183,7 @@ $('#form-confirmar').submit(function( event ) {
   	});
 });
 
-function editar_precio()
+function editar_precio(id, tipo)
 {
 	$('#btn-comprar').button('loading');
 	$('#area-mensaje').html("");
@@ -224,17 +199,46 @@ function editar_precio()
        		//alert(JSON.stringify(data));
           	if(data.resultado == true)
           	{
+          		if(tipo == "agregar")
+          		{
+          			$('#ingredientes'+id).prop('checked', true);
+					$('#success'+id).show();
+					$('#failure'+id).hide();
+					$('#btn_sacar'+id).show();
+					$('#btn_poner'+id).hide();
+					$('#item_color_'+id).removeClass('alert-danger');
+					$('#item_color_'+id).addClass('alert-success');
+          		}
+          		else
+          		{
+          			$('#ingredientes'+id).prop('checked', false);
+					$('#success'+id).hide();
+					$('#failure'+id).show();
+					$('#btn_sacar'+id).hide();
+					$('#btn_poner'+id).show();
+					$('#item_color_'+id).removeClass('alert-success');
+					$('#item_color_'+id).addClass('alert-danger');
+          		}
 	            $('#total').html('$ '+data.precio);
 	            $('#cant_items_carrito').html('('+data.cantidad+')');
           	}
           	else
           	{
+          		if(tipo == "agregar")
+          		{
+          			$('#ingredientes'+id).prop('checked', false);
+          		}
+          		else
+          		{
+          			$('#ingredientes'+id).prop('checked', true);
+          		}
 	            var htmlData = '<div class="alert with-icon alert-danger" role="alert">';
 	            htmlData += data.mensaje;
 	            htmlData += '</div>';
 	            $('#area-mensaje').html(htmlData);
           	}
           	$('#btn-comprar').button('reset');
+          	$('#loading'+id).hide();
         },
         error: function(x, status, error){
           	var htmlData = '<div class="alert with-icon alert-danger" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
@@ -242,6 +246,7 @@ function editar_precio()
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
             $('#btn-comprar').button('reset');
+            $('#loading'+id).hide();
         }
   	});
 }
@@ -249,21 +254,49 @@ function editar_precio()
 function agregar_producto(id)
 {
 	$('#ingredientes'+id).prop('checked', true);
-	$('#succes'+id).show();
+	$('#loading'+id).show();
+	/*
+	$('#success'+id).show();
 	$('#failure'+id).hide();
 	$('#btn_sacar'+id).show();
 	$('#btn_poner'+id).hide();
-	editar_precio();
+	$('#item_color_'+id).removeClass('alert-danger');
+	$('#item_color_'+id).addClass('alert-success');
+	*/
+	editar_precio(id, "agregar");
 }
 
 function sacar_producto(id)
 {
-	$('#ingredientes'+id).prop('checked', false);
-	$('#succes'+id).hide();
-	$('#failure'+id).show();
-	$('#btn_sacar'+id).hide();
-	$('#btn_poner'+id).show();
-	editar_precio();
+	if($('#item_color_'+id).data('fijo'))
+	{
+		alert("No se puede quitar este ingrediente");
+	}
+	else
+	{
+		$('#ingredientes'+id).prop('checked', false);
+		/*
+		$('#success'+id).hide();
+		$('#failure'+id).show();
+		$('#btn_sacar'+id).hide();
+		$('#btn_poner'+id).show();
+		$('#item_color_'+id).removeClass('alert-success');
+		$('#item_color_'+id).addClass('alert-danger');
+		*/
+		editar_precio(id, "sacar");
+	}
+}
+
+function toggle_producto(id)
+{
+	if($('#ingredientes'+id).prop('checked') == true)
+	{
+		sacar_producto(id);
+	}
+	else
+	{
+		agregar_producto(id);
+	}
 }
 
 function mensaje_no_items()
