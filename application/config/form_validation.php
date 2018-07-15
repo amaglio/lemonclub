@@ -425,7 +425,39 @@ $config = array(
                                              )
                                     ), 
 
-                                
+            'set_producto_grupo_ingrediente' => array(
+
+                                        array(
+                                                'field' => 'id_producto',
+                                                'label' => 'id_producto',
+                                                'rules' => 'strip_tags|required|trim|xss_clean'
+                                            ),
+
+                                         array(
+                                                'field' => 'id_grupo',
+                                                'label' => 'id_grupo',
+                                                'rules' => 'strip_tags|required|trim|xss_clean'
+                                            ),
+
+                                         array(
+                                                 'field' => 'id_ingrediente',
+                                                 'label' => 'id_ingrediente',
+                                                 'rules' => 'strip_tags|required|trim|xss_clean'
+                                             ),
+
+                                         array(
+                                                 'field' => 'accion',
+                                                 'label' => 'accion',
+                                                 'rules' => 'strip_tags|required|trim|xss_clean'
+                                             ),
+
+                                         array(
+                                                 'field' => 'campo',
+                                                 'label' => 'campo',
+                                                 'rules' => 'strip_tags|required|trim|xss_clean'
+                                             )
+                                    ), 
+            
 );
 
 

@@ -546,10 +546,15 @@ public function ver_grupos_producto()
 
 	$id_producto = $this->uri->segment(3);
 
+	//[REVISAR] Esta funcion tiene que ser del PRODUCTO MODEL: get_informacion_producto
 	$datos['producto_info'] = $this->Administrador_model->traer_informacion_producto($id_producto);
 	//$datos['grupos_producto'] = $this->Producto_model->get_grupos_producto($id_producto);
 
+	//var_dump($datos['producto_info']);
+
 	$grupos_producto = $this->Producto_model->get_grupos_producto($id_producto);
+
+	//var_dump($grupos_producto);
 
 	$array_grupos = array();
 
@@ -557,7 +562,8 @@ public function ver_grupos_producto()
 	{
 		$grupo['informacion_grupo']	= $row;
 		$grupo['ingredientes_grupo'] = $this->Producto_model->get_ingredientes_grupo_producto($id_producto,$row['id_grupo']);
-
+		//echo '<pre>'; print_r($grupo['ingredientes_grupo']); echo '</pre>';
+ 
 		array_push($array_grupos, $grupo);
 	}
 
@@ -753,7 +759,7 @@ public function eliminar_grupo_producto()
 	print json_encode($return);	
 }
 
-
+/*
 public function configuracion_ingrediente_producto()
 {
 	chrome_log("configuracion_ingrediente_producto: ".$this->input->post("id_producto")." - ".$this->input->post("id_grupo")." - ".$this->input->post("id_ingrediente")); 
@@ -788,6 +794,39 @@ public function configuracion_ingrediente_producto()
 
 	print json_encode($return);	
 	//redirect('Administrador/ver_grupos_producto/'.$this->input->post('id_producto'),'refresh'); 
+}*/
+
+public function set_producto_grupo_ingrediente()
+{ 
+	chrome_log("set_producto_grupo_ingrediente");
+ 
+	if ($this->form_validation->run('set_producto_grupo_ingrediente') == FALSE):
+		
+		chrome_log("No paso validacion  ");
+		$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.'); 
+		$return["error"] = TRUE;
+
+	else: 
+	 
+		chrome_log("Paso validacion"); 
+ 		
+ 		 
+		$query = $this->Producto_model->set_producto_grupo_ingrediente( $this->input->post() );
+		
+		if ( $query ):  
+		 
+			chrome_log("Cambio exitoso");
+ 			$return["error"] = FALSE;  
+		 				 
+		else: 
+ 
+ 			$return["error"] = TRUE;
+
+		endif;   
+ 
+	endif; 
+
+	print json_encode($return);	 
 }
 
 
