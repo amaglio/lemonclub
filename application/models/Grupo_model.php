@@ -62,7 +62,7 @@ class Grupo_model extends CI_Model {
 	 	
 	 	$this->db->where($array_grupo_ingrediente);
 
-	  	return $this->db->delete('grupo_ingrediente',$array_grupo_ingrediente);
+	  	return $this->db->delete('grupo_ingrediente');
 	}
 
 	public function eliminar_grupo_producto($array)

@@ -118,42 +118,47 @@ public function index()
 
 public function pedidos($vista='tabla')
 {
-		$data['mensaje'] = $this->session->flashdata('mensaje');
-		$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
-		$output->titulo = traer_titulo($this->uri->segment(2));
-		$this->load->view('administrador/index.php',(array)$output);
+	$data['mensaje'] = $this->session->flashdata('mensaje');
+	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+	$output->titulo = traer_titulo($this->uri->segment(2));
+	$this->load->view('administrador/index.php',(array)$output); 
 
-		//$pedidos = $this->Pedido_model->traer_pedidos_pendientes();
+	$pedidos = $this->Pedido_model->traer_pedidos_hoy(); // Busco los pedidos de hoy
 
-		$pedidos = $this->Pedido_model->traer_pedidos_hoy();
- 
-		$array_pedidos = array();
+	$array_pedidos = array();
 
-		foreach($pedidos as $row)
-		{
-			$informacion['informacion_pedido'] =  $row;
-			$informacion['total_pedido'] = $this->Pedido_model->get_total_pedido($row['id_pedido']);
-			$informacion['productos'] = $this->Pedido_model->get_pedido_productos($row['id_pedido']);
-
-			array_push($array_pedidos, $informacion);
-		}
-
-		$data['estados_pedidos'] = $this->Pedido_model->get_pedido_estados();
-
-		$data['pedidos'] = $array_pedidos;
-
-		$filtros['forma_entrega'] = $this->Pedido_model->get_forma_entrega();
-		$filtros['productos'] = $this->Producto_model->get_items();
-		$filtros['estados'] = $this->Pedido_model->get_pedido_estados();
-
-		$filtros['texto_filtros'] = "<span class='label label-primary'>Pedidos de HOY</span>";
-
-		$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
+	foreach($pedidos as $row) // Recorro los pedidos
+	{
+		$informacion['informacion_pedido'] =  $row;
+		$informacion['total_pedido'] = $this->Pedido_model->get_total_pedido($row['id_pedido']);
 		
-		if($vista == 'tabla')
-			$this->load->view('administrador/pedidos_tabla.php',$data);
-		else
-			$this->load->view('administrador/pedidos.php',$data);
+		$informacion['productos'] = $productos = $this->Pedido_model->get_pedido_productos($row['id_pedido']); // Busco los productos
+	 
+		foreach($productos as $row_producto ) // Recorro los productos
+		{
+			$datos['producto'] = $row_producto;
+			$datos['pedido_producto_ingrediente'] = $this->Pedido_model->get_pedido_producto_ingrediente($row_producto['id_pedido_producto']);
+		} 
+
+		array_push($array_pedidos, $informacion);
+	}
+
+	$data['estados_pedidos'] = $this->Pedido_model->get_pedido_estados();
+
+	$data['pedidos'] = $array_pedidos;
+
+	$filtros['forma_entrega'] = $this->Pedido_model->get_forma_entrega();
+	$filtros['productos'] = $this->Producto_model->get_items();
+	$filtros['estados'] = $this->Pedido_model->get_pedido_estados();
+
+	$filtros['texto_filtros'] = "<span class='label label-primary'>Pedidos de HOY</span>";
+
+	$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
+	
+	if($vista == 'tabla')
+		$this->load->view('administrador/pedidos_tabla.php',$data);
+	else
+		$this->load->view('administrador/pedidos.php',$data);
 }
 
 public function productos()
@@ -161,8 +166,8 @@ public function productos()
 	$crud = new grocery_CRUD();
 	$crud->set_language("spanish"); 
 	$crud->set_theme('datatables');
-	
-
+	$crud->set_subject('Producto');
+	$crud->unset_read();
 	$crud->set_table('producto');
 	$crud->where('producto.fecha_baja IS NULL');
 	$crud->columns('id_producto','nombre','id_producto_tipo','precio','path_imagen');
@@ -171,31 +176,23 @@ public function productos()
 		 ->display_as('path_imagen','Imagen')
 		 ->display_as('id_producto_tipo','Tipo de producto');
 
+	$crud->unset_texteditor(array('descripcion','full_text'));
 	$crud->add_action('Grupo de ingredientes',   base_url().'assets/grocery_crud/themes/flexigrid/css/images/grupo_ingredientes.png', 'Administrador/ver_grupos_producto');
-
-
 	
 	$state_info = $crud->getStateInfo();
 	$state = $crud->getState();
+
 	if($state == "edit")
 	{
 		$primary_key = $state_info->primary_key;
-		$crud->field_type('id_producto','readonly');
+		$crud->field_type('id_producto','hidden');
 	}
  	
- 	if($crud->getState() == 'add' OR $crud->getState() == 'edit')
-    {
-        //Do your cool stuff here . You don't need any State info you are in add
-      	$crud->unset_texteditor(array('descripcion','full_text'));
-        $crud->field_type('fecha_alta', 'hidden');
-        $crud->field_type('fecha_modificacion', 'hidden');
-        $crud->field_type('fecha_baja', 'hidden');
-    }
+	$crud->field_type('fecha_alta', 'hidden');
+	$crud->field_type('fecha_modificacion', 'hidden');
+	$crud->field_type('fecha_baja', 'hidden');
 
-    $crud->unset_read();
-
-	$crud->set_subject('Producto');
-	$crud->set_relation('id_producto_tipo','producto_tipo','descripcion');
+	$crud->set_relation('id_producto_tipo','producto_tipo','descripcion', "fecha_baja IS NULL" );
 
 	$crud->required_fields('id_producto_tipo' , 'nombre' , 'precio');
 
@@ -581,18 +578,13 @@ public function ver_agregar_ingrediente_grupo()
 
 	$this->load->view('administrador/index.php',(array)$output);
 
-	$id_gripo = $this->uri->segment(3);
+	$id_grupo = $this->uri->segment(3);
 
-	$datos['grupo_informacion'] = $this->Grupo_model->get_informacion_grupo($id_gripo);
-	$datos['grupo_ingredientes'] = $this->Grupo_model->get_ingredientes_grupo($id_gripo);
+	$datos['grupo_informacion'] = $this->Grupo_model->get_informacion_grupo($id_grupo);
+	$datos['grupo_ingredientes'] = $this->Grupo_model->get_ingredientes_grupo($id_grupo);
 
 	$this->load->view('administrador/ver_agregar_ingredientes_grupo.php',$datos); 
-
-	/*
-
-	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
-	$output->titulo = "Disponible en la <b>  etapa 2 <b>";
-	$this->load->view('administrador/index.php',(array)$output);*/
+ 
 }
 
 // GRUPOS 
@@ -883,11 +875,13 @@ public function agregar_ingrediente_producto()
 	endif; 
 }
 
+ 
 public function ajax_ingrediente()
 {
 	chrome_log("ajax_ingrediente: " );
 
-	$buscar = $this->input->get('term');
+	$buscar = $this->input->post('term');
+	$id_grupo = $this->input->post('id_grupo');
 
 	if( isset($buscar) && strlen($buscar) > 1 )
 	{
@@ -895,6 +889,11 @@ public function ajax_ingrediente()
 									FROM	ingrediente i
 									WHERE 	i.nombre like '%$buscar%'
 									AND i.fecha_baja IS NULL
+									AND i.id_ingrediente NOT IN ( 
+																SELECT gi.id_ingrediente
+																FROM  grupo_ingrediente gi
+																WHERE gi.id_grupo = $id_grupo
+																)
 									ORDER BY i.nombre"
 								);
 
@@ -903,10 +902,11 @@ public function ajax_ingrediente()
 		{
 			foreach ($query->result() as $row)
 			{	
- 
+ 				$variable = "<img style='width:100px' src='".base_url()."/assets/images/productos/".$row->path_imagen."'> ".$row->nombre;
 
 				$result[]= array( 	"id_ingrediente" => $row->id_ingrediente, 
-									"value" => $row->nombre 
+									"value" => $variable,
+									"nombre" => $row->nombre
 								);
 
 			 
@@ -916,19 +916,61 @@ public function ajax_ingrediente()
 		echo json_encode($result);
 	}
 }
-
  
+
+/*
+public function ajax_ingrediente()
+{
+	chrome_log("ajax_ingrediente:2 " );
+
+	$buscar = $this->input->post('term'); 
+
+	if( isset($buscar) && strlen($buscar) > 1 )
+	{
+		$query=$this->db->query("   SELECT *
+									FROM	ingrediente i
+									WHERE 	i.nombre like '%$buscar%'
+									AND i.fecha_baja IS NULL 
+									ORDER BY i.nombre"
+								);
+
+		chrome_log("aaa" );
+		
+		if($query->num_rows() > 0)
+		{
+			foreach ($query->result() as $row)
+			{	
+ 				$variable = "<img style='width:100px' src='".base_url()."/assets/images/productos/".$row->path_imagen."'> ".$row->nombre;
+
+				$result[]= array( 	"id_ingrediente" => $row->id_ingrediente, 
+									"value" => $variable,
+									"nombre" => $row->nombre
+								);
+
+			 
+			}
+		} 
+		
+		echo json_encode($result);
+	}
+}*/ 
+
 public function ajax_grupo()
 {
-	chrome_log("ajax_grupos: " );
+	chrome_log("ajax_grupos: ".$this->input->post('term') );
 
-	$buscar = $this->input->get('term');
+
+	$buscar = $this->input->post('term');
+	$id_producto = $this->input->post('id_producto');
 
 	if( isset($buscar) && strlen($buscar) > 1 )
 	{
 		$query=$this->db->query("   SELECT *
 									FROM	grupo g
 									WHERE 	g.nombre like '%$buscar%'
+									AND 	g.id_grupo NOT IN ( 	SELECT pg.id_grupo 
+																	FROM producto_grupo pg
+																	WHERE pg.id_producto = $id_producto )
 									ORDER BY g.nombre"
 								);
 
@@ -945,7 +987,7 @@ public function ajax_grupo()
 
 			 
 			}
-		} 
+		}
 		
 		echo json_encode($result);
 	}

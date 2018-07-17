@@ -1,80 +1,20 @@
 <link   type="text/css" href="<?php echo base_url(); ?>assets/css/dark-hive/jquery-ui-1.8.10.custom.css" rel="stylesheet" /> 
-
-<style type="text/css">
-  .error{
-    color:red;
-        font-size: 13px;
-
-  }
  
-  #div_grupo_seleccionado{
-         display: none;
-    background-color: rgba(0, 0, 0, 0.08);
-    padding: 20px 20px 0px 20px;
-    margin-left: 0px;
-    border-top: 1px solid #ececec;
-    border: 1px solid #dcdcdc;
-    }
-
-    .alert-info {
-          color: #000000;
-    background-color: #fbe75961;
-    border-color: #ecdd9d94;
-    font-weight: bold;
-    color: #303030d6;
-    padding: 10px;
-    letter-spacing: 0.5px;
-    }
-
-    .btn-danger 
-    {
-            color: #7f6800;
-    background-color: #f0f8ff00;
-    border: none;
-    }
-
-  .alert { 
-        border-radius: 3px;
-    }
-
-    .checkbox{
-      width: 30px; height: 30px;
-    }
-
-    .div_respuesta {
-      padding: 20px;
-      background-color: #ffff008a;
-      width: fit-content;
-      font-weight: bold;
-      position: relative;
-      left: 35px;
-      top: -24px;
-      z-index: 8000;
-  }
-
-  .nombre_grupo{
-    background-color: black;
-    padding: 10px 10px;
-    color: white;
-    font-size: 15px;
-    font-weight: 600;
-  }
-
-  .ui-widget-content {
-    border: 1px solid #555555;
-    background: #000000 url(images/ui-bg_loop_25_000000_21x21.png) 50% 50% repeat;
-    color: #ffffff;
-    padding: 10px !important;
-    font-size: 13px !important;
-}
-
-
-  </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+<style type="text/css">
+#div_grupo_seleccionado{
+  display: none;
+}
+
+
+
+</style>
+
 <?php mensaje_resultado($mensaje); ?>
+
 <div class="col-md-3">
   <div class="panel panel-default">
       <div class="panel-heading"><strong>Informacion del producto</strong></div>
@@ -92,6 +32,9 @@
         <div class="form-group">
             <label for="pwd">Precio</label>
             <input type="email" class="form-control" id="email" value="<?=$producto_info->precio?>" readonly="readonly">
+        </div>
+        <div class="form-group">
+            <a class="btn btn-primary btn-block" class="form-control" href="<?=base_url()?>/index.php/administrador/productos/edit/<?=$producto_info->id_producto?>"> Editar </a>
         </div>
       </form>
 
@@ -177,12 +120,12 @@
                                       <div class="col-md-3"> <?=ucfirst($ingrediente['nombre'])?></div > 
                                       <div class="col-md-3"> 
 
-                                        <input  type="checkbox" class="checkbox" name="es_fijo" id="es_fijo" value="<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" <? if( $ingrediente['es_fijo'] ==1 ) echo "checked='checked'"; ?> >
+                                        <input  type="checkbox" class="checkbox" name="es_fijo" id="es_fijo_<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" value="<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" <? if( $ingrediente['es_fijo'] ==1 ) echo "checked='checked'"; ?> >
 
                                       </div > 
                                       <div class="col-md-3"> 
 
-                                        <input  type="checkbox" class="checkbox" name="es_default" id="es_default" value="<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" <? if( $ingrediente['es_default'] ==1 ) echo "checked='checked'"; ?> >
+                                        <input  type="checkbox" class="checkbox" name="es_default" id="es_default_<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" value="<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" <? if( $ingrediente['es_default'] ==1 ) echo "checked='checked'"; ?> <? if( $ingrediente['es_fijo'] ==1 ) echo "disabled='disabled'"; ?> >
 
                                       </div> 
                                     </div >
@@ -221,16 +164,19 @@
       <div class="panel-heading"><strong>Agregar grupo</strong></div>
       <div class="panel-body">
 
-        <form  name="form_agregar_grupo" id="form_agregar_grupo"  method="POST"  action="<?=base_url()?>index.php/administrador/agregar_grupo_producto/" >
+        <form  name="form_agregar_grupo" id="form_agregar_grupo2"  method="POST"  action="<?=base_url()?>index.php/administrador/agregar_grupo_producto/" >
 
           <input type="hidden" class="form-control" name="id_producto" id="id_producto" value="<?=$producto_info->id_producto?>" readonly="readonly">
           
           <div class="form-group">
               <label for="email">Buscar grupo</label>
               <input type="text" class="form-control" id="grupo"  name="grupo" >
+              <div class="row col-sm-12" id="sin_resultado"  >
+                No se ha encontrado ningún grupo.    
+              </div>
           </div>
 
-          <div class="form-group" id="div_grupo_seleccionado">
+          <div class="form-group div_resultado_ajax" id="div_grupo_seleccionado" >
              
 
               <input readonly="readonly" type="text" class="form-control" id="grupo_seleccionado"  name="grupo_seleccionado" >
@@ -264,6 +210,9 @@
 
 <script type="text/javascript">
   
+  jq_va(document).on("keypress", "form", function(event) { 
+    return event.keyCode != 13;
+  });
  
   jq_va.validator.addMethod("seleccionar_grupo", 
       function(value, element) 
@@ -401,11 +350,57 @@
     //-- EDUCACION 
 
     jq_ui('#grupo').autocomplete({
+         
+           
+          select: function(event, ui)
+                  {   
+                      //alert("aaaa");
+                      jq_ui("#div_grupo_seleccionado").show();
+                      jq_ui("#id_grupo").val(ui.item.id_grupo);
+                      jq_ui("#grupo_seleccionado").val(ui.item.value);
+                      jq_ui('#grupo').attr('readonly', true);
+                      jq_ui('#grupo').val("");
+                      jq_ui( "#grupo_seleccionado" ).focus();
+
+                      jq_ui(this).val("");
+                      return false; // Importante, si esto no borra el input
+                  },
+          source: function(request, response)
+                  { 
+                    jq_ui.ajax({
+                        url: '<?php echo site_url('administrador/ajax_grupo'); ?>',
+                        dataType: 'json',
+                        type: "POST",
+                        data: {
+                            term : request.term,
+                            id_producto : <?=$producto_info->id_producto?>
+                        },
+                        success: function(data)
+                        {
+                          
+                            jq_ui('#sin_resultado').hide();
+                           if(data) response( data );
+                           else response({});
+                            //alert(data.length);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            jq_ui('#sin_resultado').show();   
+                        } 
+                    });
+                  },
+          minLength: 2
           
-          minLength: 3,
-          change: function( event, ui ) {
-             //jq_ui('#div_educacion_manual').hide();
-          },
+
+    }).keyup(function (e) {
+         
+            $(".ui-menu").hide();
+                    
+    });
+
+    /*
+    jq_ui('#grupo').autocomplete({
+          
+          minLength: 3, 
           source:'<?php echo site_url('administrador/ajax_grupo'); ?>',
           select: function(event, ui) 
           {   
@@ -420,7 +415,8 @@
               return false; // Importante, si esto no borra el input
             
           },
-          response: function(event, ui) {
+          response: function(event, ui) 
+          {
 
             //alert(ui.content.length);
 
@@ -435,9 +431,9 @@
                  jq_ui('#sin_resultado').hide();
             }
 
-          }
+          } 
 
-    });
+    });*/
 
     function ocultar_grupo()
     {
@@ -485,13 +481,31 @@
           accion = 1; // agregar
         else
           accion = 0; // eliminar
-
-        //alert(this.value);
-        //alert(this.name);
+ 
 
         campo = this.name;
 
         valor = this.value.split('_');
+        
+        //$('input[name="myname"]:checked').val()
+
+        if( campo == 'es_fijo' && accion == 1 )
+        {    
+            $("input[id='es_default_"+this.value+"']").attr('checked','checked');
+            $("#es_default_"+this.value).prop('checked', true);
+            $("#es_default_"+this.value).prop('disabled', true);
+        }
+  
+        if( campo == 'es_fijo' && accion == 0 )
+        {    
+             $("#es_default_"+this.value).prop('disabled', false);
+        }
+
+        if( campo == 'es_default' && accion == 0 && jq_ui("input[id='es_fijo_"+this.value+"']:checked").val() )
+        {   
+            //alert('es_default' );
+            jq_ui("#es_fijo_"+this.value).attr('checked',false); 
+        }
 
         var id_producto = valor[0] ;
         var id_grupo = valor[1] ;

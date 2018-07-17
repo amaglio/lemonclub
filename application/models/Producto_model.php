@@ -291,8 +291,7 @@ function set_producto_grupo_ingrediente( $array )
         $id_grupo = $array['id_grupo'];
         $id_ingrediente = $array['id_ingrediente'];
         $campo = $array['campo'];
-        $accion = $array['accion'];
-
+        $accion = $array['accion'];           
 
         $sql_select = " SELECT *
                         FROM producto_grupo_ingrediente 
@@ -308,9 +307,27 @@ function set_producto_grupo_ingrediente( $array )
             
             chrome_log("Ya hay");
 
-            $array_actualizar = array(
-               $campo =>$accion
-            );
+            if( $campo == 'es_fijo' && $accion == 1 ):// Si es fijo es default
+
+                    $array_actualizar = array(
+                        $campo => $accion,
+                        'es_default' => 1
+                    );
+
+            elseif( $campo == 'es_default' && $accion == 0 ):// Si es default saco el fijo
+
+                    $array_actualizar = array(
+                        $campo => $accion,
+                        'es_fijo' => 0
+                    );
+            
+            else:
+
+                    $array_actualizar = array(
+                        $campo =>$accion
+                    );
+
+            endif;
 
             $array_where = array(
                 'id_producto' => $id_producto ,
@@ -328,7 +345,24 @@ function set_producto_grupo_ingrediente( $array )
             $array_insert['id_producto'] = $array['id_producto'];
             $array_insert['id_grupo'] = $array['id_grupo'];
             $array_insert['id_ingrediente'] = $array['id_ingrediente'];
-            $array_insert[$campo] = $accion;
+            
+
+
+            if( $campo == 'es_fijo' && $accion == 1 ):// Si es fijo es default
+
+                    $array_insert[$campo] = $accion;
+                    $array_insert['es_default'] = 1;
+
+            elseif( $campo == 'es_default' && $accion == 0 ):// Si es default saco el fijo
+
+                    $array_insert[$campo] = $accion;
+                    $array_insert['es_fijo'] = 0;
+
+            else:
+
+                    $array_insert[$campo] = $accion;
+
+            endif;
 
             $this->db->insert('producto_grupo_ingrediente',  $array_insert );
 

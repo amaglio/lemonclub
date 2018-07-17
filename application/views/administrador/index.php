@@ -48,6 +48,78 @@
 		.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover{
 			background-color: #fce129;
 		}
+
+		.error{
+    color:red;
+        font-size: 13px;
+
+  }
+ 
+    .div_resultado_ajax{
+         display: none;
+    background-color: rgba(0, 0, 0, 0.08);
+    padding: 20px 20px 0px 20px;
+    margin-left: 0px;
+    border-top: 1px solid #ececec;
+    border: 1px solid #dcdcdc;
+    }
+
+    .alert-info {
+          color: #000000;
+    background-color: #fbe75961;
+    border-color: #ecdd9d94;
+    font-weight: bold;
+    color: #303030d6;
+    padding: 10px;
+    letter-spacing: 0.5px;
+    }
+
+    .btn-danger 
+    {
+            color: #7f6800;
+    background-color: #f0f8ff00;
+    border: none;
+    }
+
+  .alert { 
+        border-radius: 3px;
+    }
+
+    .checkbox{
+      width: 30px; height: 30px;
+    }
+
+    .div_respuesta {
+      padding: 20px;
+      background-color: #ffff008a;
+      width: fit-content;
+      font-weight: bold;
+      position: relative;
+      left: 35px;
+      top: -24px;
+      z-index: 8000;
+  }
+
+  .nombre_grupo{
+    background-color: black;
+    padding: 10px 10px;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .ui-widget-content {
+    border: 1px solid #555555;
+    background: #000000 url(images/ui-bg_loop_25_000000_21x21.png) 50% 50% repeat;
+    color: #ffffff;
+    padding: 10px !important;
+    font-size: 13px !important;
+}
+
+#sin_resultado{
+      display: none;   
+    color: red;
+    }
 	
 	</style>
  

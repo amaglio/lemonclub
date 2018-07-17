@@ -868,6 +868,56 @@ class Pedido_model extends CI_Model {
 
     	return $resultado->row()->cant;
 	}
+
+
+	public function get_pedido_producto_ingrediente($id_pedido_producto)
+	{	
+
+		chrome_log("Pedido_model/get_pedido_producto_ingrediente"); 
+
+		// Obtengo los ingredientes y sus configuraciones
+
+	 	$sql_ingredientes_pedido = "SELECT *
+					                FROM pedido_producto pp
+					                	 INNER JOIN pedido_producto_ingrediente ppi ON pp.id_pedido_producto = ppi.id_pedido_producto
+					                	 INNER JOIN ingrediente i ON ppi.id_ingrediente = i.id_ingrediente
+					                	 LEFT JOIN producto_grupo_ingrediente pgi 
+					                	 		ON pgi.id_producto = pp.id_producto
+					                	 		AND pgi.id_grupo = ppi.id_grupo
+					                	 		AND pgi.id_ingrediente = ppi.id_ingrediente
+
+					                WHERE ppi.id_pedido_producto = ? "; 
+
+		$query_ingredientes_pedido = $this->db->query( $sql_ingredientes_pedido, array($id_pedido_producto) );
+
+		$result_ingredientes_pedido = $query_ingredientes_pedido->result_array();
+		
+		$ingredientes_agregados = array();
+
+		//-- Si no es fijo y no es default, entonces es agregado 
+		
+		$id_producto;
+
+		foreach ($result_ingredientes_pedido as $key => $value) 
+		{ 
+			$id_producto = $value['id_producto'];
+
+			if( $value['es_default'] == FALSE ){
+				echo $value['nombre']."<br>";
+				array_push($ingredientes_agregados, $value);
+			}
+		}
+
+		//-- Busco los grupos del producto, busco los default y si no los sacaron  
+
+		echo   '<pre>',print_r($ingredientes_agregados,1),'</pre>';
+
+		if($query_ingredientes_pedido->num_rows() > 0)
+			return $query_ingredientes_pedido;
+		else
+			return false;
+
+	}
  
 }
 
