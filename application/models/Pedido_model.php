@@ -875,7 +875,7 @@ class Pedido_model extends CI_Model {
 
 		chrome_log("Pedido_model/get_pedido_producto_ingrediente"); 
 
-		// Obtengo los ingredientes y sus configuraciones
+		// Obtengo los ingredientes del pedido y sus configuraciones
 
 	 	$sql_ingredientes_pedido = "SELECT *
 					                FROM pedido_producto pp
@@ -901,19 +901,58 @@ class Pedido_model extends CI_Model {
 		foreach ($result_ingredientes_pedido as $key => $value) 
 		{ 
 			$id_producto = $value['id_producto'];
-
+ 
 			if( $value['es_default'] == FALSE ){
-				echo $value['nombre']."<br>";
+				//echo $value['nombre']."<br>";
 				array_push($ingredientes_agregados, $value);
 			}
 		}
 
+		//echo   '<pre>',print_r($ingredientes_agregados,1),'</pre>';
+
 		//-- Busco los grupos del producto, busco los default y si no los sacaron  
 
-		echo   '<pre>',print_r($ingredientes_agregados,1),'</pre>';
+		$sql_ingredientes_default = "	SELECT *
+					                	FROM producto_grupo pg
+					                	 	 INNER JOIN producto_grupo_ingrediente pgi 
+					                	 		ON pgi.id_grupo = pg.id_grupo AND pgi.id_producto = pg.id_producto
+					                	 	INNER JOIN ingrediente i ON pgi.id_ingrediente  = i.id_ingrediente
+					                	WHERE pg.id_producto = ? 
+					                	AND pgi.es_default = 1"; 
+
+		$query_ingredientes_default = $this->db->query( $sql_ingredientes_default, array($id_producto) );
+
+		$res_ingredientes_default = $query_ingredientes_default->result_array();
+
+		// Recorro los ingredientes default del grupo y busco los que no estan en el pedido
+
+		$ingredientes_quitados = array();
+
+		foreach ($res_ingredientes_default as $key2 => $row_ingrediente_default) 
+		{ 
+			$flag = 0;
+
+			// Recorro los ingredientes del pedido para ver si esta el default
+
+			foreach ($result_ingredientes_pedido as $key3 => $row_ingrediente_pedido) 
+			{ 
+				if( $row_ingrediente_default['id_ingrediente'] == $row_ingrediente_pedido['id_ingrediente'] )
+					$flag = 1;
+ 
+			}
+
+			if($flag == 0)
+				array_push($ingredientes_quitados, $row_ingrediente_default);
+
+		}
+
+		//echo   '<pre>',print_r($ingredientes_quitados,1),'</pre>';
+
+		$resultado['ingredientes_agregados'] = $ingredientes_agregados;
+		$resultado['ingredientes_quitados'] = $ingredientes_quitados; 
 
 		if($query_ingredientes_pedido->num_rows() > 0)
-			return $query_ingredientes_pedido;
+			return $resultado;
 		else
 			return false;
 

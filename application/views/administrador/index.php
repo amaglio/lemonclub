@@ -120,6 +120,10 @@
       display: none;   
     color: red;
     }
+
+    .badge{
+    	background-color: #4CAF50 !important;
+    }
 	
 	</style>
  

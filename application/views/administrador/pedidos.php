@@ -96,15 +96,30 @@ if( count($pedidos) > 0):
                             foreach ($row['productos'] as $row2) 
                             { ?>
                                 <div class="col-md-12" style="padding: 0px; padding-bottom:  10px; ">
-                                    <img  class="img img-fluid" style="width: inherit; padding: 5px; border: 1px solid #808080a8;" src="<?=base_url()?>/assets/images/productos/<?=$row2['path_imagen']?>">  
+                                    <img  class="img img-fluid" style="width: inherit; padding: 5px; border: 1px solid #808080a8;" src="<?=base_url()?>/assets/images/productos/<?=$row2['producto']['path_imagen']?>">  
                                     <div id="imagen_producto">
-                                      <strong><?=$row2['nombre']?> (x<?=$row2['cantidad']?>)</strong><br>
-                                      <span>$</span><span><?=$row2['precio']?></span>
+                                      <strong><?=$row2['producto']['nombre']?> (x<?=$row2['producto']['cantidad']?>)</strong><br>
+                                      <span>$</span><span><?=$row2['producto']['precio']?></span>
                                     </div>
                                 </div>
                                 
+                                <!-- Ingredientes agregados -->
+                               <? foreach ($row2['pedido_producto_ingrediente']["ingredientes_agregados"] as $key => $value4) 
+                                { ?>
                                     
-                               
+                                     <span class="badge"><i class="fa fa-check"></i></span> <?=$value4['nombre']?><br>
+
+                                <?
+                               } ?>
+
+                                <!-- Ingredientes quitados -->
+                               <? foreach ($row2['pedido_producto_ingrediente']["ingredientes_quitados"] as $key => $value4) 
+                                { ?>
+                                    
+                                     <span class="badge" style="background-color: red !important;"><i class="fa fa-times"></i></span> <?=$value4['nombre']?><br>
+
+                                <?
+                               } ?>
 
                           <?php
                             }
@@ -125,6 +140,10 @@ if( count($pedidos) > 0):
 
                               <?php  endif;  ?>
                               <hr>
+
+                              <? //var_dump($pedido_producto_ingrediente['ingredientes_agregados']); ?>
+
+
                           </div>
 
                           <div class="col-md-12">
