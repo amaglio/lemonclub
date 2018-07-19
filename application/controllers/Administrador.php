@@ -472,6 +472,7 @@ public function tipos_ingredientes()
 	$this->_example_output($output);
 }
 
+/*
 public function buscar_pedidos($vista=null)
 {
 	$data['mensaje'] = $this->session->flashdata('mensaje');
@@ -506,6 +507,70 @@ public function buscar_pedidos($vista=null)
 
 	$data['pedidos'] = $array_pedidos;
 
+	$filtros['forma_entrega'] = $this->Pedido_model->get_forma_entrega();
+	$filtros['productos'] = $this->Producto_model->get_items();
+	$filtros['estados'] = $this->Pedido_model->get_pedido_estados();
+	
+	$filtros['opciones_busqueda'] = $this->input->post();
+	$filtros['texto_filtros'] = $texto_filtros;
+
+	$data['menu_pedidos'] = $this->load->view('administrador/menu_pedidos.php',$filtros, TRUE);
+	
+	if($vista == 'tabla')
+		$this->load->view('administrador/pedidos_tabla.php',$data);
+	else
+		$this->load->view('administrador/pedidos.php',$data);
+}*/
+
+public function buscar_pedidos($vista=null)
+{
+	$data['mensaje'] = $this->session->flashdata('mensaje');
+	$output = (object)array('output' => '' , 'js_files' => array() , 'css_files' => array());
+	$output->titulo = traer_titulo($this->uri->segment(2));
+	$this->load->view('administrador/index.php',(array)$output);
+
+	$texto_filtros = "";
+
+	$pedidos = $this->Pedido_model->buscar_pedidos( $this->input->post(), $texto_filtros );
+ 
+	$array_pedidos = array();
+
+	if( $pedidos ): 
+
+		foreach($pedidos as $row) // Recorro los pedidos
+		{
+			$informacion['informacion_pedido'] =  $row;
+			$informacion['total_pedido'] = $this->Pedido_model->get_total_pedido($row['id_pedido']);
+			
+			$productos = $this->Pedido_model->get_pedido_productos($row['id_pedido']); // Busco los productos
+
+			$array_productos = array();
+
+			foreach($productos as $row_producto ) // Recorro los productos
+			{
+				$datos['producto'] = $row_producto;
+				$datos['pedido_producto_ingrediente'] = $this->Pedido_model->get_pedido_producto_ingrediente($row_producto['id_pedido_producto']);
+
+				array_push($array_productos, $datos);
+			} 
+
+			$informacion['productos'] = $array_productos;
+
+			array_push($array_pedidos, $informacion);
+		}
+
+		$data['pedidos'] = $array_pedidos;
+
+	else:
+
+		$array_pedidos = NULL;
+	
+	endif;
+
+	$data['pedidos'] = $array_pedidos;
+	$data['estados_pedidos'] = $this->Pedido_model->get_pedido_estados();
+
+ 
 	$filtros['forma_entrega'] = $this->Pedido_model->get_forma_entrega();
 	$filtros['productos'] = $this->Producto_model->get_items();
 	$filtros['estados'] = $this->Pedido_model->get_pedido_estados();

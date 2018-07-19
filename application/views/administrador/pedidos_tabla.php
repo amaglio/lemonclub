@@ -43,7 +43,9 @@
     display: table-row-group;
   }
 
-
+  .badge{
+    margin: 5px;
+  }
 </style>
 
 <?php echo $menu_pedidos; ?>
@@ -89,8 +91,36 @@
                                           foreach ($row['productos'] as $row2) 
                                           { ?>
                                               <div class="col-md-12">
-                                                  <strong><?=$row2['nombre']?></strong>
-                                                  <div class="pull-right"><span>$</span><span><?=$row2['precio']?></span></div>
+                                                  <strong><?=$row2['producto']['nombre']?></strong>
+                                                  <div class="pull-right"><span>$</span><span><?=$row2['producto']['precio']?></span></div>
+                                                  <div>
+                                                     <?  if( count($row2['pedido_producto_ingrediente']["ingredientes_quitados"]) > 0) : ?>
+
+                                                             <!-- Ingredientes agregados -->
+                                                             <? foreach ($row2['pedido_producto_ingrediente']["ingredientes_agregados"] as $key => $value4) 
+                                                              { ?>
+                                                                  
+                                                                   <span class="badge"><i class="fa fa-check"></i></span> <?=$value4['nombre']?> 
+
+                                                              <?
+                                                             } 
+
+                                                          endif;
+                                                     ?>
+
+                                                     <?  if( count($row2['pedido_producto_ingrediente']["ingredientes_quitados"]) > 0) : ?>
+                                                                <!-- Ingredientes quitados -->
+                                                               <? foreach ($row2['pedido_producto_ingrediente']["ingredientes_quitados"] as $key => $value4) 
+                                                                { ?>
+                                                                    
+                                                                     <span class="badge" style="background-color: red !important;"><i class="fa fa-times"></i></span> <?=$value4['nombre']?> 
+
+                                                                <?
+                                                               } 
+
+                                                          endif; ?>
+
+                                                  </div>
                                               </div>
                                         <?php
                                           }

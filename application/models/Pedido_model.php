@@ -889,67 +889,77 @@ class Pedido_model extends CI_Model {
 					                WHERE ppi.id_pedido_producto = ? "; 
 
 		$query_ingredientes_pedido = $this->db->query( $sql_ingredientes_pedido, array($id_pedido_producto) );
-
 		$result_ingredientes_pedido = $query_ingredientes_pedido->result_array();
 		
-		$ingredientes_agregados = array();
 
-		//-- Si no es fijo y no es default, entonces es agregado 
+		//echo   '<pre>',print_r($result_ingredientes_pedido,1),'</pre>';
 		
-		$id_producto;
+		//  Si un producto no tiene grupos, significa que no tiene ingredientes
+		//  entonces no tiene ingredientes que poner o sacar
+ 		
+ 		if( count($result_ingredientes_pedido) > 0 ): // TIENE INGREDIENTES
 
-		foreach ($result_ingredientes_pedido as $key => $value) 
-		{ 
-			$id_producto = $value['id_producto'];
- 
-			if( $value['es_default'] == FALSE ){
-				//echo $value['nombre']."<br>";
-				array_push($ingredientes_agregados, $value);
-			}
-		}
+			$ingredientes_agregados = array();
 
-		//echo   '<pre>',print_r($ingredientes_agregados,1),'</pre>';
-
-		//-- Busco los grupos del producto, busco los default y si no los sacaron  
-
-		$sql_ingredientes_default = "	SELECT *
-					                	FROM producto_grupo pg
-					                	 	 INNER JOIN producto_grupo_ingrediente pgi 
-					                	 		ON pgi.id_grupo = pg.id_grupo AND pgi.id_producto = pg.id_producto
-					                	 	INNER JOIN ingrediente i ON pgi.id_ingrediente  = i.id_ingrediente
-					                	WHERE pg.id_producto = ? 
-					                	AND pgi.es_default = 1"; 
-
-		$query_ingredientes_default = $this->db->query( $sql_ingredientes_default, array($id_producto) );
-
-		$res_ingredientes_default = $query_ingredientes_default->result_array();
-
-		// Recorro los ingredientes default del grupo y busco los que no estan en el pedido
-
-		$ingredientes_quitados = array();
-
-		foreach ($res_ingredientes_default as $key2 => $row_ingrediente_default) 
-		{ 
-			$flag = 0;
-
-			// Recorro los ingredientes del pedido para ver si esta el default
-
-			foreach ($result_ingredientes_pedido as $key3 => $row_ingrediente_pedido) 
+			//-- Si no es fijo y no es default, entonces es agregado 
+			foreach ($result_ingredientes_pedido as $key => $value) 
 			{ 
-				if( $row_ingrediente_default['id_ingrediente'] == $row_ingrediente_pedido['id_ingrediente'] )
-					$flag = 1;
- 
+				$id_producto = $value['id_producto'];
+	 
+				if( $value['es_default'] == FALSE ){
+					//echo $value['nombre']."<br>";
+					array_push($ingredientes_agregados, $value);
+				}
 			}
 
-			if($flag == 0)
-				array_push($ingredientes_quitados, $row_ingrediente_default);
+			//-- Busco los grupos del producto, busco los default y si no los sacaron  
 
-		}
+			$sql_ingredientes_default = "	SELECT *
+						                	FROM producto_grupo pg
+						                	 	 INNER JOIN producto_grupo_ingrediente pgi 
+						                	 		ON pgi.id_grupo = pg.id_grupo AND pgi.id_producto = pg.id_producto
+						                	 	INNER JOIN ingrediente i ON pgi.id_ingrediente  = i.id_ingrediente
+						                	WHERE pg.id_producto = ? 
+						                	AND pgi.es_default = 1"; 
 
-		//echo   '<pre>',print_r($ingredientes_quitados,1),'</pre>';
+			$query_ingredientes_default = $this->db->query( $sql_ingredientes_default, array($id_producto) );
 
-		$resultado['ingredientes_agregados'] = $ingredientes_agregados;
-		$resultado['ingredientes_quitados'] = $ingredientes_quitados; 
+			$res_ingredientes_default = $query_ingredientes_default->result_array();
+
+			// Recorro los ingredientes default del grupo y busco los que no estan en el pedido
+
+			$ingredientes_quitados = array();
+
+			foreach ($res_ingredientes_default as $key2 => $row_ingrediente_default) 
+			{ 
+				$flag = 0;
+
+				// Recorro los ingredientes del pedido para ver si esta el default
+
+				foreach ($result_ingredientes_pedido as $key3 => $row_ingrediente_pedido) 
+				{ 
+					if( $row_ingrediente_default['id_ingrediente'] == $row_ingrediente_pedido['id_ingrediente'] )
+						$flag = 1;
+	 
+				}
+
+				if($flag == 0)
+					array_push($ingredientes_quitados, $row_ingrediente_default);
+			}
+
+			//echo   '<pre>',print_r($ingredientes_quitados,1),'</pre>';
+
+			$resultado['ingredientes_agregados'] = $ingredientes_agregados;
+			$resultado['ingredientes_quitados'] = $ingredientes_quitados; 
+
+		
+		else: // NO TIENE INGREDIENTES, NO SE PUEDE MODIFICAR
+
+			$resultado['ingredientes_agregados'] = NULL;
+			$resultado['ingredientes_quitados'] = NULL; 
+
+		endif;
+
 
 		if($query_ingredientes_pedido->num_rows() > 0)
 			return $resultado;
