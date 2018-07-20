@@ -86,6 +86,8 @@
                                     <td><?=$row['informacion_pedido']['fecha_entrega']?></td>
                                     <td><?=$row['informacion_pedido']['id_pedido']?></td>
                                     <td><?=$row['informacion_pedido']['email']?></td>
+
+                                     
                                     <td>
                                         <?php
                                           foreach ($row['productos'] as $row2) 

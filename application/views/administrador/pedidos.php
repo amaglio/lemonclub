@@ -136,7 +136,20 @@ if( count($pedidos) > 0):
                           ?>
 
                           <div class="col-md-12">
-                              <small>- <?=$row['informacion_pedido']['forma_pago']?></small><br>
+                              <small>- <?=$row['informacion_pedido']['forma_pago']?>
+
+                                      <?  if( count($row['pagos_on_line'] ) > 0  ) : ?>
+                                        
+                                        <?php  foreach ($row['pagos_on_line'] as $row_pagos): ?>
+
+                                             <br><span style="color:red"> Fecha Pago: <?=$row_pagos['fecha_pago']?> - <?=$row_pagos['descripcion']?> </span> 
+
+                                        <?php endforeach;  ?>
+
+                                      <?  endif; ?>
+
+
+                              </small><br>
                               <small>- <?=$row['informacion_pedido']['forma_entrega']?></small><br>
                               <small>- Fecha del pedido: <?=$row['informacion_pedido']['fecha_pedido']?></small>
                               <br>
@@ -149,7 +162,9 @@ if( count($pedidos) > 0):
                                   </div>
 
                               <?php  endif;  ?>
-                              <hr>
+                              <hr><br>
+                              
+
 
                               <? //var_dump($pedido_producto_ingrediente['ingredientes_agregados']); ?>
 

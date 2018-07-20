@@ -74,7 +74,7 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 
-// Configuracion trabajo
+//Configuracion trabajo
 
 $db['default'] = array(
 	'dsn'	=> '',

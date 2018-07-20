@@ -177,6 +177,7 @@ public function pedidos($vista='tabla')
 	{
 		$informacion['informacion_pedido'] =  $row;
 		$informacion['total_pedido'] = $this->Pedido_model->get_total_pedido($row['id_pedido']);
+		$informacion['pagos_on_line'] = $this->Pedido_model->get_pagos_on_line_pedido($row['id_pedido']);
 		
 		$productos = $this->Pedido_model->get_pedido_productos($row['id_pedido']); // Busco los productos
 

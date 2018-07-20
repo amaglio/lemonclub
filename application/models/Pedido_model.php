@@ -967,6 +967,21 @@ class Pedido_model extends CI_Model {
 			return false;
 
 	}
+
+	public function get_pagos_on_line_pedido($id_pedido)
+	{
+		chrome_log("Pedido_model/get_pagos_pedido");
+
+	 	$sql = "SELECT  *
+				FROM 	pago_online po
+						INNER JOIN pago_online_estado poe ON po.id_pago_online_estado = poe.id_pago_online_estado
+				WHERE
+					po.id_pedido  = ? "; 
+
+		$query = $this->db->query($sql, array($id_pedido) );
+	 
+	    return $query->result_array();
+	}
  
 }
 
