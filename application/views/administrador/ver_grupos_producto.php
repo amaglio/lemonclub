@@ -92,7 +92,8 @@
                     <?php $w=0; ?>
                     <?php    foreach ( $grupos_ingredientes[$i]['ingredientes_grupo'] as $ingrediente):?>
 
-                                <?/*
+                                <?php
+                                /*
                                 <form method="post"
 
                                       name="form_configuracion_ingrediente_producto_<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" 
@@ -100,7 +101,8 @@
                                       id="form_configuracion_ingrediente_producto_<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>"  
 
                                       class="form_configuracion_ingrediente"
-                                > */ ?>
+                                > */ 
+                                ?>
                                   
                                     <input type="hidden" name="id_producto" value="<?=$ingrediente['id_producto']?>">
                                     <input type="hidden" name="id_grupo" value="<?=$ingrediente['id_grupo']?>">
@@ -120,18 +122,20 @@
                                       <div class="col-md-3"> <?=ucfirst($ingrediente['nombre'])?></div > 
                                       <div class="col-md-3"> 
 
-                                        <input  type="checkbox" class="checkbox" name="es_fijo" id="es_fijo_<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" value="<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" <? if( $ingrediente['es_fijo'] ==1 ) echo "checked='checked'"; ?> >
+                                        <input  type="checkbox" class="checkbox" name="es_fijo" id="es_fijo_<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" value="<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" <?php if( $ingrediente['es_fijo'] ==1 ) echo "checked='checked'"; ?> >
 
                                       </div > 
                                       <div class="col-md-3"> 
 
-                                        <input  type="checkbox" class="checkbox" name="es_default" id="es_default_<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" value="<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" <? if( $ingrediente['es_default'] ==1 ) echo "checked='checked'"; ?> <? if( $ingrediente['es_fijo'] ==1 ) echo "disabled='disabled'"; ?> >
+                                        <input  type="checkbox" class="checkbox" name="es_default" id="es_default_<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" value="<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" <?php if( $ingrediente['es_default'] ==1 ) echo "checked='checked'"; ?> <?php if( $ingrediente['es_fijo'] ==1 ) echo "disabled='disabled'"; ?> >
 
                                       </div> 
                                     </div >
 
-                                <?/*
-                                </form> */ ?>
+                                <?php
+                                /*
+                                </form> */ 
+                                ?>
 
                               
 

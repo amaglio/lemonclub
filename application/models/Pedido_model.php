@@ -62,7 +62,8 @@ class Pedido_model extends CI_Model {
 			return $array;
 		}
 		*/
-		$query = $this->db->query('SELECT *
+		$query = $this->db->query('SELECT PP.*, P.*,
+									(SELECT PPI.id_ingrediente FROM pedido_producto_ingrediente AS PPI WHERE PP.id_pedido_producto = PPI.id_pedido_producto LIMIT 1) tiene_ingredientes
 		                            FROM pedido_producto AS PP
 		                            INNER JOIN producto AS P ON PP.id_producto = P.id_producto
 		                            WHERE PP.id_pedido='.$id);

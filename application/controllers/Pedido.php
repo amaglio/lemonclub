@@ -224,12 +224,13 @@ class Pedido extends CI_Controller {
 				{
 					$row['cantidad'] = 0;
 				}
-				
+				/*
 				if($row['cantidad'] < $row['cantidad_minima'])
 				{
 					$return["resultado"] = FALSE;
 					$return["mensaje"] = 'Tiene que seleccionar mas ingredientes'.$aux;
 				}
+				*/
 				if($row['cantidad'] > $row['cantidad_maxima'])
 				{
 					$return["resultado"] = FALSE;
