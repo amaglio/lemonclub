@@ -72,6 +72,25 @@ CREATE TABLE `forma_entrega` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `forma_pago`
+--
+
+CREATE TABLE `forma_pago` (
+  `id_forma_pago` int(11) NOT NULL,
+  `descripcion` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `forma_pago`
+--
+
+INSERT INTO `forma_pago` (`id_forma_pago`, `descripcion`) VALUES
+(1, 'Efectivo'),
+(2, 'Digital');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `grupo`
 --
 
