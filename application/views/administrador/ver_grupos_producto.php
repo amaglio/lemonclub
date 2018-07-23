@@ -1,25 +1,20 @@
 <link   type="text/css" href="<?php echo base_url(); ?>assets/css/dark-hive/jquery-ui-1.8.10.custom.css" rel="stylesheet" /> 
-
-<style type="text/css">
-  .error{
-    color:red;
-  }
  
-  #div_grupo_seleccionado{
-      display: none;
-      background-color: rgba(60, 141, 188, 0.55);
-      padding: 20px 20px 0px 20px;
-      margin-left: 0px;
-      border-top:1px solid silver;
-      border:1px solid silver;
-    }
-
-</style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+<style type="text/css">
+#div_grupo_seleccionado{
+  display: none;
+}
+
+
+
+</style>
+
 <?php mensaje_resultado($mensaje); ?>
+
 <div class="col-md-3">
   <div class="panel panel-default">
       <div class="panel-heading"><strong>Informacion del producto</strong></div>
@@ -37,6 +32,9 @@
         <div class="form-group">
             <label for="pwd">Precio</label>
             <input type="email" class="form-control" id="email" value="<?=$producto_info->precio?>" readonly="readonly">
+        </div>
+        <div class="form-group">
+            <a class="btn btn-primary btn-block" class="form-control" href="<?=base_url()?>/index.php/administrador/productos/edit/<?=$producto_info->id_producto?>"> Editar </a>
         </div>
       </form>
 
@@ -58,18 +56,43 @@
               <?php for ($i=0; $i < count($grupos_ingredientes) ; $i++): ?>
 
                 <?php $grupo = $grupos_ingredientes[$i]['informacion_grupo'];  ?>
-
-                    <div class="alert alert-info" role="alert">
-                      <?=$grupo['nombre']?>
-                      <a class="btn btn-danger btn-xs pull-right" onclick="eliminar_grupo_producto(<?=$grupo['id_producto']?>,<?=$grupo['id_grupo']?>)">
-                            Eliminar
+                    
+                    <div class="row ">
+                      
+                        <div class="col-md-5 nombre_grupo"   > 
+                            <?=ucfirst($grupo['nombre'])?><br>
+                            <a class="btn btn-danger btn-xs " onclick="eliminar_grupo_producto(<?=$grupo['id_producto']?>,<?=$grupo['id_grupo']?>)">
+                            <i class="fa fa-trash fa-1x" ></i>  Eliminar 
                           </a>
+                        </div>
+                        <div class="col-md-6" style="border-top: 1px solid #dedede;">
+                          <table class="table table-responsive" style="    font-size: 12px;">
+                              <thead>
+                                <tr>
+                                  <th>Minima</th>
+                                  <th>Maxima</th>
+                                  <th>Default</th>
+                                  <th>Adicional</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr style="text-align: center;">
+                                  <td><?=$grupo['cantidad_minima']?></td>
+                                  <td><?=$grupo['cantidad_maxima']?></td>
+                                  <td><?=$grupo['cantidad_default']?></td>
+                                  <td>$<?=$grupo['precio_adicional']?></td>
+                                </tr>
+                              </tbody>
+                          </table> 
+                        </div>
+                      
                     </div>
+ 
                     
                     <?php $w=0; ?>
                     <?php    foreach ( $grupos_ingredientes[$i]['ingredientes_grupo'] as $ingrediente):?>
 
-
+                                <?/*
                                 <form method="post"
 
                                       name="form_configuracion_ingrediente_producto_<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" 
@@ -77,7 +100,7 @@
                                       id="form_configuracion_ingrediente_producto_<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>"  
 
                                       class="form_configuracion_ingrediente"
-                                >
+                                > */ ?>
                                   
                                     <input type="hidden" name="id_producto" value="<?=$ingrediente['id_producto']?>">
                                     <input type="hidden" name="id_grupo" value="<?=$ingrediente['id_grupo']?>">
@@ -85,28 +108,30 @@
 
                                     <?php if($w==0): ?>
                                       <div class="row" style="font-size: 12px; font-weight: bold">
-                                        <div class="col-md-3"> </div > 
+                                        <div class="col-md-3">   </div >
+                                         <div class="col-md-3">  </div >  
                                         <div class="col-md-3">  Fijo</div > 
-                                        <div class="col-md-3">  Default</div >
-                                        <div class="col-md-3"> </div >
+                                        <div class="col-md-3">  Default</div > 
                                       </div>
                                      <?php endif; ?>
 
                                     <div class="row" style="padding: 5px">
-                                      <div class="col-md-3"> <?=$ingrediente['nombre']?></div > 
+                                      <div class="col-md-3"> <img   style="width:100px; margin-bottom:10px" src="<?=base_url()?>assets/images/productos/<?=$ingrediente['path_imagen']?>"  > </div>
+                                      <div class="col-md-3"> <?=ucfirst($ingrediente['nombre'])?></div > 
                                       <div class="col-md-3"> 
-                                        <input type="checkbox" class="phone-group" name="fijo" id="fijo" value="1" 
-                                                <? if( $ingrediente['es_fijo'] ==1 ) echo "checked='checked'"; ?> >
+
+                                        <input  type="checkbox" class="checkbox" name="es_fijo" id="es_fijo_<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" value="<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" <? if( $ingrediente['es_fijo'] ==1 ) echo "checked='checked'"; ?> >
+
                                       </div > 
                                       <div class="col-md-3"> 
-                                        <input type="checkbox" class="phone-group" name="default" id="default" value="1" 
-                                                <? if( $ingrediente['es_default'] ==1 ) echo "checked='checked'"; ?> >
 
-                                      </div >
-                                      <div class="col-md-3"> <input type="submit" class="btn btn-primary btn-xs"  value="Guardar"> </div >
+                                        <input  type="checkbox" class="checkbox" name="es_default" id="es_default_<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" value="<?=$ingrediente['id_producto']?>_<?=$ingrediente['id_grupo']?>_<?=$ingrediente['id_ingrediente']?>" <? if( $ingrediente['es_default'] ==1 ) echo "checked='checked'"; ?> <? if( $ingrediente['es_fijo'] ==1 ) echo "disabled='disabled'"; ?> >
+
+                                      </div> 
                                     </div >
 
-                                </form>
+                                <?/*
+                                </form> */ ?>
 
                               
 
@@ -139,19 +164,20 @@
       <div class="panel-heading"><strong>Agregar grupo</strong></div>
       <div class="panel-body">
 
-        <form  name="form_agregar_grupo" id="form_agregar_grupo"  method="POST"  action="<?=base_url()?>index.php/administrador/agregar_grupo_producto/" >
+        <form  name="form_agregar_grupo" id="form_agregar_grupo2"  method="POST"  action="<?=base_url()?>index.php/administrador/agregar_grupo_producto/" >
 
           <input type="hidden" class="form-control" name="id_producto" id="id_producto" value="<?=$producto_info->id_producto?>" readonly="readonly">
           
           <div class="form-group">
-              <label for="email">Grupo</label>
+              <label for="email">Buscar grupo</label>
               <input type="text" class="form-control" id="grupo"  name="grupo" >
+              <div class="row col-sm-12" id="sin_resultado"  >
+                No se ha encontrado ningún grupo.    
+              </div>
           </div>
 
-          <div class="form-group" id="div_grupo_seleccionado">
-              <a class="btn btn-danger btn-xs" onclick="ocultar_grupo()"> 
-                  <i class="fa fa-times" aria-hidden="true"> </i> Eliminar
-              </a> 
+          <div class="form-group div_resultado_ajax" id="div_grupo_seleccionado" >
+             
 
               <input readonly="readonly" type="text" class="form-control" id="grupo_seleccionado"  name="grupo_seleccionado" >
               
@@ -169,7 +195,7 @@
   </div>
    
 </div>
-
+ 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -184,6 +210,9 @@
 
 <script type="text/javascript">
   
+  jq_va(document).on("keypress", "form", function(event) { 
+    return event.keyCode != 13;
+  });
  
   jq_va.validator.addMethod("seleccionar_grupo", 
       function(value, element) 
@@ -321,11 +350,57 @@
     //-- EDUCACION 
 
     jq_ui('#grupo').autocomplete({
+         
+           
+          select: function(event, ui)
+                  {   
+                      //alert("aaaa");
+                      jq_ui("#div_grupo_seleccionado").show();
+                      jq_ui("#id_grupo").val(ui.item.id_grupo);
+                      jq_ui("#grupo_seleccionado").val(ui.item.value);
+                      jq_ui('#grupo').attr('readonly', true);
+                      jq_ui('#grupo').val("");
+                      jq_ui( "#grupo_seleccionado" ).focus();
+
+                      jq_ui(this).val("");
+                      return false; // Importante, si esto no borra el input
+                  },
+          source: function(request, response)
+                  { 
+                    jq_ui.ajax({
+                        url: '<?php echo site_url('administrador/ajax_grupo'); ?>',
+                        dataType: 'json',
+                        type: "POST",
+                        data: {
+                            term : request.term,
+                            id_producto : <?=$producto_info->id_producto?>
+                        },
+                        success: function(data)
+                        {
+                          
+                            jq_ui('#sin_resultado').hide();
+                           if(data) response( data );
+                           else response({});
+                            //alert(data.length);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            jq_ui('#sin_resultado').show();   
+                        } 
+                    });
+                  },
+          minLength: 2
           
-          minLength: 3,
-          change: function( event, ui ) {
-             //jq_ui('#div_educacion_manual').hide();
-          },
+
+    }).keyup(function (e) {
+         
+            $(".ui-menu").hide();
+                    
+    });
+
+    /*
+    jq_ui('#grupo').autocomplete({
+          
+          minLength: 3, 
           source:'<?php echo site_url('administrador/ajax_grupo'); ?>',
           select: function(event, ui) 
           {   
@@ -340,7 +415,8 @@
               return false; // Importante, si esto no borra el input
             
           },
-          response: function(event, ui) {
+          response: function(event, ui) 
+          {
 
             //alert(ui.content.length);
 
@@ -355,9 +431,9 @@
                  jq_ui('#sin_resultado').hide();
             }
 
-          }
+          } 
 
-    });
+    });*/
 
     function ocultar_grupo()
     {
@@ -395,6 +471,103 @@
       });
     }
 
+    
+    jq_ui(".checkbox").change(function() {
+        
+        var accion;
+        var campo;
+
+        if(this.checked) 
+          accion = 1; // agregar
+        else
+          accion = 0; // eliminar
+ 
+
+        campo = this.name;
+
+        valor = this.value.split('_');
+        
+        //$('input[name="myname"]:checked').val()
+
+        if( campo == 'es_fijo' && accion == 1 )
+        {    
+            $("input[id='es_default_"+this.value+"']").attr('checked','checked');
+            $("#es_default_"+this.value).prop('checked', true);
+            $("#es_default_"+this.value).prop('disabled', true);
+        }
+  
+        if( campo == 'es_fijo' && accion == 0 )
+        {    
+             $("#es_default_"+this.value).prop('disabled', false);
+        }
+
+        if( campo == 'es_default' && accion == 0 && jq_ui("input[id='es_fijo_"+this.value+"']:checked").val() )
+        {   
+            //alert('es_default' );
+            jq_ui("#es_fijo_"+this.value).attr('checked',false); 
+        }
+
+        var id_producto = valor[0] ;
+        var id_grupo = valor[1] ;
+        var id_ingrediente = valor[2] ;
+
+        var input_checkbox = this;
+
+        var div_respuesta = 'div_respuesta'+$.now();
+
+
+        $.ajax({
+                  url: CI_ROOT+'index.php/administrador/set_producto_grupo_ingrediente',  
+                  data: { id_producto: id_producto,
+                          id_grupo: id_grupo , 
+                          id_ingrediente : id_ingrediente,
+                          accion : accion,
+                          campo: campo
+                        },
+                  async: true,
+                  type: 'POST',
+                  dataType: 'JSON',
+                  success: function(data)
+                  {
+                    if(data.error == false)
+                    {
+                      //alert("Cambio exitoso"); 
+                      texto_respuesta = "Cambio exitoso";
+                    }
+                    else
+                    {
+                      //alert("Error al cambiar");
+                      texto_respuesta = "Error al cambiar";
+                    }
+
+                    $(input_checkbox).append("<div id='"+div_respuesta+"' class='div_respuesta'>"+texto_respuesta+"</div>");
+
+                    //$('#div_respuesta').remove();
+
+                    $( '#'+div_respuesta ).fadeOut( 1700, function() {
+                     
+                      $( div_respuesta ).remove();
+
+                    });
+
+
+                  },
+                  error: function(x, status, error){
+                    alert("error");
+                  }
+            });    
+           
+    });
+
+   
+    jq_ui( "#grupo" ).focusin(function() {
+
+      jq_ui('#div_grupo_seleccionado').hide();
+        jq_ui('#id_grupo').val("");
+        jq_ui('#grupo_seleccionado').val("");
+        jq_ui('#grupo').val("");
+        jq_ui('#grupo').attr('readonly', false);
+    });
 
 </script>
 
@@ -430,6 +603,23 @@
             });
     }
   }
+
+  function dump(obj) {
+    var out = '';
+    for (var i in obj) {
+        out += i + ": " + obj[i] + "\n";
+    }
+
+    alert(out);
+
+    // or, if you wanted to avoid alerts...
+
+    var pre = document.createElement('pre');
+    pre.innerHTML = out;
+    document.body.appendChild(pre)
+  }
+
+
 
 </script>
 

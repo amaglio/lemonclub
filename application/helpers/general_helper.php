@@ -196,15 +196,13 @@ if(!function_exists('mensaje_resultado'))
     function mensaje_resultado($mensaje)
     {
         if ($mensaje): ?>
-            <div class="container">
-            <div class="row">
+           
                 <div class="col-md-12">
                     <div class="alert alert-success mensaje_resultado" style="padding:5px 30px 5px 15px">
                       <h5 style="color:#000; font-weight:bold"><?=$mensaje?></h5>
                     </div>
                 </div>
-            </div>
-            </div>
+             
         <?php endif;  
     }
 }

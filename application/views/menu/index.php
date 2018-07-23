@@ -6,6 +6,68 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $this->load->view('templates/head');
 ?>
 
+<style>
+
+/*
+.area-imagen {
+    padding: 50px;
+    background-color: green;
+    transition: transform .2s; /* Animation  
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+.area-imagen:hover {
+    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)  
+} */
+
+.parent {
+    width: 100%;
+    margin: 20px;  
+    overflow: hidden;
+    position: relative;
+    float: left;
+    display: inline-block; 
+}
+
+.area-imagen {
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    transition: all .5s;
+}
+
+
+.parent:hover .area-imagen, .parent:focus .area-imagen {
+    -ms-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+}
+
+.parent:hover .area-imagen:before, .parent:focus .area-imagen:before {
+    display: block;
+}
+
+.parent:hover a, .parent:focus a {
+    display: block;
+}
+ 
+
+/* Media Queries */
+@media screen and (max-width: 960px) {
+    .parent {width: 100%; margin: 20px 0px}
+        .wrapper {padding: 20px 20px;}
+}
+
+
+</style>
 <body>
 	<?php
 	$this->load->view('templates/header');
@@ -63,7 +125,9 @@ $this->load->view('templates/head');
 			foreach ($productos as $key_prod => $producto)
 			{
 				echo '<div class="col-xs-12 col-sm-3 item">
-						<div class="area-imagen" style="background:url('.base_url('assets/images/productos/'.$producto['path_imagen']).'); background-size:cover; background-position:center;"></div>
+						<div class="parent" >
+							<div class="area-imagen" style="background:url('.base_url('assets/images/productos/'.$producto['path_imagen']).'); background-size:cover; background-position:center;"></div>
+						</div>
 						<div class="titulo">'.$producto['nombre'].'</div>
 						<div class="descripcion">'.$producto['descripcion'].'</div>
 						<div class="precio">$'.$producto['precio'].'</div>

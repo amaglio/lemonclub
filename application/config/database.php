@@ -74,14 +74,14 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 
-// Configuracion trabajo
+//Configuracion trabajo
 
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => 'root',
-	'database' => 'c0920276_lemon',
+	'database' => 'lemonclub',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -105,7 +105,7 @@ $db['default'] = array(
 // 	'hostname' => 'localhost',
 // 	'username' => 'c0920276_admin',
 // 	'password' => 'nobazi51MU',
-// 	'database' => 'c0920276_lemon',
+// 	'database' => 'c0920276_lemonv1',
 // 	'dbdriver' => 'mysqli',
 // 	'dbprefix' => '',
 // 	'pconnect' => FALSE,

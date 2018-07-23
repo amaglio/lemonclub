@@ -12,13 +12,14 @@ class Producto_tipo_model extends CI_Model {
    		if ($id === FALSE)
         {
             $query = $this->db->query('SELECT *
-                                        FROM producto_tipo AS PT');
+                                        FROM producto_tipo AS PT
+                                        WHERE PT.fecha_baja IS NULL');
             return $query->result_array();
         }
 
-        $query = $this->db->query('SELECT *
+        $query = $this->db->query(' SELECT *
                                     FROM producto_tipo AS PT
-                                    WHERE PT.id_producto_tipo='.$id);
+                                    WHERE PT.fecha_baja IS NULL AND PT.id_producto_tipo = '.$id);
         return $query->row_array();
     }
 
@@ -26,7 +27,7 @@ class Producto_tipo_model extends CI_Model {
     {
         $query = $this->db->query('SELECT *
                                     FROM producto_tipo AS PT
-                                    ORDER BY PT.id_producto_tipo
+                                    ORDER BY PT.id_producto_tipo AND PT.fecha_baja IS NULL 
                                     LIMIT 1');
         return $query->row_array();
     }

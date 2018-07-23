@@ -545,6 +545,31 @@ class Pedido_model extends CI_Model {
     	return $resultado->result_array();
     }
 
+    public function traer_pedidos_hoy()
+    {
+   		$fecha_hoy = date('Y-m-d');
+    	$resultado = $this->db->query("	SELECT pe.*,
+    										   pd.direccion, pd.telefono, pd.nota,
+    										   fp.descripcion as forma_pago,
+    										   fe.descripcion as forma_entrega,
+    										   pes.descripcion as estado,
+    										   u.email,
+    										   ur.nombre
+						    			FROM pedido pe
+							    				 left join pedido_delivery pd ON pe.id_pedido = pd.id_pedido
+							    				 inner join forma_pago fp ON pe.id_forma_pago =  fp.id_forma_pago
+							    				 inner join forma_entrega fe ON pe.id_forma_entrega =  fe.id_forma_entrega
+							    				 inner join pedido_estado pes ON pe.id_pedido_estado =  pes.id_pedido_estado,
+						    				 usuario u
+						    				 	left join usuario_registrado ur ON ur.id_usuario =  u.id_usuario
+						    			WHERE pe.id_pedido_estado != 1
+						    			AND pe.id_usuario =  u.id_usuario
+						    			AND  pe.fecha_pedido LIKE '%$fecha_hoy%'
+						    			ORDER BY id_pedido DESC "  ); //traer_pedidos_pendientes
+ 
+    	return $resultado->result_array();
+    }
+
     public function get_informacion_pedido($id_pedido)
     {
    	
@@ -842,6 +867,120 @@ class Pedido_model extends CI_Model {
 						    			AND P.fecha_pedido <= '".$fecha." 23:59:59'" );
 
     	return $resultado->row()->cant;
+	}
+
+
+	public function get_pedido_producto_ingrediente($id_pedido_producto)
+	{	
+
+		chrome_log("Pedido_model/get_pedido_producto_ingrediente"); 
+
+		// Obtengo los ingredientes del pedido y sus configuraciones
+
+	 	$sql_ingredientes_pedido = "SELECT *
+					                FROM pedido_producto pp
+					                	 INNER JOIN pedido_producto_ingrediente ppi ON pp.id_pedido_producto = ppi.id_pedido_producto
+					                	 INNER JOIN ingrediente i ON ppi.id_ingrediente = i.id_ingrediente
+					                	 LEFT JOIN producto_grupo_ingrediente pgi 
+					                	 		ON pgi.id_producto = pp.id_producto
+					                	 		AND pgi.id_grupo = ppi.id_grupo
+					                	 		AND pgi.id_ingrediente = ppi.id_ingrediente
+
+					                WHERE ppi.id_pedido_producto = ? "; 
+
+		$query_ingredientes_pedido = $this->db->query( $sql_ingredientes_pedido, array($id_pedido_producto) );
+		$result_ingredientes_pedido = $query_ingredientes_pedido->result_array();
+		
+
+		//echo   '<pre>',print_r($result_ingredientes_pedido,1),'</pre>';
+		
+		//  Si un producto no tiene grupos, significa que no tiene ingredientes
+		//  entonces no tiene ingredientes que poner o sacar
+ 		
+ 		if( count($result_ingredientes_pedido) > 0 ): // TIENE INGREDIENTES
+
+			$ingredientes_agregados = array();
+
+			//-- Si no es fijo y no es default, entonces es agregado 
+			foreach ($result_ingredientes_pedido as $key => $value) 
+			{ 
+				$id_producto = $value['id_producto'];
+	 
+				if( $value['es_default'] == FALSE ){
+					//echo $value['nombre']."<br>";
+					array_push($ingredientes_agregados, $value);
+				}
+			}
+
+			//-- Busco los grupos del producto, busco los default y si no los sacaron  
+
+			$sql_ingredientes_default = "	SELECT *
+						                	FROM producto_grupo pg
+						                	 	 INNER JOIN producto_grupo_ingrediente pgi 
+						                	 		ON pgi.id_grupo = pg.id_grupo AND pgi.id_producto = pg.id_producto
+						                	 	INNER JOIN ingrediente i ON pgi.id_ingrediente  = i.id_ingrediente
+						                	WHERE pg.id_producto = ? 
+						                	AND pgi.es_default = 1"; 
+
+			$query_ingredientes_default = $this->db->query( $sql_ingredientes_default, array($id_producto) );
+
+			$res_ingredientes_default = $query_ingredientes_default->result_array();
+
+			// Recorro los ingredientes default del grupo y busco los que no estan en el pedido
+
+			$ingredientes_quitados = array();
+
+			foreach ($res_ingredientes_default as $key2 => $row_ingrediente_default) 
+			{ 
+				$flag = 0;
+
+				// Recorro los ingredientes del pedido para ver si esta el default
+
+				foreach ($result_ingredientes_pedido as $key3 => $row_ingrediente_pedido) 
+				{ 
+					if( $row_ingrediente_default['id_ingrediente'] == $row_ingrediente_pedido['id_ingrediente'] )
+						$flag = 1;
+	 
+				}
+
+				if($flag == 0)
+					array_push($ingredientes_quitados, $row_ingrediente_default);
+			}
+
+			//echo   '<pre>',print_r($ingredientes_quitados,1),'</pre>';
+
+			$resultado['ingredientes_agregados'] = $ingredientes_agregados;
+			$resultado['ingredientes_quitados'] = $ingredientes_quitados; 
+
+		
+		else: // NO TIENE INGREDIENTES, NO SE PUEDE MODIFICAR
+
+			$resultado['ingredientes_agregados'] = NULL;
+			$resultado['ingredientes_quitados'] = NULL; 
+
+		endif;
+
+
+		if($query_ingredientes_pedido->num_rows() > 0)
+			return $resultado;
+		else
+			return false;
+
+	}
+
+	public function get_pagos_on_line_pedido($id_pedido)
+	{
+		chrome_log("Pedido_model/get_pagos_pedido");
+
+	 	$sql = "SELECT  *
+				FROM 	pago_online po
+						INNER JOIN pago_online_estado poe ON po.id_pago_online_estado = poe.id_pago_online_estado
+				WHERE
+					po.id_pedido  = ? "; 
+
+		$query = $this->db->query($sql, array($id_pedido) );
+	 
+	    return $query->result_array();
 	}
  
 }

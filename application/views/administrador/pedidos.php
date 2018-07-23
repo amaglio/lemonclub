@@ -35,6 +35,17 @@
       color: white;
     }
 
+    #imagen_producto{
+
+     padding: 10px;
+    background-color: #000000e3;
+    position: absolute;
+    top: 10%;
+    width: unset;
+    color: white;
+
+
+    }
 </style>
 
  
@@ -71,10 +82,11 @@ if( count($pedidos) > 0):
                       <h4>Pedido: <strong><?=$row['informacion_pedido']['id_pedido']?>
 
                       <a target="_blank" href="<?=site_url('administrador/imprimir_comanda/'.$row['informacion_pedido']['id_pedido'].'')?>"> <i class="fa fa-print" aria-hidden="true"></i> </a> </strong></h4> 
-                      <h5><strong>[ <?=$row['informacion_pedido']['email']?> ]</strong>
+                      <h5><strong>  <?=$row['informacion_pedido']['email']?>  </strong>
                       <?php if(isset($row['informacion_pedido']['nombre'])) echo '<i class="fa fa-registered" aria-hidden="true"></i>';?> 
                         
                       </h5>
+                      <small style="font-size: 15px; color: #ffe860;">  <?=$row['informacion_pedido']['fecha_entrega']?></small> 
                   </div>
                   <div class="panel-body">
 
@@ -83,34 +95,84 @@ if( count($pedidos) > 0):
                           <?php
                             foreach ($row['productos'] as $row2) 
                             { ?>
-                                <div class="col-md-12">
-                                    <strong><?=$row2['nombre']?> (x<?=$row2['cantidad']?>)</strong>
-                                    <div class="pull-right"><span>$</span><span><?=$row2['precio']?></span></div>
+                                <div class="col-md-12" style="padding: 0px; padding:10px 0px; ">
+                                    <img  class="img img-fluid" style="width: inherit; padding: 5px; border: 1px solid #808080a8;" src="<?=base_url()?>/assets/images/productos/<?=$row2['producto']['path_imagen']?>">  
+                                    <div id="imagen_producto">
+                                      <strong><?=$row2['producto']['nombre']?> (x<?=$row2['producto']['cantidad']?>)</strong><br>
+                                      <span>$</span><span><?=$row2['producto']['precio']?></span>
+                                    </div>
                                 </div>
+                                
+                                <?  if( count($row2['pedido_producto_ingrediente']["ingredientes_quitados"]) > 0) :
+
+                                      //<!-- Ingredientes agregados -->
+                                      foreach ($row2['pedido_producto_ingrediente']["ingredientes_agregados"] as $key => $value4) 
+                                      { ?>
+                                          
+                                           <span class="badge"><i class="fa fa-check"></i></span> <?=$value4['nombre']?><br>
+
+                                      <?
+                                     } 
+
+                                     endif; ?>
+
+
+
+                              <?  if( count($row2['pedido_producto_ingrediente']["ingredientes_quitados"]) > 0) :
+                                      // <!-- Ingredientes quitados -->
+                                      foreach ($row2['pedido_producto_ingrediente']["ingredientes_quitados"] as $key => $value4) 
+                                      { ?>
+                                          
+                                           <span class="badge" style="background-color: red !important;"><i class="fa fa-times"></i></span> <?=$value4['nombre']?><br>
+
+                                      <?
+                                     } 
+
+                                  endif;
+                               ?>
+
                           <?php
                             }
                           ?>
 
                           <div class="col-md-12">
-                              <small>- <?=$row['informacion_pedido']['forma_pago']?></small><br>
+                              <small>- <?=$row['informacion_pedido']['forma_pago']?>
+
+                                      <?  if( count($row['pagos_on_line'] ) > 0  ) : ?>
+                                        
+                                        <?php  foreach ($row['pagos_on_line'] as $row_pagos): ?>
+
+                                             <br><span style="color:red"> Fecha Pago: <?=$row_pagos['fecha_pago']?> - <?=$row_pagos['descripcion']?> </span> 
+
+                                        <?php endforeach;  ?>
+
+                                      <?  endif; ?>
+
+
+                              </small><br>
                               <small>- <?=$row['informacion_pedido']['forma_entrega']?></small><br>
-                              <small>- <?=$row['informacion_pedido']['fecha_entrega']?></small><br>
-                              <small>- <?=$row['informacion_pedido']['fecha_pedido']?></small>
-                              
+                              <small>- Fecha del pedido: <?=$row['informacion_pedido']['fecha_pedido']?></small>
+                              <br>
                               <?php if($row['informacion_pedido']['forma_entrega'] == 'Delivery'): ?>
                                   
-                                  <div class="pull-right">
+                                  <div class="pull-left">
                                       <?php if(isset($row['informacion_pedido']['direccion']))?>
                                             <span><small><?="(".$row['informacion_pedido']['direccion']." ".$row['informacion_pedido']['nota'].")"?></small></span>
 
                                   </div>
 
                               <?php  endif;  ?>
-                              <hr>
+                              <hr><br>
+                              
+
+
+                              <? //var_dump($pedido_producto_ingrediente['ingredientes_agregados']); ?>
+
+
                           </div>
 
                           <div class="col-md-12">
-                              <strong>Total</strong>
+                              <strong style="font-size:20px; font-weight:bold">Total</strong>
                               <div class="pull-right"><span>$</span><span style="font-size:20px; font-weight:bold"> <?=$row['total_pedido']?> </span></div>
                               <hr>
                           </div>
