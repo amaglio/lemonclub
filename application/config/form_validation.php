@@ -205,7 +205,7 @@ $config = array(
                                         ) 
                                 ),
             
-            'eliminar_ingrediente_grupo' => array(
+            'delete_ingrediente_grupo' => array(
                                     array(
                                             'field' => 'id_grupo',
                                             'label' => 'id_grupo',
@@ -361,6 +361,56 @@ $config = array(
                                             'label' => 'mensaje',
                                             'rules' => 'required|trim|xss_clean'
                                         ) 
+                                ),
+
+// --------------------------------- TIPO PRODUCTO ------------------------------ 
+
+
+            'delete_producto_tipo' => array(
+
+                                    array(
+                                            'field' => 'id_producto_tipo',
+                                            'label' => 'id_producto_tipo',
+                                            'rules' => 'required|trim|xss_clean'
+                                        )  
+                                ),
+
+
+// --------------------------------- PRODUCTO ------------------------------ 
+
+
+            'delete_producto' => array(
+
+                                    array(
+                                            'field' => 'id_producto',
+                                            'label' => 'id_producto',
+                                            'rules' => 'required|trim|xss_clean'
+                                        )  
+                                ),
+
+// --------------------------------- GRUPO ------------------------------ 
+
+
+            'delete_grupo_ingrediente' => array(
+
+                                    array(
+                                            'field' => 'id_grupo',
+                                            'label' => 'id_grupo',
+                                            'rules' => 'required|trim|xss_clean'
+                                        )  
+                                ),
+
+
+// --------------------------------- INGREDIENTE ------------------------------ 
+
+
+            'delete_ingrediente' => array(
+
+                                    array(
+                                            'field' => 'id_ingrediente',
+                                            'label' => 'id_ingrediente',
+                                            'rules' => 'required|trim|xss_clean'
+                                        )  
                                 ),
 
 // --------------------------------- ESTADISTICAS ------------------------------ 

@@ -158,7 +158,7 @@ foreach($css_files as $file): ?>
 	    	<li <?php echo ($this->uri->segment(2) == 'productos')? 'class="active"' : ' ' ;  ?> ><a  href='<?php echo site_url('administrador/productos')?>'><i class="fa fa-lemon-o" aria-hidden="true"></i> Productos</a>
 	    	</li>
 
-	    	<li <?php echo ($this->uri->segment(2) == 'grupo_ingregientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/grupo_ingregientes')?>'><i class="fa fa-tag" aria-hidden="true"></i> Grupos de Ingr.</a>
+	    	<li <?php echo ($this->uri->segment(2) == 'grupo_ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/grupo_ingredientes')?>'><i class="fa fa-tag" aria-hidden="true"></i> Grupos de Ingr.</a>
 	    	</li>
 
 	    	<li <?php echo ($this->uri->segment(2) == 'ingredientes')? 'class="active"' : ' ' ;  ?>><a href='<?php echo site_url('administrador/ingredientes')?>'><i class="fa fa-flask" aria-hidden="true"></i> Ingredientes</a>

@@ -43,7 +43,7 @@
             <input type="email" class="form-control" id="email" value="<?=$grupo_informacion['precio_adicional']?>" readonly="readonly">
         </div> 
         <div class="form-group">
-            <a class="btn btn-primary btn-block" class="form-control" href="<?=base_url()?>/index.php/administrador/grupo_ingregientes/edit/<?=$grupo_informacion['id_grupo']?>"> Editar </a>
+            <a class="btn btn-primary btn-block" class="form-control" href="<?=base_url()?>/index.php/administrador/grupo_ingredientes/edit/<?=$grupo_informacion['id_grupo']?>"> Editar </a>
         </div>
 		 
 
@@ -71,7 +71,7 @@
                   <td><img style="width:100px"  class="img img-responsive" src="<?=base_url()?>/assets/images/productos/<?=$row['path_imagen']?>"></td>
                   <td><?=$row['nombre']?></td> 
                   <td>
-                    <a class="btn btn-danger btn-xs" onclick="eliminar_ingrediente_grupo(<?=$row['id_ingrediente']?>,<?=$row['id_grupo']?>)">
+                    <a class="btn btn-danger btn-xs" onclick="delete_ingrediente_grupo(<?=$row['id_ingrediente']?>,<?=$row['id_grupo']?>)">
                       Eliminar
                     </a>
                   </td> 
@@ -378,14 +378,14 @@
 
 <script type="text/javascript">
 
-  function eliminar_ingrediente_grupo(id_ingrediente, id_grupo)
+  function delete_ingrediente_grupo(id_ingrediente, id_grupo)
   {
     
 
     if (confirm('Seguro queres eliminar el ingrediente ?')) 
     { 
       $.ajax({
-                  url: CI_ROOT+'index.php/administrador/eliminar_ingrediente_grupo',
+                  url: CI_ROOT+'index.php/administrador/delete_ingrediente_grupo',
                   data: { id_ingrediente: id_ingrediente, id_grupo: id_grupo },
                   async: true,
                   type: 'POST',
@@ -395,13 +395,16 @@
                     if(data.error == false)
                     {
                       alert("Se ha eliminado el ingrediente exitosamente");
-                      location.reload();
+        
                     }
                     else
                     {
                       alert("No se ha eliminado el ingrediente");
-                      location.reload();
+                     
                     }
+
+                    location.reload();
+
                   },
                   error: function(x, status, error){
                     alert("error");
