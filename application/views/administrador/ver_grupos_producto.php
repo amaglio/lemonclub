@@ -71,7 +71,7 @@
                                 <tr>
                                   <th>Minima</th>
                                   <th>Maxima</th>
-                                  <th>Default</th>
+                                  <th>Sin pagar</th>
                                   <th>Adicional</th>
                                 </tr>
                               </thead>
