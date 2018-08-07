@@ -348,6 +348,8 @@ public function procesa_registrarse_ingresar()
 		$id_usuario = $this->Usuario_model->registrar_usuario( $this->input->post()  );
 
 		$this->session->set_userdata('id_usuario', $id_usuario);
+		$this->session->set_userdata('usr_nombre', $this->input->post('nombre') );
+		$this->session->set_userdata('usr_apellido', $this->input->post('apellido') );
 
 		$aux = array( 'id_usuario' => $id_usuario );
 		/*
