@@ -41,9 +41,11 @@ function traer_ingredientes_producto($id_producto)
 	return $resultado;
 }
 
+
+/*
 function agregar_ingrediente_producto($array)
 {
-		chrome_log("Administrador_model/agregar_ingrediente_producto");
+	chrome_log("Administrador_model/agregar_ingrediente_producto");
 
 	//--- Producto ingrediente ---
 
@@ -69,7 +71,7 @@ function agregar_ingrediente_producto($array)
 
 }
 
-	
+	*/
 
 
 }
