@@ -30,7 +30,17 @@
                     
                     if($this->session->userdata('id_usuario') != "")
                     {
-                        echo '<a href="'.site_url('usuario/logout').'" class="btn btn-amarillo"><i class="fa fa-sign-out fa-lg"></i> CERRAR SESIÓN</a> ';
+                        echo '<div class="dropdown" style="display:inline-block;">
+                                  <button class="btn btn-amarillo dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="text-transform:uppercase;">
+                                    '.$this->session->userdata('usr_nombre').'
+                                    <span class="caret"></span>
+                                  </button>
+                                  <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="background:#ffc200;">
+                                    <li><a href="'.site_url('pedido/historial').'" class="btn btn-amarillo">PEDIDOS</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="'.site_url('usuario/logout').'" class="btn btn-amarillo">CERRAR SESIÓN</a></li>
+                                  </ul>
+                                </div>';
                     }
                     else
                     {

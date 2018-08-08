@@ -34,6 +34,25 @@ class Pedido extends CI_Controller {
 		$this->load->view(self::$solapa.'/index', $data);
 	}
 
+	public function historial()
+	{
+		$data['pedidos'] = $this->pedido_model->get_historial( $this->session->userdata('id_usuario') );
+		if($data['pedidos'])
+		{
+			$data['cantidad'] = count($data['pedidos']);
+			foreach ($data['pedidos'] as $key => $pedido)
+			{
+				$data['pedidos'][$key]['items'] = $this->pedido_model->get_pedido_productos( $pedido['id_pedido'] );
+			}
+		}
+		else
+		{
+			$data['cantidad'] = 0;
+		}
+
+		$this->load->view(self::$solapa.'/historial', $data);
+	}
+
 	public function ver_editar_ingredientes_producto($id_pedido_producto)
 	{	
 		// Buscamos la informacion del pedido_producto

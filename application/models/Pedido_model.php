@@ -30,6 +30,14 @@ class Pedido_model extends CI_Model {
 		                            WHERE P.id_pedido='.$id);
 		return $query->row_array();
 	}
+
+	public function get_historial( $id ) 
+	{
+		$query = $this->db->query('SELECT *
+		                            FROM pedido AS P
+		                            WHERE P.id_usuario='.$id);
+		return $query->result_array();
+	}
 	
 	public function get_pedido_productos( $id ) 
 	{
