@@ -47,6 +47,29 @@ function get_productos_dia()
     return $query->result_array();
 }
 
+/*
+function set_grupo_producto($array)
+{
+    $array = array(
+            'id_producto' => $array['id_producto'],
+            'id_grupo' => $array['id_grupo']
+        );
+
+    return $this->db->insert('producto_grupo', $array);
+}
+/*
+function get_ingredientes_grupo_producto($id_grupo, $id_producto)
+{
+    $sql =  '   SELECT  *
+                FROM    producto_grupo_ingrediente pgi
+                INNER JOIN ingrediente i ON pgi.id_ingrediente = i.id_ingrediente
+                WHERE pgi.id_grupo = ?
+                AND pgi.id_producto = ?' ; 
+
+    $query = $this->db->query($sql, array( $id_grupo, $id_producto) ); 
+
+    return $query->result_array();
+}*/
 
 function get_informacion_producto($id_producto)
 {
@@ -78,8 +101,7 @@ function get_grupos_producto($id_producto)
                 FROM    producto_grupo pg,
                         grupo g
                 WHERE   pg.id_producto = ?
-                AND     pg.id_grupo = g.id_grupo 
-                AND     pg.fecha_baja IS NULL ' ; 
+                AND     pg.id_grupo = g.id_grupo' ; 
 
     $query = $this->db->query($sql, array( $id_producto) ); 
 
@@ -88,7 +110,7 @@ function get_grupos_producto($id_producto)
 
 
 function set_grupo_producto($array)
-{
+{   
     $this->db->trans_start();
 
     $array_grupo = array(
@@ -132,9 +154,8 @@ function set_grupo_producto($array)
     return $flag; 
 }
 
-/*
 function delete_grupo_producto($array)
-{
+{   
     $this->db->trans_start();
 
     // Eliminos los ingredientes grupos productos
@@ -166,107 +187,23 @@ function delete_grupo_producto($array)
     } 
 
     return $flag; 
-}*/
-
- 
-
-//-- ABM ingredientes del grupo 
-
-public function abm_grupo_producto($accion, $array)
-{   
-    chrome_log("abm_grupo_producto");
-
-    switch ($accion) 
-    {
-
-        case 'A':
-
-            chrome_log("A");
-            
-            $result = $this->db->get_where('producto_grupo', array( 'id_grupo' => $array['id_grupo'] , 
-                                                                    'id_producto' => $array['id_producto'] ) );
-
-            //echo "<pre>".print_r($result)."</pre>".$result->num_rows();
-
-           
-            if( $result->num_rows() == 0 ):
-
-                chrome_log("FALSE");
-
-                $this->db->trans_start();
-
-                $array_grupo = array(
-                        'id_producto' => $array['id_producto'],
-                        'id_grupo' => $array['id_grupo']
-                    );
-
-                $this->db->insert('producto_grupo', $array_grupo);
-
-                // Traigo los ingredientes del grupo y los agrego al producto-grupo
-
-                $this->load->model('Grupo_model');
-
-                $ingredientes = $this->Grupo_model->get_ingredientes_grupo($array['id_grupo']);
-
-                foreach ($ingredientes as $row) 
-                {
-                    $array_ingrediente = array(
-                        'id_producto' => $array['id_producto'],
-                        'id_grupo' => $array['id_grupo'],
-                        'id_ingrediente' => $row['id_ingrediente'],
-                    );
-
-                    $this->db->insert('producto_grupo_ingrediente', $array_ingrediente);
-                }
-
-                $this->db->trans_complete();
-
-            else:
-
-                chrome_log("TRUE");
-
-                $where['id_grupo'] =  $array['id_grupo'];
-                $where['id_producto'] = $array['id_producto']; 
-
-                $data = array(
-                   'fecha_baja' => NULL
-                );
-
-                $this->db->where( $where);
-                $result =  $this->db->update('producto_grupo', $data); 
-
-
-            endif;
-
-            break; 
-
-        case 'B':
-            
-            $where['id_grupo'] =  $array['id_grupo'];
-            $where['id_producto'] = $array['id_producto']; 
-
-            $data = array(
-               'fecha_baja' => date('Y-m-d H:i:s')
-            );
-
-            $this->db->where( $where);
-            $result =  $this->db->update('producto_grupo', $data); 
-
-            break;
-
-        default:
-             
-            break;
-    }
-
-    if( $result )
-        return true;
-    else
-        return false;       
+    
 }
 
+/*
+function get_ingredientes_grupo_producto($id_producto, $id_grupo)
+{
+    $sql =  '   SELECT *
+                FROM    producto_grupo_ingrediente pgi,
+                        ingrediente i
+                WHERE   pgi.id_producto = ?
+                AND     pgi.id_grupo = ?  
+                AND     pgi.id_ingrediente = i.id_ingrediente ' ; 
 
+    $query = $this->db->query($sql, array( $id_producto, $id_grupo) ); 
 
+    return $query->result_array();
+}*/
 
 function get_ingredientes_grupo_producto($id_producto, $id_grupo)
 {
@@ -282,8 +219,7 @@ function get_ingredientes_grupo_producto($id_producto, $id_grupo)
                                 AND pgi.id_grupo = gi.id_grupo
                                 AND pgi.id_producto = ?  
                 WHERE   gi.id_grupo = ? 
-                AND     gi.id_ingrediente = i.id_ingrediente 
-                AND     i.fecha_baja IS NULL' ; 
+                AND     gi.id_ingrediente = i.id_ingrediente ' ; 
 
     $query = $this->db->query($sql, array( $id_producto, $id_producto, $id_grupo ) ); 
 
@@ -295,8 +231,7 @@ function existe_grupo_producto($id_producto, $id_grupo)
     $sql =  '   SELECT *
                 FROM    producto_grupo pg 
                 WHERE   pg.id_producto = ?
-                AND     pg.id_grupo = ?   
-                AND     pg.fecha_baja IS NULL' ; 
+                AND     pg.id_grupo = ?   ' ; 
 
     $query = $this->db->query($sql, array( $id_producto, $id_grupo) ); 
 
@@ -449,38 +384,6 @@ function set_producto_grupo_ingrediente( $array )
 
     return $flag; 
     
-}
-
-function abm_producto($accion, $array) 
-{   
-    // Solo utilizamos el borrar, el Alta y Modificar usamos GC.
-
-    switch ($accion) 
-    {
-
-        case 'B': 
-
-
-            $where['id_producto'] =  $array['id_producto']; 
-
-            $data = array(
-               'fecha_baja' => date('Y-m-d H:i:s')
-            );
-
-            $this->db->where( $where);
-            $result =  $this->db->update('producto', $data); 
-
-            break;
-
-        default:
-             
-            break;
-    }
-
-    if( $result )
-        return true;
-    else
-        return false;       
 }
 
 }

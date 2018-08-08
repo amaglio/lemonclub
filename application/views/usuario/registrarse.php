@@ -25,7 +25,7 @@ $this->load->view('templates/head');
 			<div class="col-xs-12 col-sm-7 col-md-7 col-md-offset-1">
 			   
           <div role="tabpanel" class="tab-pane active" id="ingresar">
-            <div class="formulario">
+              <div class="formulario">
  
               <form class="form-horizontal" action="#" method="POST" id="form-registro"> 
            
@@ -56,7 +56,7 @@ $this->load->view('templates/head');
               </form>
 
             </div>
-          </div>
+            </div>
 				 
 
 				<div class="seguir"><a href="<?=site_url('menu')?>" class="btn btn-default btn-block">SEGUIR COMPRANDO</a></div>

@@ -32,38 +32,6 @@ class Producto_tipo_model extends CI_Model {
         return $query->row_array();
     }
 
-    function abm_producto_tipo($accion, $array) 
-    {   
-        // Solo utilizamos el borrar, el Alta y Modificar usamos GC.
-
-        switch ($accion) 
-        {
-
-            case 'B': 
-
-
-                $where['id_producto_tipo'] =  $array['id_producto_tipo']; 
-
-                $data = array(
-                   'fecha_baja' => date('Y-m-d H:i:s')
-                );
-
-                $this->db->where( $where);
-                $result =  $this->db->update('producto_tipo', $data); 
-
-                break;
- 
-            default:
-                 
-                break;
-        }
-
-        if( $result )
-            return true;
-        else
-            return false;       
-    }
-
 }
 
 /* End of file  */

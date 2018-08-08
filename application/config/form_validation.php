@@ -17,6 +17,27 @@ $config = array(
                                         )
                                 ),
 
+// --------------------------------- PEDIDO ------------------------------
+
+
+            'comprar' => array(
+                                    array(
+                                            'field' => 'nombre',
+                                            'label' => 'nombre',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'apellido',
+                                            'label' => 'apellido',
+                                            'rules' => 'required|trim|xss_clean'
+                                        ),
+                                    array(
+                                            'field' => 'mail',
+                                            'label' => 'mail',
+                                            'rules' => 'required|trim|xss_clean'
+                                        )
+                                ),
+
 // --------------------------------- USUARIO ------------------------------
 
 
@@ -24,7 +45,7 @@ $config = array(
                                     array(
                                             'field' => 'email',
                                             'label' => 'email',
-                                            'rules' => 'required|trim|xss_clean|valid_email'
+                                            'rules' => 'required|trim|xss_clean'
                                         ),
                                     array(
                                             'field' => 'clave',
@@ -33,59 +54,53 @@ $config = array(
                                         ) 
                                 ),
 
-            'registrarse' => array(
+             'registrarse' => array(
                                     
                                     array(
                                             'field' => 'nombre',
                                             'label' => 'nombre',
-                                            'rules' => 'strip_tags|max_length[45]|trim|xss_clean'
+                                            'rules' => 'strip_tags|max_length[100]|trim|xss_clean'
                                          ),
                                     array(
                                             'field' => 'apellido',
                                             'label' => 'apellido',
-                                            'rules' => 'strip_tags|max_length[45]|trim|xss_clean'
+                                            'rules' => 'strip_tags|max_length[100]|trim|xss_clean'
                                          ),
                                     array(
                                             'field' => 'email',
                                             'label' => 'email',
-                                            'rules' => 'strip_tags | required | max_length[100] | trim | valid_email | callback_comprobar_email_existente_validation | xss_clean'
+                                            'rules' => 'strip_tags|required|max_length[100]|trim|valid_email|callback_comprobar_email_existente_validation|xss_clean'
                                          ),
                                     array(
                                             'field' => 'clave',
                                             'label' => 'clave',
-                                            'rules' => 'strip_tags|required|trim|matches[clave2]|min_length[6]| max_length[64] | xss_clean'
+                                            'rules' => 'strip_tags|required|max_length[100]|trim|matches[clave2]|min_length[6]|max_length[15]|xss_clean'
                                          ),
                                     array(
                                             'field' => 'clave2',
                                             'label' => 'clave2',
-                                            'rules' => 'strip_tags|required| trim | min_length[6] max_length[64]| xss_clean'
-                                         ),
-                                    array(
-                                            'field' => 'direccion',
-                                            'label' => 'direccion',
-                                            'rules' => 'strip_tags|max_length[100]|trim|xss_clean'
-                                         ),
-                                    array(
-                                            'field' => 'telefono',
-                                            'label' => 'telefono',
-                                            'rules' => 'strip_tags|max_length[45]|trim|xss_clean'
-                                         )
-
+                                            'rules' => 'strip_tags|required|max_length[100]|trim|min_length[6]|max_length[15]|xss_clean'
+                                         ) 
                                 ),
 
-            'usuario_invitado' => array(
+          'usuario_invitado' => array(
                                     array(
                                             'field' => 'email',
                                             'label' => 'email',
-                                            'rules' => 'required|trim|xss_clean|valid_email'
-                                        ) 
+                                            'rules' => 'required|trim|xss_clean|required'
+                                        )/*,
+                                     array(
+                                            'field' => 'id_pedido',
+                                            'label' => 'id_pedido',
+                                            'rules' => 'required|trim|xss_clean|required|is_numeric'
+                                        )*/
                                 ),
 
-            'validar_usuario_invitado' => array(
+          'validar_usuario_invitado' => array(
                                      array(
                                             'field' => 'id_usuario',
                                             'label' => 'id_usuario',
-                                            'rules' => 'strip_tags|required|trim|xss_clean|numeric'
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
                                          ),
                                         array(
                                             'field' => 'token',
@@ -95,10 +110,10 @@ $config = array(
                                 ),
 
             'procesa_validar_registro_ingresar' => array(
-                                        array(
+                                     array(
                                             'field' => 'id_pedido',
                                             'label' => 'id_pedido',
-                                            'rules' => 'strip_tags|required|trim|xss_clean|numeric'
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
                                          ),
                                         array(
                                             'field' => 'token',
@@ -111,7 +126,7 @@ $config = array(
                                      array(
                                             'field' => 'id_usuario',
                                             'label' => 'id_usuario',
-                                            'rules' => 'strip_tags|required|trim|xss_clean | numeric'
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
                                          ),
                                         array(
                                             'field' => 'token',
@@ -124,16 +139,16 @@ $config = array(
                                      array(
                                             'field' => 'email',
                                             'label' => 'email',
-                                            'rules' => 'strip_tags | required | trim | xss_clean |valid_email | max_length[100]'
+                                            'rules' => 'strip_tags|required|trim|xss_clean|callback_comprobar_email_registrado_validation'
                                          ) 
                                 ),
 
-            'procesa_validar_recuperar_password' => array(
+'procesa_validar_recuperar_password' => array(
 
-                                    array(
+                                     array(
                                             'field' => 'id_usuario',
                                             'label' => 'id_usuario',
-                                            'rules' => 'strip_tags|required|trim|xss_clean | numeric'
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
                                          ),
                                     array(
                                         'field' => 'token',
@@ -142,22 +157,22 @@ $config = array(
                                      )  
                                 ),
 
-            'cambiar_password' => array(
+        'cambiar_password' => array(
     
-                                    array(
+                                     array(
                                             'field' => 'id_usuario',
                                             'label' => 'id_usuario',
-                                            'rules' => 'strip_tags|required|trim|xss_clean|numeric'
+                                            'rules' => 'strip_tags|required|trim|xss_clean'
                                          ),
                                     array(
                                             'field' => 'clave',
                                             'label' => 'clave',
-                                            'rules' => 'strip_tags | required |min_length[6]| max_length[100] | trim | matches[clave2] | xss_clean'
+                                            'rules' => 'strip_tags|required|max_length[100]|trim|matches[clave2]|min_length[6]|max_length[15]|xss_clean'
                                          ),
                                     array(
                                             'field' => 'clave2',
                                             'label' => 'clave2',
-                                            'rules' => 'strip_tags | required | trim | min_length[6] | max_length[100] | xss_clean'
+                                            'rules' => 'strip_tags|required|max_length[100]|trim|min_length[6]|max_length[15]|xss_clean'
                                          ) 
                                 ),
         
@@ -168,12 +183,12 @@ $config = array(
                                     array(
                                             'field' => 'id_producto',
                                             'label' => 'id_producto',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ),
                                     array(
                                             'field' => 'id_ingrediente',
                                             'label' => 'id_ingrediente',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ) 
                                 ),
 
@@ -181,25 +196,25 @@ $config = array(
                                     array(
                                             'field' => 'id_grupo',
                                             'label' => 'id_grupo',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ),
                                     array(
                                             'field' => 'id_ingrediente',
                                             'label' => 'id_ingrediente',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ) 
                                 ),
             
-            'delete_ingrediente_grupo' => array(
+            'eliminar_ingrediente_grupo' => array(
                                     array(
                                             'field' => 'id_grupo',
                                             'label' => 'id_grupo',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ),
                                     array(
                                             'field' => 'id_ingrediente',
                                             'label' => 'id_ingrediente',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ) 
                                 ),
 
@@ -207,12 +222,12 @@ $config = array(
                                     array(
                                             'field' => 'id_producto',
                                             'label' => 'id_producto',
-                                            'rules' => 'required|trim|xss_clean|callback_existe_grupo_producto|numeric'
+                                            'rules' => 'required|trim|xss_clean|callback_existe_grupo_producto'
                                         ),
                                     array(
                                             'field' => 'id_grupo',
                                             'label' => 'id_grupo',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ) 
                                 ),
  
@@ -220,12 +235,12 @@ $config = array(
                                     array(
                                             'field' => 'id_producto',
                                             'label' => 'id_producto',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ),
                                     array(
                                             'field' => 'id_grupo',
                                             'label' => 'id_grupo',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ) 
                                 ),
 
@@ -239,22 +254,22 @@ $config = array(
                                     array(
                                             'field' => 'id_pedido',
                                             'label' => 'id_pedido',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ),
                                     array(
                                             'field' => 'mail',
                                             'label' => 'mail',
-                                            'rules' => 'required|trim|xss_clean|valid_email | max_length[100]'
+                                            'rules' => 'required|trim|xss_clean'
                                         ),
                                     array(
                                             'field' => 'nombre',
                                             'label' => 'id_producto',
-                                            'rules' => 'trim|xss_clean | max_length[45] '
+                                            'rules' => 'trim|xss_clean'
                                         ),
                                     array(
                                             'field' => 'apellido',
                                             'label' => 'apellido',
-                                            'rules' => 'trim|xss_clean | max_length[45]'
+                                            'rules' => 'trim|xss_clean'
                                         ) 
                                 ),
 
@@ -263,12 +278,12 @@ $config = array(
                                     array(
                                             'field' => 'id_pedido',
                                             'label' => 'id_pedido',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ),
                                     array(
                                             'field' => 'id_pedido_estado',
                                             'label' => 'id_pedido_estado',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ) 
                                 ),
 
@@ -278,7 +293,7 @@ $config = array(
                                     array(
                                             'field' => 'id',
                                             'label' => 'id',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ) 
                                 ),
 
@@ -288,7 +303,7 @@ $config = array(
                                     array(
                                             'field' => 'id_usuario',
                                             'label' => 'id_usuario',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ) 
                                 ),
 
@@ -298,7 +313,7 @@ $config = array(
                                     array(
                                             'field' => 'id_producto',
                                             'label' => 'id_producto',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ),
                                     array(
                                             'field' => 'qty',
@@ -315,7 +330,7 @@ $config = array(
                                     array(
                                             'field' => 'id_producto',
                                             'label' => 'id_producto',
-                                            'rules' => 'required|trim|xss_clean|numeric'
+                                            'rules' => 'required|trim|xss_clean'
                                         ) 
 
                                 ),
@@ -329,73 +344,23 @@ $config = array(
                                     array(
                                             'field' => 'nombre',
                                             'label' => 'nombre',
-                                            'rules' => 'required|trim|xss_clean| max_length[45] '
+                                            'rules' => 'required|trim|xss_clean'
                                         ),
                                     array(
                                             'field' => 'apellido',
                                             'label' => 'apellido',
-                                            'rules' => 'required|trim|xss_clean | max_length[45]'
+                                            'rules' => 'required|trim|xss_clean'
                                         ),
                                     array(
                                             'field' => 'mail',
                                             'label' => 'mail',
-                                            'rules' => 'required | trim | xss_clean | valid_email | max_length[100]'
+                                            'rules' => 'required|trim|xss_clean|valid_email'
                                         ),
                                     array(
                                             'field' => 'mensaje',
                                             'label' => 'mensaje',
                                             'rules' => 'required|trim|xss_clean'
                                         ) 
-                                ),
-
-// --------------------------------- TIPO PRODUCTO ------------------------------ 
-
-
-            'delete_producto_tipo' => array(
-
-                                    array(
-                                            'field' => 'id_producto_tipo',
-                                            'label' => 'id_producto_tipo',
-                                            'rules' => 'required|trim|xss_clean|numeric'
-                                        )  
-                                ),
-
-
-// --------------------------------- PRODUCTO ------------------------------ 
-
-
-            'delete_producto' => array(
-
-                                    array(
-                                            'field' => 'id_producto',
-                                            'label' => 'id_producto',
-                                            'rules' => 'required|trim|xss_clean|numeric'
-                                        )  
-                                ),
-
-// --------------------------------- GRUPO ------------------------------ 
-
-
-            'delete_grupo_ingrediente' => array(
-
-                                    array(
-                                            'field' => 'id_grupo',
-                                            'label' => 'id_grupo',
-                                            'rules' => 'required|trim|xss_clean|numeric'
-                                        )  
-                                ),
-
-
-// --------------------------------- INGREDIENTE ------------------------------ 
-
-
-            'delete_ingrediente' => array(
-
-                                    array(
-                                            'field' => 'id_ingrediente',
-                                            'label' => 'id_ingrediente',
-                                            'rules' => 'required|trim|xss_clean|numeric'
-                                        )  
                                 ),
 
 // --------------------------------- ESTADISTICAS ------------------------------ 
@@ -424,7 +389,7 @@ $config = array(
                                         array(
                                                 'field' => 'id_pedido_producto',
                                                 'label' => 'id_pedido_producto',
-                                                'rules' => 'required|trim|xss_clean|numeric'
+                                                'rules' => 'strip_tags|required|trim|xss_clean'
                                             )
                                     ),
 
@@ -444,19 +409,19 @@ $config = array(
                                         array(
                                                 'field' => 'id_producto',
                                                 'label' => 'id_producto',
-                                                'rules' => 'strip_tags|required|trim|xss_clean|numeric'
+                                                'rules' => 'strip_tags|required|trim|xss_clean'
                                             ),
 
                                          array(
                                                 'field' => 'id_grupo',
                                                 'label' => 'id_grupo',
-                                                'rules' => 'strip_tags|required|trim|xss_clean|numeric'
+                                                'rules' => 'strip_tags|required|trim|xss_clean'
                                             ),
 
                                          array(
                                                  'field' => 'id_ingrediente',
                                                  'label' => 'id_ingrediente',
-                                                 'rules' => 'strip_tags|required|trim|xss_clean|numeric'
+                                                 'rules' => 'strip_tags|required|trim|xss_clean'
                                              )
                                     ), 
 
@@ -465,19 +430,19 @@ $config = array(
                                         array(
                                                 'field' => 'id_producto',
                                                 'label' => 'id_producto',
-                                                'rules' => 'strip_tags|required|trim|xss_clean|numeric'
+                                                'rules' => 'strip_tags|required|trim|xss_clean'
                                             ),
 
                                          array(
                                                 'field' => 'id_grupo',
                                                 'label' => 'id_grupo',
-                                                'rules' => 'strip_tags|required|trim|xss_clean|numeric'
+                                                'rules' => 'strip_tags|required|trim|xss_clean'
                                             ),
 
                                          array(
                                                  'field' => 'id_ingrediente',
                                                  'label' => 'id_ingrediente',
-                                                 'rules' => 'strip_tags|required|trim|xss_clean|numeric'
+                                                 'rules' => 'strip_tags|required|trim|xss_clean'
                                              ),
 
                                          array(

@@ -26,9 +26,6 @@ public function loguearse( $array )
 
 	if($query->num_rows() > 0)
 	{
-		$this->session->set_userdata('usr_nombre', $query->row()->nombre );
-		$this->session->set_userdata('usr_apellido', $query->row()->apellido );
-
 		return $query->row()->id_usuario;
 	}
 	else
