@@ -24,9 +24,6 @@ $this->load->view('templates/head');
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
 
-				<div id="area-mensaje">
-				</div>
-
 				<div class="titulo">
 					<i class="fa fa-shopping-cart fa-lg"></i> &nbsp; INGREDIENTES <span id="cant_items_carrito">(<?php echo $cantidad; ?>)</span>
 				</div>
@@ -120,6 +117,8 @@ $this->load->view('templates/head');
 
 	<div style="position:fixed; bottom:0px; background:#FFF; padding:10px; width:100%; border-top:1px solid #ccc;">
 		<div class="container carrito" style="margin:0px auto;">
+			<div id="area-mensaje">
+			</div>
 			<div class="col-xs-12 col-sm-4 col-sm-offset-8 total" style="border-top:solid 1px #999;">
 				<div class="col-xs-6">Total</div>
 				<div class="col-xs-6" id="total">$<?php echo $this->cart->format_number($informacion_pedido_producto['precio_unitario']); ?></div>
@@ -159,7 +158,8 @@ $('#form-confirmar').submit(function( event ) {
        	//alert(JSON.stringify(data));
           if(data.resultado == true)
           {
-            var htmlData = '<div class="alert with-icon alert-success" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            var htmlData = '<div class="alert with-icon alert-success alert-dismissible fade in" role="alert"><i class="icon fa fa-exclamation-triangle"></i>';
+            htmlData += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
             htmlData += data.mensaje;
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
@@ -168,7 +168,8 @@ $('#form-confirmar').submit(function( event ) {
           }
           else
           {
-            var htmlData = '<div class="alert with-icon alert-danger" role="alert">';
+            var htmlData = '<div class="alert with-icon alert-danger alert-dismissible fade in" role="alert">';
+            htmlData += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
             htmlData += data.mensaje;
             htmlData += '</div>';
             $('#area-mensaje').html(htmlData);
@@ -234,7 +235,8 @@ function editar_precio(id, tipo)
           		{
           			$('#ingredientes'+id).prop('checked', true);
           		}
-	            var htmlData = '<div class="alert with-icon alert-danger" role="alert">';
+	            var htmlData = '<div class="alert with-icon alert-danger alert-dismissible fade in" role="alert">';
+	            htmlData += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
 	            htmlData += data.mensaje;
 	            htmlData += '</div>';
 	            $('#area-mensaje').html(htmlData);
@@ -303,7 +305,7 @@ function toggle_producto(id)
 
 function mensaje_no_items()
 {
-	$('#area-mensaje').html('<div id="no_items" class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>No hay items para comprar.</div>');
+	$('#area-mensaje').html('<div id="no_items" class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>No hay items para comprar.</div>');
 }
 
 $(function () {
