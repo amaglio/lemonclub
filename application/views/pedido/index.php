@@ -48,7 +48,7 @@ $this->load->view('templates/head');
 								<div class="col-xs-12 col-sm-2 precio">$'.$this->cart->format_number($item['precio_unitario']).'</div>
 								<div class="col-xs-12 col-sm-2 cantidad">
 									<input type="number" min="1" step="1" name="cantidad[]" id="cant_'.$item['id_pedido_producto'].'" value="'.$item['cantidad'].'"  onchange="modificar_cantidad(\''.$item['id_pedido_producto'].'\', this.value);" class="form-control pull-left">
-									<button class="btn btn-danger" onclick="eliminar_producto(\''.$item['id_pedido_producto'].'\')"><i class="fa fa-times"></i></button>
+									<button class="btn btn-danger" onclick="eliminar_producto(\''.$item['id_pedido_producto'].'\')" data-toggle="tooltip" data-placement="top" title="Quitar"><i class="fa fa-times"></i></button>
 									</div>
 							</div>';
 					}
@@ -161,6 +161,10 @@ function mensaje_no_items()
 {
 	$('#area-mensaje').html('<div id="no_items" class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>No hay items para comprar.</div>');
 }
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 
 </body>

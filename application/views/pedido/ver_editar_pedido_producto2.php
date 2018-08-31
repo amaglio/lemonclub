@@ -18,6 +18,8 @@ $this->load->view('templates/head');
 		</div>
 	</div>
 
+<form action="<?=site_url('pedido/ver_editar_ingredientes_producto/'.$informacion_pedido_producto['id_pedido_producto'])?>" method="POST" id="form-confirmar">
+
 	<div class="container carrito">
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
@@ -28,8 +30,6 @@ $this->load->view('templates/head');
 				<div class="titulo">
 					<i class="fa fa-shopping-cart fa-lg"></i> &nbsp; INGREDIENTES <span id="cant_items_carrito">(<?php echo $cantidad; ?>)</span>
 				</div>
-
-				<form action="<?=site_url('pedido/ver_editar_ingredientes_producto/'.$informacion_pedido_producto['id_pedido_producto'])?>" method="POST" id="form-confirmar">
 
 					
 						<?php
@@ -113,28 +113,30 @@ $this->load->view('templates/head');
 							echo '</div>';
 						}
 						?>
-					
-					<div class="col-xs-12 col-sm-4 col-sm-offset-8 total" style="border-top:solid 1px #999;">
-						<div class="col-xs-6">Total</div>
-						<div class="col-xs-6" id="total">$<?php echo $this->cart->format_number($informacion_pedido_producto['precio_unitario']); ?></div>
-					</div>
-					
-					<div class="row">
-						<div class="col-xs-12 col-sm-3 col-sm-push-9" style="text-align:right">
-							<?php
-								echo '<button type="submit" class="btn btn-amarillo btn-block" id="btn-comprar">GUARDAR</button>';
-							?>
-						</div>
-						<div class="col-xs-12 col-sm-3 col-sm-pull-3" style="text-align:left">
-							<a href="<?=site_url('pedido')?>" class="btn btn-default btn-block">CANCELAR</a>
-						</div>
-					</div>
-				
-				</form>
 
 			</div>
 		</div>
 	</div>
+
+	<div style="position:fixed; bottom:0px; background:#FFF; padding:10px; width:100%; border-top:1px solid #ccc;">
+		<div class="container carrito" style="margin:0px auto;">
+			<div class="col-xs-12 col-sm-4 col-sm-offset-8 total" style="border-top:solid 1px #999;">
+				<div class="col-xs-6">Total</div>
+				<div class="col-xs-6" id="total">$<?php echo $this->cart->format_number($informacion_pedido_producto['precio_unitario']); ?></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-3 col-sm-push-9" style="text-align:right">
+					<?php
+						echo '<button type="submit" class="btn btn-amarillo btn-block" id="btn-comprar">GUARDAR</button>';
+					?>
+				</div>
+				<div class="col-xs-12 col-sm-3 col-sm-pull-3" style="text-align:left">
+					<a href="<?=site_url('pedido')?>" class="btn btn-default btn-block">CANCELAR</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
 
 <?php
 $this->load->view('templates/footer');
@@ -303,6 +305,10 @@ function mensaje_no_items()
 {
 	$('#area-mensaje').html('<div id="no_items" class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>No hay items para comprar.</div>');
 }
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 
 </body>
