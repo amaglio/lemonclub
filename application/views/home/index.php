@@ -52,16 +52,16 @@ $this->load->view('templates/head');
 		<div class="row cont-btns-index">
 			<div class="col-xs-12 btns-index">
 				<?php
-				/*
-				foreach ($tipos as $key => $tipo)
-				{
-					echo '<a class="btn-index" style="background:url(\''.base_url('assets/images/'.$tipo['imagen']).'\'); background-size:cover; background-position:center;" href="'.site_url('menu/index/'.$tipo['id_producto_tipo']).'">
-							<div class="btn btn-amarillo">'.strtoupper($tipo['descripcion']).'</div>
-						</a>';
-				}
-				*/
+				echo '<div class="visible-xs">';
+					foreach ($tipos as $key => $tipo)
+					{
+						echo '<a class="btn-index-xs" style="background:url(\''.base_url('assets/images/'.$tipo['path_imagen']).'\'); background-size:cover; background-position:center;" href="'.site_url('menu/index/'.$tipo['id_producto_tipo']).'">
+								<div class="btn btn-amarillo">'.strtoupper($tipo['descripcion']).'</div>
+							</a>';
+					}
+				echo '</div>';
 				?>
-				<ul id="slider">
+				<ul id="slider" class="hidden-xs">
 					<?php
 					foreach ($tipos as $key => $tipo)
 					{
@@ -72,7 +72,6 @@ $this->load->view('templates/head');
 							</li>';
 					}
 					?>
-
 				</ul>
 			</div>
 		</div>
@@ -117,13 +116,16 @@ $this->load->view('templates/footer');
 		//alert(res+" "+cant);
 		// DOM Ready
 		$(function(){
-			$('#slider').anythingSlider({
-			    showMultiple: cant,
-			    buildArrows         : false,      // If true, builds the forwards and backwards buttons
-				buildNavigation     : false,      // If true, builds a list of anchor links to link to each panel
-				buildStartStop      : false,      // If true, builds the start/stop button
-				autoPlay            : true
-			});
+			if(res > 750)
+			{
+				$('#slider').anythingSlider({
+				    showMultiple: cant,
+				    buildArrows         : false,      // If true, builds the forwards and backwards buttons
+					buildNavigation     : false,      // If true, builds a list of anchor links to link to each panel
+					buildStartStop      : false,      // If true, builds the start/stop button
+					autoPlay            : true
+				});
+			}
 		});
 
 		function abrir_menu(id)

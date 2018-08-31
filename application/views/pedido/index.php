@@ -42,7 +42,7 @@ $this->load->view('templates/head');
 									<span class="descripcion">'.$item['descripcion'].'</span>';
 								if($item['tiene_ingredientes'])
 								{
-									echo '<a class="btn btn-warning" href="'.site_url('pedido/ver_editar_ingredientes_producto/'.$item['id_pedido_producto']).'"><i class="fa fa-pencil"></i></a>';
+									echo '<a class="btn btn-warning" href="'.site_url('pedido/ver_editar_ingredientes_producto/'.$item['id_pedido_producto']).'" data-toggle="tooltip" data-placement="top" title="Modificar ingredientes"><i class="fa fa-pencil"></i></a>';
 								}
 							echo '</div>
 								<div class="col-xs-12 col-sm-2 precio">$'.$this->cart->format_number($item['precio_unitario']).'</div>

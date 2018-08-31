@@ -8,6 +8,7 @@
     			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-5 area-botones" style="">
 		            <a class="" href="<?=site_url('home')?>">HOME</a>
 		            <a class="" href="<?=site_url('menu/index/-1')?>">MENU</a>
+                    <a class="" href="<?=site_url('menu/index/9')?>">SALAD BAR</a>
 		            <a class="" href="<?=site_url('contacto')?>">CONTACTO</a>
     			</div>
     			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 area-logo">
@@ -67,7 +68,8 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="<?=site_url('home')?>">HOME</a></li>
-            <li><a href="<?=site_url('menu')?>">MENU</a></li>
+            <li><a href="<?=site_url('menu/index/-1')?>">MENU</a></li>
+            <li><a href="<?=site_url('menu/index/9')?>">SALAD BAR</a></li>
             <li><a href="<?=site_url('contacto')?>">CONTACTO</a></li>
             <li><a href="<?=site_url('pedido')?>">CARRITO</a></li>
             <li><a href="<?=site_url('servicio_corporativo')?>">SERVICIO CORPORATIVO</a></li>

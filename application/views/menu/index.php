@@ -85,14 +85,21 @@ $this->load->view('templates/head');
 				}
 				else
 				{
-					echo '<p>'.$tipo_actual['descripcion'].'</p>';
+					if($tipo_actual)
+					{
+						echo '<p>'.$tipo_actual['descripcion'].'</p>';
+					}
+					else
+					{
+						echo '<p><i class="fa fa-star-o" aria-hidden="true"></i> MENÚ DEL DÍA</p>';
+					}
 				}
 				?>
 			</div>
 		</div>
 	</div>
 
-	<div class="container-fluid area-menu">
+	<div class="container-fluid area-menu hidden-xs">
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="menu">
@@ -102,7 +109,7 @@ $this->load->view('templates/head');
 					else
 						$active = "";
 					
-					echo '<a style="color:" href="'.site_url('menu/index/-1').'" '.$active.' > <i class="fa fa-star-o" aria-hidden="true"></i> Menú del dia </a>';
+					echo '<a href="'.site_url('menu/index/-1').'" '.$active.' > <i class="fa fa-star-o" aria-hidden="true"></i> Menú del día </a>';
 
 					foreach ($tipos as $key_tipo => $tipo)
 					{
@@ -114,6 +121,40 @@ $this->load->view('templates/head');
 						echo '<a href="'.site_url('menu/index/'.$tipo['id_producto_tipo']).'" '.$active.'>'.$tipo['descripcion'].'</a>';
 					}
 					?>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid visible-xs">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="menu" style="width:100%;">
+					<div class="dropdown" style="width:100%;">
+					  <button class="btn btn-default dropdown-toggle" style="width:100%;" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					    MENU <span class="caret"></span>
+					  </button>
+					  <ul class="dropdown-menu" style="width:100%; text-align:center; background:#f7f7f7;" aria-labelledby="dropdownMenu1">
+					  	<?php
+						if($plato_dia == 1)
+							$active = "class='active'"; 
+						else
+							$active = "";
+						
+						echo '<li><a href="'.site_url('menu/index/-1').'" '.$active.' > <i class="fa fa-star-o" aria-hidden="true"></i> Menú del día </a></li>';
+
+						foreach ($tipos as $key_tipo => $tipo)
+						{
+							$active = "";
+							if($tipo_actual['id_producto_tipo'] == $tipo['id_producto_tipo'])
+							{
+								$active = "class='active'";
+							}
+							echo '<li><a href="'.site_url('menu/index/'.$tipo['id_producto_tipo']).'" '.$active.'>'.$tipo['descripcion'].'</a></li>';
+						}
+						?>
+					  </ul>
+					</div>
 				</div>
 			</div>
 		</div>
