@@ -184,6 +184,7 @@ $this->load->view('templates/head');
 								        data-btn-ok-class="btn btn-primary"
 								        data-btn-cancel-label="Cancelar" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
 								        data-btn-cancel-class="btn btn-danger"
+								        data-placement="top"
 								        data-title="Is it ok?" data-content="This might be dangerous" data-loading-text="Cargando...">
 								  COMPRAR
 								</button>';

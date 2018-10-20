@@ -217,6 +217,10 @@ function mensaje_no_items()
 {
 	$('#area-mensaje').html('<div id="no_items" class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>No hay items para comprar.</div>');
 }
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 
 </body>

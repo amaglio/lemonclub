@@ -12,7 +12,7 @@ $config = array(
                                         ),
                                     array(
                                             'field' => 'clave',
-                                            'label' => 'clave',
+                                            'label' => 'contraseña',
                                             'rules' => 'required|trim|xss_clean'
                                         )
                                 ),
@@ -49,7 +49,7 @@ $config = array(
                                         ),
                                     array(
                                             'field' => 'clave',
-                                            'label' => 'clave',
+                                            'label' => 'contraseña',
                                             'rules' => 'required|trim|xss_clean'
                                         ) 
                                 ),
@@ -73,12 +73,12 @@ $config = array(
                                          ),
                                     array(
                                             'field' => 'clave',
-                                            'label' => 'clave',
+                                            'label' => 'contraseña',
                                             'rules' => 'strip_tags|required|max_length[100]|trim|matches[clave2]|min_length[6]|max_length[15]|xss_clean'
                                          ),
                                     array(
                                             'field' => 'clave2',
-                                            'label' => 'clave2',
+                                            'label' => 'repetir contraseña',
                                             'rules' => 'strip_tags|required|max_length[100]|trim|min_length[6]|max_length[15]|xss_clean'
                                          ) 
                                 ),
@@ -166,12 +166,12 @@ $config = array(
                                          ),
                                     array(
                                             'field' => 'clave',
-                                            'label' => 'clave',
+                                            'label' => 'contraseña',
                                             'rules' => 'strip_tags|required|max_length[100]|trim|matches[clave2]|min_length[6]|max_length[15]|xss_clean'
                                          ),
                                     array(
                                             'field' => 'clave2',
-                                            'label' => 'clave2',
+                                            'label' => 'repetir contraseña',
                                             'rules' => 'strip_tags|required|max_length[100]|trim|min_length[6]|max_length[15]|xss_clean'
                                          ) 
                                 ),
