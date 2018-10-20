@@ -39,8 +39,8 @@ $this->load->view('templates/head');
 
 				echo '<ul class="nav nav-tabs " role="tablist">';
 				    echo '<li role="presentation" class="active"><a href="#ingresar" aria-controls="ingresar" role="tab" data-toggle="tab">Ingresar</a></li>';
-				    echo '<li role="presentation" ><a href="#invitado" aria-controls="invitado" role="tab" data-toggle="tab">Invitado</a></li>';
-				    echo '<li role="presentation" ><a href="#registro" aria-controls="registro" role="tab" data-toggle="tab">Registro</a></li>';
+ 
+				    echo '<li role="presentation" ><a href="#registro" aria-controls="registro" role="tab" data-toggle="tab">Registrarse</a></li>';
 				echo '</ul>';
 				?>
 
@@ -65,19 +65,6 @@ $this->load->view('templates/head');
 						</div>
 				    </div>
 
-				    <div role="tabpanel" class="tab-pane" id="invitado">
-				    	<div class="formulario">
-				    		<p>No necesitas registrarte, pero te enviaremos un email para validar tu correo.</p>
-							<form class="form-horizontal" action="#" method="POST" id="form-invitado">
-								<div class="form-group">
-								    <div class="col-sm-12">
-								    	<input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo set_value('email'); ?>" required="required" >
-								    </div>
-								</div>
-								<button type="submit" id="btn-invitado" value="2" name="ingresar" class="btn btn-block btn-amarillo" style="margin-top:10px;" data-loading-text="Cargando...">INGRESAR</button>
-							</form>
-						</div>
-				    </div>
 
 				    <div role="tabpanel" class="tab-pane" id="registro">
 				    	<div class="formulario">
