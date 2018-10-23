@@ -12,7 +12,7 @@ class Contacto extends CI_Controller {
 		$this->load->model('producto_model');
 		$this->load->model('Usuario_model');
 
- 
+
 	}
 
 	public function index()
@@ -20,20 +20,20 @@ class Contacto extends CI_Controller {
 		$this->load->view('pages/contacto');
 	}
 
- 	
+
  	public function alta_contacto()
 	{
 		chrome_log("Contacto/alta_contacto");
- 
+
 		if ($this->form_validation->run('alta_contacto') == FALSE):
 
 			chrome_log("No paso validacion");
 			$return["resultado"] = FALSE;
-			$return["mensaje"] ='Ha ocurrido un error en la validacion.'; 
+			$return["mensaje"] ='Ha ocurrido un error en la validacion.';
 
 
-		else: 
-		  	
+		else:
+
 		  	$mensaje =  '<h2>CONTACTO WEB</h2><hr><br>';
 			$mensaje .= 'Has recibido un contacto desde lemonclub.com.<br>';
 			$mensaje .= 'Nombre:'.$this->input->post('nombre').'<br>';
@@ -43,7 +43,7 @@ class Contacto extends CI_Controller {
 			$mensaje  = html_entity_decode( $mensaje , ENT_QUOTES, "UTF-8");
 
 			$asunto = "LemonClub - contacto web";
- 			
+
 			if( enviar_email( "adrian.magliola@gmail.com" , $mensaje, $asunto )):
 
 				$return["resultado"] = TRUE;
@@ -51,14 +51,14 @@ class Contacto extends CI_Controller {
 
 			else:
 				$return["resultado"] = FALSE;
-				$return["mensaje"] ='Ha ocurrido un error, por favor, intentá mas tarde.'; 
+				$return["mensaje"] ='Ha ocurrido un error, por favor, intentá mas tarde.';
 
-			endif; 
-	 
+			endif;
+
 		endif;
 
-		print json_encode($return);	
- 
+		print json_encode($return);
+
 	}
 
 

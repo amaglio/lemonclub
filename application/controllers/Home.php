@@ -22,15 +22,15 @@ class Home extends CI_Controller {
 	}
 
 	public function enviar_email()
-	{	
+	{
 		$email_to = 'adrian.magliola@gmail.com';
-		$mensaje = "SI"; 
+		$mensaje = "SI";
 		$asunto = "Prueba";
 
 		$CI =& get_instance();
-    
-        $CI->load->library('email'); // load library 
- 
+
+        $CI->load->library('email'); // load library
+
         // $configuracion = array(
         //         'protocol' => 'smtp',
         //         'smtp_host' => 'ssl://smtp.googlemail.com',
@@ -52,35 +52,26 @@ class Home extends CI_Controller {
         //     'charset' => 'utf-8',
         //     'newline' => "\r\n"
         // );
-        
-      
+
+
         $configuracion = array(
                         'protocol' => 'smtp',
                         'smtp_host' => 'mail.lemonclub.com.ar',
-                        'smtp_port' => 587, 
+                        'smtp_port' => 587,
                         'smtp_user' => 'info@lemonclub.com.ar',
                         'smtp_pass' => 'Webemail2018',
                         'mailtype' => 'html',
                         'charset' => 'utf-8',
                         'newline' => "\r\n" ,
                         'smtp_timeout' => 30,
-                    ); 
- 
+                    );
+
 
         $CI->email->initialize($configuracion);
 
-        // NO FUNCIONA ---
-            // $config['protocol'] = 'sendmail';
-            // $config['mailpath'] = '/usr/sbin/sendmail';
-            // $config['charset'] = 'utf-8';
-            // $config['wordwrap'] = TRUE;
 
-            // $CI->email->initialize($config);
-        //------------------------------
-
-        
         $CI->email->from('no-reply@c0920276.ferozo.com');
-        $CI->email->to($email_to); 
+        $CI->email->to($email_to);
 
         $CI->email->subject($asunto);
 
@@ -95,14 +86,14 @@ class Home extends CI_Controller {
                     </td>
                 </tr>
             </table>";
-                    
+
         $cuerpo .= "<!-- One Column -->
                     <table width='580' border='0' cellpadding='0' cellspacing='0' align='center' bgcolor='#FFC50A'>
                         <tr>
                             <td valign='top' style='padding:10px; color:#333333; text-align:left;' bgcolor='#FFC50A'>
                                 ".$mensaje."
                             </td>
-                        </tr>           
+                        </tr>
                     </table>";
 
         $cuerpo .= "<table width='580' border='0' cellpadding='0' cellspacing='0' align='center' bgcolor='#fff'>
@@ -114,25 +105,25 @@ class Home extends CI_Controller {
                     </td>
                 </tr>
             </table>";
-                          
+
         $cuerpo .= "</td>
             </tr>
         </table>";
 
-        $CI->email->message($cuerpo); 
+        $CI->email->message($cuerpo);
 
         if ( ! $CI->email->send())
         {
         	echo $this->email->print_debugger();
             chrome_log("send false3");
-       
+
         }
         else{
             //echo "BIEN";
             chrome_log("send true3s");
             return TRUE;
         }
-  
+
 	}
 
 }

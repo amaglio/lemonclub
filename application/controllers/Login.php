@@ -19,22 +19,22 @@ public function index()
 public function procesa_logueo()
 {
 	chrome_log("Login/procesa_login");
- 
+
 	if ($this->form_validation->run('loguearse') == FALSE):
 
 		chrome_log("No paso validacion");
 		$this->session->set_flashdata('mensaje', 'Error: no paso la validacion.');
 		redirect('Login/index/','refresh');
 
-	else: 
-	 
+	else:
+
 		chrome_log("Paso validacion");
-			
+
 			$this->session->set_userdata('administrador_lemon',  "aaaaa" );
 
 			redirect('Administrador/pedidos/','refresh');
- 
-	endif;	
+
+	endif;
 }
 
 

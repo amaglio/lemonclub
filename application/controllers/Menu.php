@@ -11,17 +11,17 @@ class Menu extends CI_Controller {
 
                 $this->load->model('producto_tipo_model');
                 $this->load->model('producto_model');
-                $this->load->model('pedido_model'); 
+                $this->load->model('pedido_model');
 	}
 
 	public function index($id = FALSE)
-	{       
+	{
                 $data['plato_dia'] = 0;
 
                 $data['tipos'] = $this->producto_tipo_model->get_items();
 
                 if($id == FALSE)
-                {       
+                {
                         $data['tipo_actual'] = $this->producto_tipo_model->get_primer_item();
                 }
                 else
@@ -36,7 +36,7 @@ class Menu extends CI_Controller {
                 else
                 {
                 	if($id == -1 )// traigo los platos del dia
-                        { 
+                        {
                                 $data['productos'] = $this->producto_model->get_productos_dia();
                                 $data['plato_dia'] = 1;
                         }

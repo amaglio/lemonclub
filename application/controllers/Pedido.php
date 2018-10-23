@@ -3,7 +3,7 @@
 class Pedido extends CI_Controller {
 
 	private static $solapa = "pedido";
-			
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -54,7 +54,7 @@ class Pedido extends CI_Controller {
 	}
 
 	public function ver_editar_ingredientes_producto($id_pedido_producto)
-	{	
+	{
 		// Buscamos la informacion del pedido_producto
 
 		$datos['informacion_pedido_producto'] =  $this->pedido_model->get_informacion_pedido_producto($id_pedido_producto);
@@ -87,7 +87,7 @@ class Pedido extends CI_Controller {
 			$grupo['ingredientes_grupo'] = $this->producto_model->get_ingredientes_grupo_producto( $row['id_producto'], $row['id_grupo'] );
 
 			foreach ($grupo['ingredientes_grupo'] as $key_ingrediente_grupo => $ingrediente_grupo)
-			{	
+			{
 				chrome_log("Ingrediente: ".$ingrediente_grupo['nombre']);
 
 				foreach ($datos['informacion_ingredientes_pedido_producto'] as $key_ingrediente_pedido_producto => $ingrediente_pedido_producto)
@@ -99,8 +99,7 @@ class Pedido extends CI_Controller {
 					}
 				}
 			}
-			
-			array_push($array_grupos, $grupo);
+ 			array_push($array_grupos, $grupo);
 		}
 
 		//print_r($array_grupos);
@@ -677,97 +676,4 @@ class Pedido extends CI_Controller {
 		
 		redirect($url);
 	}
-
-	/*
- 
-	// SE USA ?
-	public function finalizar_pedido()
-	{
-		chrome_log("usuario/finalizar_pedido");
-
-		$data['error'] = FALSE;
-		$data['success'] = FALSE;
-
-		$_POST['id_pedido'] = $this->session->userdata('id_pedido');
- 
-		if ($this->form_validation->run('finalizar_pedido') == FALSE):
-
-			chrome_log("No paso validacion");
-			$data['error'] = "Ocurrio un error al cargar el pedido.";
-			
-		else: 
-		 
-			chrome_log("Paso validacion");
-
-			$result = $this->pedido_model->finalizar_pedido( $this->session->userdata('id_pedido'), $this->session->userdata('id_usuario'), $this->input->post() );
-        	if($result)
-        	{	
-        		$usuario = $this->Usuario_model->traer_datos_usuario( $this->session->userdata('id_usuario') );
-
-        		$mensaje =  '<h2>NUEVO PEDIDO</h2><hr><br>';
-        		$mensaje .= 'Has recibido un nuevo pedido en lemonclub.com.<br>';
-        		$mensaje .= 'Email: '.$usuario->email.'<br>';
-        		
-        		if($usuario->nombre)
-        			$mensaje .= 'Nombre: '.$usuario->nombre.'<br>';
-
-        		if($usuario->apellido)
-        			$mensaje .= 'Apellido: '.$usuario->apellido.'<br>';
- 
-        		$descripcion_forma_pago =  $this->pedido_model->traer_descripcion_forma_pago($this->input->post('pago'));
-        		$descripcion_forma_entrega =  $this->pedido_model->traer_descripcion_forma_entrega($this->input->post('entrega'));	 
-
-        		if( $this->input->post('entrega') == FORMA_ENTREGA_DELIVERY )
-        		{
-  					$mensaje .= 'Forma entrega:  DELIVERY <br>';
-
-        			if($this->input->post('calle'))
-        				$mensaje .= 'Calle: '.$this->input->post('calle').'<br>';
-
-	        		if($this->input->post('altura'))
-	        			$mensaje .= 'Altura: '.$this->input->post('altura').'<br>';
-
-        		}
-        		else
-        		{
-        			$mensaje .= 'Forma entrega:  TAKE AWAY <br>';
-        		}
-
-       
-        		$pedido = $this->pedido_model->get_pedido_productos( $this->session->userdata('id_pedido') );
-
-        		$mensaje .= '<h3>Productos</h3> ';
-
-        		foreach ($pedido as $key => $value) 
-        		{
-        			$mensaje .= '-----------------------------------------------------<br>';
-        			$mensaje .= 'Nombre: '.$value['nombre'].'<br>';
-        			$mensaje .= 'Descripcion: '.$value['descripcion'].'<br>';
-        			$mensaje .= 'Cantidad: '.$value['cantidad'].'<br>';
-        			$mensaje .= 'Precio: $'.$value['precio'].'<br>';
-        		}
-
-        		$mensaje .= '-----------------------------------------------------<br>';
-        		$mensaje .= '<b>TOTAL:</b> $'.$this->pedido_model->get_total_pedido( $this->session->userdata('id_pedido') ).'<br>';
-
-        		$asunto = "Lemonclub: Nuevo pedido";
-
-        		enviar_email("info@lemonclub.com.ar", $mensaje, $asunto );
-
-        		$this->session->unset_userdata('id_pedido');
-        		$this->session->unset_userdata('pedido_activo');
-
-	          	redirect(self::$solapa.'/success');
-        	}
-        	else
-        	{
-        		$data['error'] = "Ocurrio un error al cargar el pedido.";
-        	}
-		 
-		endif; 
-	}
- 
-	*/
- 
-
 }
