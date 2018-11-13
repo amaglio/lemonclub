@@ -183,6 +183,7 @@ $this->load->view('templates/head');
 $this->load->view('templates/footer');
 ?>
 <script type="text/javascript">
+/*
 function comprar(id)
 {
 	$('#btn_'+id).button('loading');
@@ -224,6 +225,11 @@ function comprar(id)
       		$('#btn_'+id).button('reset');
       	}
     });
+}
+*/
+function comprar(id)
+{
+	location.href = SITE_URL+'/menu/producto/'+id;
 }
 
 //add a new style 'foo'

@@ -324,7 +324,7 @@ class Pedido_model extends CI_Model {
 
     	return $this->db->insert('pedido_producto_ingrediente', $array_ingredientes);
 	}
-
+	/*
 	public function get_ingredientes_default_producto($id_producto)
     {
         chrome_log("Producto_model/get_ingredientes_producto");
@@ -337,6 +337,29 @@ class Pedido_model extends CI_Model {
                 WHERE pg.id_producto = ? 
                 AND pg.id_producto = pgi.id_producto
                 AND pg.id_grupo = pgi.id_grupo 
+                AND (pgi.es_default = 1 OR pgi.es_fijo = 1)"; 
+
+        $query = $this->db->query($sql, array($id_producto) );
+     
+        return $query->result_array();
+    }
+	*/
+    public function get_ingredientes_default_producto($id_producto)
+    {
+        chrome_log("Producto_model/get_ingredientes_producto");
+
+        // Traigo los ingredientes default del producto 
+
+        $sql = "SELECT pg.id_grupo, pgi.id_ingrediente, pgi.es_fijo, pgi.es_default, i.path_imagen, i.nombre, g.precio_adicional
+                FROM producto_grupo pg,
+                     producto_grupo_ingrediente pgi,
+                     ingrediente i,
+                     grupo g
+                WHERE pg.id_producto = ? 
+                AND pg.id_producto = pgi.id_producto
+                AND pg.id_grupo = pgi.id_grupo 
+                AND i.id_ingrediente = pgi.id_ingrediente
+                AND g.id_grupo = pg.id_grupo
                 AND (pgi.es_default = 1 OR pgi.es_fijo = 1)"; 
 
         $query = $this->db->query($sql, array($id_producto) );

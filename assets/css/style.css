@@ -485,6 +485,11 @@ MENU
 	margin-bottom: 5px;
 }
 
+.alert-default{
+	background: #FFF;
+	border: 1px solid #CCC;
+}
+
 /***************
 CONTACTO
 ****************/
